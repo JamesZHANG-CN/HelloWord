@@ -7,3 +7,5 @@
 ## Try another line
 
 ## Sync remote line
+
+## New line
