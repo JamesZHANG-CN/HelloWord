@@ -3,14 +3,21 @@
   
   <url>
     <loc>/post/</loc>
-    <lastmod>2019-06-09T22:55:00+08:00</lastmod>
+    <lastmod>2019-06-24T23:07:16+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>/</loc>
-    <lastmod>2019-06-09T22:55:00+08:00</lastmod>
+    <lastmod>2019-06-24T23:07:16+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>/post/wechat-server-side-api-documentation-and-debug-tool/</loc>
+    <lastmod>2019-06-24T23:07:16+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
