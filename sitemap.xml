@@ -2,38 +2,38 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>/post/</loc>
+    <loc>https://thenorthmemory.github.io/post/</loc>
     <lastmod>2019-06-24T23:07:16+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/</loc>
+    <loc>https://thenorthmemory.github.io/</loc>
     <lastmod>2019-06-24T23:07:16+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/post/wechat-server-side-api-documentation-and-debug-tool/</loc>
+    <loc>https://thenorthmemory.github.io/post/wechat-server-side-api-documentation-and-debug-tool/</loc>
     <lastmod>2019-06-24T23:07:16+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/post/hello-world/</loc>
+    <loc>https://thenorthmemory.github.io/post/hello-world/</loc>
     <lastmod>2019-06-09T22:55:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>/categories/</loc>
+    <loc>https://thenorthmemory.github.io/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>/tags/</loc>
+    <loc>https://thenorthmemory.github.io/tags/</loc>
     <priority>0</priority>
   </url>
   
