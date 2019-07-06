@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>A snowflake-style id generator for postgresql - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Rob Conery" /><meta name="description" content="a pretty elegant, twitter snowflake style id_generator for postgresql" /><meta name="keywords" content="postgresql, plpgql, snowflake" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/a-snowflake-style-id-generator-for-postgresql/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="A snowflake-style id generator for postgresql" />
+<meta property="og:description" content="a pretty elegant, twitter snowflake style id_generator for postgresql" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/a-snowflake-style-id-generator-for-postgresql/" />
+<meta property="article:published_time" content="2019-07-06T16:06:57&#43;08:00"/>
+<meta property="article:modified_time" content="2019-07-06T16:06:57&#43;08:00"/>
+
+<meta itemprop="name" content="A snowflake-style id generator for postgresql">
+<meta itemprop="description" content="a pretty elegant, twitter snowflake style id_generator for postgresql">
+
+
+<meta itemprop="datePublished" content="2019-07-06T16:06:57&#43;08:00" />
+<meta itemprop="dateModified" content="2019-07-06T16:06:57&#43;08:00" />
+<meta itemprop="wordCount" content="284">
+
+
+
+<meta itemprop="keywords" content="postgres," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="A snowflake-style id generator for postgresql"/>
+<meta name="twitter:description" content="a pretty elegant, twitter snowflake style id_generator for postgresql"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">A snowflake-style id generator for postgresql</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-07-06 </span>
+        <div class="post-category">
+            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"> 数据库 </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+    <div class="post-content">
+      <p>在各种群里潜水，看到一条消息说解决分布式数据库ID自增解决方案——twitter snowflake，遂搜索并学习了一下，发现真的挺好，ID算法能保证使用69年。。。够用了。。。够用了！</p>
+
+<p>snowflake 算法原版见 <a href="https://github.com/twitter-archive/snowflake/blob/snowflake-2010/src/main/scala/com/twitter/service/snowflake/IdWorker.scala">这里</a>，相当精妙的算法。</p>
+
+<p>以下是摘录自 Rob Conery 的<a href="https://rob.conery.io/2014/05/28/a-better-id-generator-for-postgresql/">英文博文</a>，实现得也相当赞，记录下来，以备不时之需。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">schema</span> <span class="n">shard_1</span><span class="p">;</span>
+<span class="k">create</span> <span class="n">sequence</span> <span class="n">shard_1</span><span class="p">.</span><span class="n">global_id_sequence</span><span class="p">;</span>
+
+<span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">shard_1</span><span class="p">.</span><span class="n">id_generator</span><span class="p">(</span><span class="k">OUT</span> <span class="k">result</span> <span class="nb">bigint</span><span class="p">)</span> <span class="k">AS</span> <span class="err">$$</span>
+<span class="k">DECLARE</span>
+    <span class="n">our_epoch</span> <span class="nb">bigint</span> <span class="p">:</span><span class="o">=</span> <span class="mi">1314220021721</span><span class="p">;</span>
+    <span class="n">seq_id</span> <span class="nb">bigint</span><span class="p">;</span>
+    <span class="n">now_millis</span> <span class="nb">bigint</span><span class="p">;</span>
+    <span class="c1">-- the id of this DB shard, must be set for each
+</span><span class="c1"></span>    <span class="c1">-- schema shard you have - you could pass this as a parameter too
+</span><span class="c1"></span>    <span class="n">shard_id</span> <span class="nb">int</span> <span class="p">:</span><span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="k">BEGIN</span>
+    <span class="k">SELECT</span> <span class="n">nextval</span><span class="p">(</span><span class="s1">&#39;shard_1.global_id_sequence&#39;</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1024</span> <span class="k">INTO</span> <span class="n">seq_id</span><span class="p">;</span>
+
+    <span class="k">SELECT</span> <span class="n">FLOOR</span><span class="p">(</span><span class="k">EXTRACT</span><span class="p">(</span><span class="n">EPOCH</span> <span class="k">FROM</span> <span class="n">clock_timestamp</span><span class="p">())</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span> <span class="k">INTO</span> <span class="n">now_millis</span><span class="p">;</span>
+    <span class="k">result</span> <span class="p">:</span><span class="o">=</span> <span class="p">(</span><span class="n">now_millis</span> <span class="o">-</span> <span class="n">our_epoch</span><span class="p">)</span> <span class="o">&lt;&lt;</span> <span class="mi">23</span><span class="p">;</span>
+    <span class="k">result</span> <span class="p">:</span><span class="o">=</span> <span class="k">result</span> <span class="o">|</span> <span class="p">(</span><span class="n">shard_id</span> <span class="o">&lt;&lt;</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="k">result</span> <span class="p">:</span><span class="o">=</span> <span class="k">result</span> <span class="o">|</span> <span class="p">(</span><span class="n">seq_id</span><span class="p">);</span>
+<span class="k">END</span><span class="p">;</span>
+<span class="err">$$</span> <span class="k">LANGUAGE</span> <span class="n">PLPGSQL</span><span class="p">;</span>
+
+<span class="k">select</span> <span class="n">shard_1</span><span class="p">.</span><span class="n">id_generator</span><span class="p">();</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span> <span class="k">table</span> <span class="n">shard_1</span><span class="p">.</span><span class="n">users</span><span class="p">(</span>
+  <span class="n">id</span> <span class="nb">bigint</span> <span class="k">not</span> <span class="k">null</span> <span class="k">default</span> <span class="n">id_generator</span><span class="p">(),</span>
+  <span class="n">email</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span> <span class="k">not</span> <span class="k">null</span> <span class="k">unique</span><span class="p">,</span>
+  <span class="k">first</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+  <span class="k">last</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+<span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content"><a href="https://rob.conery.io/about-me/">Rob Conery</a></span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-07-06
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/postgres/">postgres</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/wechat-server-side-api-documentation-and-debug-tool/">
+            <span class="next-text nav-default">微信服务端接口文档及工具</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

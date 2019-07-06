@@ -2,13 +2,56 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://thenorthmemory.github.io/post/a-snowflake-style-id-generator-for-postgresql/</loc>
+    <lastmod>2019-07-06T16:06:57+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/categories/</loc>
+    <lastmod>2019-07-06T16:06:57+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://thenorthmemory.github.io/post/</loc>
-    <lastmod>2019-06-24T23:07:16+08:00</lastmod>
+    <lastmod>2019-07-06T16:06:57+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/tags/</loc>
+    <lastmod>2019-07-06T16:06:57+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://thenorthmemory.github.io/</loc>
+    <lastmod>2019-07-06T16:06:57+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/tags/postgres/</loc>
+    <lastmod>2019-07-06T16:06:57+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <lastmod>2019-07-06T16:06:57+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/categories/wechat/</loc>
+    <lastmod>2019-06-24T23:07:16+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/tags/wechat-swagger/</loc>
     <lastmod>2019-06-24T23:07:16+08:00</lastmod>
     <priority>0</priority>
   </url>
@@ -25,16 +68,6 @@
     <lastmod>2019-06-09T22:55:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://thenorthmemory.github.io/categories/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://thenorthmemory.github.io/tags/</loc>
-    <priority>0</priority>
   </url>
   
 </urlset>

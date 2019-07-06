@@ -6,9 +6,28 @@
     <description>Recent content in Tags on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
+    <lastBuildDate>Sat, 06 Jul 2019 16:06:57 +0800</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>postgres</title>
+      <link>/tags/postgres/</link>
+      <pubDate>Sat, 06 Jul 2019 16:06:57 +0800</pubDate>
+      
+      <guid>/tags/postgres/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>wechat swagger</title>
+      <link>/tags/wechat-swagger/</link>
+      <pubDate>Mon, 24 Jun 2019 23:07:16 +0800</pubDate>
+      
+      <guid>/tags/wechat-swagger/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>

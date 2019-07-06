@@ -6,9 +6,28 @@
     <description>Recent content in Categories on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
+    <lastBuildDate>Sat, 06 Jul 2019 16:06:57 +0800</lastBuildDate>
     
 	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>数据库</title>
+      <link>/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
+      <pubDate>Sat, 06 Jul 2019 16:06:57 +0800</pubDate>
+      
+      <guid>/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>wechat</title>
+      <link>/categories/wechat/</link>
+      <pubDate>Mon, 24 Jun 2019 23:07:16 +0800</pubDate>
+      
+      <guid>/categories/wechat/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>
