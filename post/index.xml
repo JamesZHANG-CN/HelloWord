@@ -6,10 +6,19 @@
     <description>Recent content in Posts on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Sat, 06 Jul 2019 16:06:57 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 31 May 2020 10:54:14 +0800</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用Guzzle标准包，向微信支付V3官方中间件添加媒体上传类</title>
+      <link>/post/the-media-upload-solution-for-wechatpay-guzzle-middleware/</link>
+      <pubDate>Sun, 31 May 2020 10:54:14 +0800</pubDate>
+      
+      <guid>/post/the-media-upload-solution-for-wechatpay-guzzle-middleware/</guid>
+      <description>既然是给中间件做新功能加强，自然就需要熟悉中间件的实现机理，wechatpay-guzzle-middleware (以下简称middlewa</description>
+    </item>
     
     <item>
       <title>A snowflake-style id generator for postgresql</title>
