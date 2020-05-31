@@ -6,10 +6,19 @@
     <description>Recent content in wechat on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Mon, 24 Jun 2019 23:07:16 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 31 May 2020 10:54:14 +0800</lastBuildDate>
     
 	<atom:link href="/categories/wechat/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>使用Guzzle标准包，向微信支付V3官方中间件添加媒体上传类</title>
+      <link>/post/the-media-upload-solution-for-wechatpay-guzzle-middleware/</link>
+      <pubDate>Sun, 31 May 2020 10:54:14 +0800</pubDate>
+      
+      <guid>/post/the-media-upload-solution-for-wechatpay-guzzle-middleware/</guid>
+      <description>通过使用 GuzzlHttp\Psr7\Fnstream 修饰 GuzzlHttp\Psr7\MultipartStream 类，使微信支付官方wechatpay-guzzle-middleware支持媒体文件上传 。 同时在处理文件上传时，优化了业务代码获取文件二进制内容及对内容做 sha256 计算。 不侵入官方包，使用起来相当简单，仅在需要上传媒体文件时引入并实例化即可。</description>
+    </item>
     
     <item>
       <title>微信服务端接口文档及工具</title>

@@ -17,7 +17,7 @@
       <pubDate>Sun, 31 May 2020 10:54:14 +0800</pubDate>
       
       <guid>/post/the-media-upload-solution-for-wechatpay-guzzle-middleware/</guid>
-      <description>既然是给中间件做新功能加强，自然就需要熟悉中间件的实现机理，wechatpay-guzzle-middleware (以下简称middlewa</description>
+      <description>通过使用 GuzzlHttp\Psr7\Fnstream 修饰 GuzzlHttp\Psr7\MultipartStream 类，使微信支付官方wechatpay-guzzle-middleware支持媒体文件上传 。 同时在处理文件上传时，优化了业务代码获取文件二进制内容及对内容做 sha256 计算。 不侵入官方包，使用起来相当简单，仅在需要上传媒体文件时引入并实例化即可。</description>
     </item>
     
     <item>
