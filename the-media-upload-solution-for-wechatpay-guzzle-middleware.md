@@ -5,7 +5,8 @@ draft: true
 keywords: ["微信支付V3", "GuzzleHttp", "MediaUtils"]
 description: "通过使用 GuzzlHttp\\Psr7\\Fnstream 修饰 GuzzlHttp\\Psr7\\MultipartStream 类，使微信支付官方wechatpay-guzzle-middleware支持媒体文件上传 。 同时在处理文件上传时，优化了业务代码获取文件二进制内容及对内容做 sha256 计算。 不侵入官方包，使用起来相当简单，仅在需要上传媒体文件时引入并实例化即可。"
 tags: []
-categories: []
+categories: ["wechat"]
+summary: "通过使用 GuzzlHttp\\Psr7\\Fnstream 修饰 GuzzlHttp\\Psr7\\MultipartStream 类，使微信支付官方wechatpay-guzzle-middleware支持媒体文件上传 。 同时在处理文件上传时，优化了业务代码获取文件二进制内容及对内容做 sha256 计算。 不侵入官方包，使用起来相当简单，仅在需要上传媒体文件时引入并实例化即可。"
 author: "James"
 ---
 
