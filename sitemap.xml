@@ -3,26 +3,33 @@
   
   <url>
     <loc>https://thenorthmemory.github.io/categories/</loc>
-    <lastmod>2020-05-31T10:54:14+08:00</lastmod>
+    <lastmod>2020-06-19T11:05:37+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://thenorthmemory.github.io/post/</loc>
-    <lastmod>2020-05-31T10:54:14+08:00</lastmod>
+    <lastmod>2020-06-19T11:05:37+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://thenorthmemory.github.io/</loc>
-    <lastmod>2020-05-31T10:54:14+08:00</lastmod>
+    <lastmod>2020-06-19T11:05:37+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://thenorthmemory.github.io/categories/wechat/</loc>
-    <lastmod>2020-05-31T10:54:14+08:00</lastmod>
+    <lastmod>2020-06-19T11:05:37+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/post/one-of-the-topest-sdk-in-the-nodejs-for-developing-wechatpay-apiv3/</loc>
+    <lastmod>2020-06-19T11:05:37+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>

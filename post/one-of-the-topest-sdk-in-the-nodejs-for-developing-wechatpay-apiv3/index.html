@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>这很可能是NodeJS中用来开发微信支付APIv3的顶级SDK之一 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="Most probably one of the topest SDK in the NodeJS for developing Wechatpay APIv3. 使用NodeJS原生方法完整实现了微信支付APIv3的请求应答工作，HTTP客户端采用成熟的Axios，通过向Axios注册拦截器完整实现微信支付APIv3上行数据签名，下行数据验签。包括收单、媒体文件上传、发核券以及账单下载解析功能，同时提供官方应答证书命令行下载工具。" /><meta name="keywords" content="微信支付V3, Wechatpay APIv3 SDK, Axios Plugin" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/one-of-the-topest-sdk-in-the-nodejs-for-developing-wechatpay-apiv3/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="这很可能是NodeJS中用来开发微信支付APIv3的顶级SDK之一" />
+<meta property="og:description" content="Most probably one of the topest SDK in the NodeJS for developing Wechatpay APIv3. 使用NodeJS原生方法完整实现了微信支付APIv3的请求应答工作，HTTP客户端采用成熟的Axios，通过向Axios注册拦截器完整实现微信支付APIv3上行数据签名，下行数据验签。包括收单、媒体文件上传、发核券以及账单下载解析功能，同时提供官方应答证书命令行下载工具。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/one-of-the-topest-sdk-in-the-nodejs-for-developing-wechatpay-apiv3/" />
+<meta property="article:published_time" content="2020-06-19T11:05:37&#43;08:00"/>
+<meta property="article:modified_time" content="2020-06-19T11:05:37&#43;08:00"/>
+
+<meta itemprop="name" content="这很可能是NodeJS中用来开发微信支付APIv3的顶级SDK之一">
+<meta itemprop="description" content="Most probably one of the topest SDK in the NodeJS for developing Wechatpay APIv3. 使用NodeJS原生方法完整实现了微信支付APIv3的请求应答工作，HTTP客户端采用成熟的Axios，通过向Axios注册拦截器完整实现微信支付APIv3上行数据签名，下行数据验签。包括收单、媒体文件上传、发核券以及账单下载解析功能，同时提供官方应答证书命令行下载工具。">
+
+
+<meta itemprop="datePublished" content="2020-06-19T11:05:37&#43;08:00" />
+<meta itemprop="dateModified" content="2020-06-19T11:05:37&#43;08:00" />
+<meta itemprop="wordCount" content="1488">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="这很可能是NodeJS中用来开发微信支付APIv3的顶级SDK之一"/>
+<meta name="twitter:description" content="Most probably one of the topest SDK in the NodeJS for developing Wechatpay APIv3. 使用NodeJS原生方法完整实现了微信支付APIv3的请求应答工作，HTTP客户端采用成熟的Axios，通过向Axios注册拦截器完整实现微信支付APIv3上行数据签名，下行数据验签。包括收单、媒体文件上传、发核券以及账单下载解析功能，同时提供官方应答证书命令行下载工具。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">这很可能是NodeJS中用来开发微信支付APIv3的顶级SDK之一</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-06-19 </span>
+        <div class="post-category">
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#缘起">缘起</a></li>
+<li><a href="#主要功能">主要功能</a></li>
+<li><a href="#安装">安装</a></li>
+<li><a href="#系统要求">系统要求</a></li>
+<li><a href="#万里长征第一步">万里长征第一步</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="缘起">缘起</h2>
+
+<p>微信支付官方提供了两个包，一个是<code>Java</code>版的，另一个是<code>PHP</code>版的。继上一篇无侵入地向官方<code>PHP</code>版提供了媒体文件上传功能之后，我就在想，<code>NodeJS</code>都已经到14.4版本了，应该有一个流行的js版的开发包吧。搜了一圈儿，发现几乎没有，遂动手花了大约两周闲暇时间，完整实现了微信支付APIv3的几乎所有功能，特别地对账单下载及处理，也算是填补并加强了官方包暂未实现的功能之一吧。有了这些成熟开发包的覆盖，包括官方包在内，现在是时候全面切换至微信支付APIv3版了。</p>
+
+<p>项目以MIT许可证开源，使用请保留许可证说明。</p>
+
+<h2 id="主要功能">主要功能</h2>
+
+<ul class="task-list">
+<li><label><input type="checkbox" checked disabled class="task-list-item"> 使用Node原生代码实现微信支付APIv3的AES加/解密功能(<code>aes-256-gcm</code> with <code>aad</code>)</label></li>
+<li><label><input type="checkbox" checked disabled class="task-list-item"> 使用Node原生代码实现微信支付APIv3的RSA加/解密、签名、验签功能(<code>sha256WithRSAEncryption</code> with <code>RSA_PKCS1_OAEP_PADDING</code>)</label></li>
+<li><label><input type="checkbox" checked disabled class="task-list-item"> 大部分微信支付APIv3的HTTP GET/POST应该能够正常工作，依赖 <code>Axios</code></label></li>
+<li><label><input type="checkbox" checked disabled class="task-list-item"> 支持微信支付APIv3的媒体文件上传(图片/视频)功能，可选依赖 <code>form-data</code></label></li>
+<li><label><input type="checkbox" checked disabled class="task-list-item"> 支持微信支付APIv3的应答证书下载功能，依赖 <code>commander</code>, 使用手册如下</label></li>
+<li><label><input type="checkbox" checked disabled class="task-list-item"> 支持微信支付APIv3的帐单下载及解析功能</label></li>
+</ul>
+
+<h2 id="安装">安装</h2>
+
+<p><code>$ npm install wechatpay-axios-plugin</code></p>
+
+<h2 id="系统要求">系统要求</h2>
+
+<p><code>NodeJS</code>的原生<code>crypto</code>模块，自v12.9.0在 <code>publicEncrypt</code> 及 <code>privateDecrypt</code> 增加了 <code>oaepHash</code> 入参选项，本项目显式声明入参，本人不确定其在v12.9.0以下是否正常工作。所以Node的最低版本要求应该是v12.9.0.</p>
+
+<h2 id="万里长征第一步">万里长征第一步</h2>
+
+<p>微信支付APIv3使用了许多成熟且牛逼的接口设计（RESTful API with JSON over HTTP），数据交换使用非对称（RSA）加/解密方案，对上行数据要求（RSA）签名，对下行数据要求（RSA）验签。API上行所需的<code>商户RSA私钥证书</code>，可以由商户的<code>超级管理员</code>在<code>微信支付商户平台</code>生成并获取到，然而，API下行所需的<code>平台RSA公共证书</code>只能从<code>/v3/certificates</code>接口获取（应答证书还经过了AES对称加密，得用<code>APIv3密钥</code>才能解密 👍 ）。本项目也提供了命令行下载工具，使用手册如下：</p>
+
+<p><code>$ ./bin/certificateDownloader -h</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">Usage: certificateDownloader [options]
+
+Options:
+  -V, --version              output the version number
+  -m, --mchid &lt;string&gt;       The merchant&#39;s ID, aka mchid.
+  -s, --serialno &lt;string&gt;    The serial number of the merchant&#39;s public certificate aka serialno.
+  -f, --privatekey &lt;string&gt;  The path of the merchant&#39;s private key certificate aka privatekey.
+  -k, --key &lt;string&gt;         The secret key string of the merchant&#39;s APIv3 aka key.
+  -o, --output [string]      Path to output the downloaded wechatpay&#39;s public certificate(s) (default: &#34;/tmp&#34;)
+  -h, --help                 display help for command</pre></td></tr></table>
+</div>
+</div>
+<p><strong>注：</strong> 像其他通用命令行工具一样，<code>-h</code> <code>--help</code> 均会打印出帮助手册，说明档里的<code>&lt;string&gt;</code>指 必选参数，类型是字符串； <code>[string]</code>指 可选字符串参数，默认值是 <code>/temp</code>（系统默认临时目录）</p>
+
+<p><code>$ ./bin/certificateDownloader -m NUMERICAL -s HEXADECIAL -f apiclient_key.pem -k YOURAPIV3SECRETKEY -o .</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">Wechatpay Public Certificate#0
+  serial=HEXADECIALHEXADECIALHEXADECIAL
+  notBefore=Wed, 22 Apr 2020 01:43:19 GMT
+  notAfter=Mon, 21 Apr 2025 01:43:19 GMT
+  Saved to: wechatpay_HEXADECIALHEXADECIALHEXADECIAL.pem
+You should verify the above infos again even if this library already did(by rsa.verify):
+    openssl x509 -in wechatpay_HEXADECIALHEXADECIALHEXADECIAL.pem -noout -serial -dates</pre></td></tr></table>
+</div>
+</div>
+<p><strong>注：</strong> 提供必选参数且运行后，屏幕即打印出如上信息，提示<code>证书序列号</code>及<code>起、止格林威治(GMT)时间</code>以及证书下载保存位置。</p>
+
+<p>接口通讯要用<code>商户RSA私钥证书</code>签名及<code>平台RSA公共证书</code>验签，只有获取到了<code>平台RSA公共证书</code>，后续的其他接口才能正常应答验签，所谓“万里长征第一步”就在这里。本下载工具也无例外对应答内容，做了验签处理，技法“剑(qí)走(zhāo)偏(yín)锋(jì)“而已，即：用Axios的拦截器把下载的证书(AES解密)处理完后，立即用于验签。</p>
+
+<p>得到证书之后，开发者需要把所得<code>serial</code>及<code>wechatpay_HEXADECIALHEXADECIALHEXADECIAL.pem</code>（文件流或者文本内容）组成 {key:value} 对，key为证书序列号，value为证书内容，传入以下的构造函数的<code>certs</code>字段里。 其他接口使用就基本上没有啥问题了。</p>
+
+<p>文档及示例在github及npm上README都有，也都是基本用法，没啥花活儿，祝开心。 😄</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-06-19
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/the-media-upload-solution-for-wechatpay-guzzle-middleware/">
+            <span class="next-text nav-default">使用Guzzle标准包，向微信支付V3官方中间件添加媒体上传类</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
