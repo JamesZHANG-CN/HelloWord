@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Yet another alibaba canal tool in alpine - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="Yet another alibaba canal tool in alpine, less size of the deployer&adapter together. Easy bootstrap and usage." /><meta name="keywords" content="another mysql binlog synchronism tool" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/yet-another-alibaba-canal-tool/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="Yet another alibaba canal tool in alpine" />
+<meta property="og:description" content="Yet another alibaba canal tool in alpine, less size of the deployer&amp;adapter together. Easy bootstrap and usage." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/yet-another-alibaba-canal-tool/" />
+<meta property="article:published_time" content="2019-10-16T20:55:42&#43;08:00"/>
+<meta property="article:modified_time" content="2019-10-16T20:55:42&#43;08:00"/>
+
+<meta itemprop="name" content="Yet another alibaba canal tool in alpine">
+<meta itemprop="description" content="Yet another alibaba canal tool in alpine, less size of the deployer&amp;adapter together. Easy bootstrap and usage.">
+
+
+<meta itemprop="datePublished" content="2019-10-16T20:55:42&#43;08:00" />
+<meta itemprop="dateModified" content="2019-10-16T20:55:42&#43;08:00" />
+<meta itemprop="wordCount" content="430">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Yet another alibaba canal tool in alpine"/>
+<meta name="twitter:description" content="Yet another alibaba canal tool in alpine, less size of the deployer&amp;adapter together. Easy bootstrap and usage."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Yet another alibaba canal tool in alpine</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-10-16 </span>
+        <div class="post-category">
+            <a href="/categories/alibaba/"> alibaba </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#why">Why</a></li>
+<li><a href="#bootstrap">Bootstrap</a></li>
+<li><a href="#example-usage-in-k8s">Example usage in k8s</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="why">Why</h2>
+
+<p>The official docker containers should have a <code>PID 1</code> issue there, <a href="https://github.com/TheNorthMemory/canal-docker">this prject</a> try to solve this problem and.</p>
+
+<h2 id="bootstrap">Bootstrap</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/sh
+</span><span class="cp"></span>
+<span class="nv">JAVA_OPTS_EXT</span><span class="o">=</span><span class="s2">&#34;-Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8&#34;</span>
+<span class="k">case</span> <span class="si">${</span><span class="p">@</span><span class="si">}</span> in
+  -a <span class="p">|</span> a <span class="p">|</span> -adapter <span class="p">|</span> adapter<span class="o">)</span>
+    <span class="nb">exec</span> java <span class="si">${</span><span class="nv">JAVA_OPTS</span><span class="si">}</span> <span class="si">${</span><span class="nv">JAVA_OPTS_EXT</span><span class="si">}</span> com.alibaba.otter.canal.adapter.launcher.CanalAdapterApplication
+  <span class="p">;;</span>
+  -d <span class="p">|</span> d <span class="p">|</span> -deployer <span class="p">|</span> deployer<span class="o">)</span>
+    <span class="nb">exec</span> java <span class="si">${</span><span class="nv">JAVA_OPTS</span><span class="si">}</span> <span class="si">${</span><span class="nv">JAVA_OPTS_EXT</span><span class="si">}</span> com.alibaba.otter.canal.deployer.CanalLauncher
+  <span class="p">;;</span>
+  -v <span class="p">|</span> v <span class="p">|</span> -version <span class="p">|</span> version<span class="o">)</span>
+    <span class="nb">echo</span> <span class="s2">&#34;canal version: 1.1.4 d53bfd7 on java-</span><span class="si">${</span><span class="nv">JAVA_VERSION</span><span class="si">}</span><span class="s2">&#34;</span>
+  <span class="p">;;</span>
+  *<span class="o">)</span>
+    <span class="nb">echo</span> <span class="s2">&#34;usage: [[-][a[dapter]]|[d[eployer]]|[v[ersion]]]&#34;</span>
+    <span class="nb">echo</span> <span class="s2">&#34;&#34;</span>
+    <span class="nb">echo</span> <span class="s2">&#34;  adapter: launch the canal adapter, the workdir must be located in /alibaba/canal-adapter&#34;</span>
+    <span class="nb">echo</span> <span class="s2">&#34;  deployer: launch the canal deployer, the workdir must be located in /alibaba/canal-deployer&#34;</span>
+    <span class="nb">echo</span> <span class="s2">&#34;  version: display this build version&#34;</span>
+    <span class="nb">echo</span> <span class="s2">&#34;&#34;</span>
+    <span class="nb">echo</span> <span class="s2">&#34;shown this usage manual default&#34;</span>
+  <span class="p">;;</span>
+<span class="k">esac</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="example-usage-in-k8s">Example usage in k8s</h2>
+
+<p>it was commented on <a href="https://github.com/alibaba/canal/issues/2114#issuecomment-527171994">here</a>, copied here for record.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml"><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span><span class="lnt">221
+</span><span class="lnt">222
+</span><span class="lnt">223
+</span><span class="lnt">224
+</span><span class="lnt">225
+</span><span class="lnt">226
+</span><span class="lnt">227
+</span><span class="lnt">228
+</span><span class="lnt">229
+</span><span class="lnt">230
+</span><span class="lnt">231
+</span><span class="lnt">232
+</span><span class="lnt">233
+</span><span class="lnt">234
+</span><span class="lnt">235
+</span><span class="lnt">236
+</span><span class="lnt">237
+</span><span class="lnt">238
+</span><span class="lnt">239
+</span><span class="lnt">240
+</span><span class="lnt">241
+</span><span class="lnt">242
+</span><span class="lnt">243
+</span><span class="lnt">244
+</span><span class="lnt">245
+</span><span class="lnt">246
+</span><span class="lnt">247
+</span><span class="lnt">248
+</span><span class="lnt">249
+</span><span class="lnt">250
+</span><span class="lnt">251
+</span><span class="lnt">252
+</span><span class="lnt">253
+</span><span class="lnt">254
+</span><span class="lnt">255
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-yaml" data-lang="yaml">apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>ConfigMap<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>k8s-canal<span class="w">
+</span><span class="w"></span>data<span class="p">:</span><span class="w">
+</span><span class="w">  </span>canal.properties<span class="p">:</span><span class="w"> </span><span class="sd">|
+</span><span class="sd">    canal.zkServers = zookeeper:2181</span><span class="w">
+</span><span class="w">    </span>canal.withoutNetty<span class="w"> </span>=<span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">    </span>canal.serverMode<span class="w"> </span>=<span class="w"> </span>tcp<span class="w">
+</span><span class="w">    </span>canal.destinations<span class="w"> </span>=<span class="w"> </span>sys_info<span class="w">
+</span><span class="w">    </span>canal.auto.scan<span class="w"> </span>=<span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">    </span>canal.conf.dir<span class="w"> </span>=<span class="w"> </span>.<span class="w">
+</span><span class="w">    </span>canal.instance.binlog.format<span class="w"> </span>=<span class="w"> </span>ROW<span class="p">,</span>STATEMENT<span class="p">,</span>MIXED<span class="w">
+</span><span class="w">    </span>canal.instance.binlog.image<span class="w"> </span>=<span class="w"> </span>FULL<span class="p">,</span>MINIMAL<span class="p">,</span>NOBLOB<span class="w">
+</span><span class="w">    </span>canal.instance.tsdb.enable<span class="w"> </span>=<span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span>canal.instance.tsdb.dir<span class="w"> </span>=<span class="w"> </span>${canal.conf.dir}/tsdb<span class="w">
+</span><span class="w">    </span>canal.instance.tsdb.url<span class="w"> </span>=<span class="w"> </span>jdbc<span class="p">:</span>h2<span class="p">:</span>${canal.instance.tsdb.dir}/h2;CACHE_SIZE=<span class="m">1000</span>;MODE=MYSQL;<span class="w">
+</span><span class="w">    </span>canal.instance.tsdb.dbUsername<span class="w"> </span>=<span class="w"> </span>canal<span class="w">
+</span><span class="w">    </span>canal.instance.tsdb.dbPassword<span class="w"> </span>=<span class="w"> </span>canal<span class="w">
+</span><span class="w">    </span>canal.instance.tsdb.spring.xml<span class="w"> </span>=<span class="w"> </span>classpath<span class="p">:</span>spring/tsdb/h2-tsdb.xml<span class="w">
+</span><span class="w">    </span>canal.instance.global.mode<span class="w"> </span>=<span class="w"> </span>spring<span class="w">
+</span><span class="w">    </span>canal.instance.global.lazy<span class="w"> </span>=<span class="w"> </span><span class="kc">false</span><span class="w">
+</span><span class="w">    </span>canal.instance.global.spring.xml<span class="w"> </span>=<span class="w"> </span>classpath<span class="p">:</span>spring/default-instance.xml<span class="w">
+</span><span class="w">  </span>sys_info-instance.properties<span class="p">:</span><span class="w"> </span><span class="sd">|
+</span><span class="sd">    canal.instance.gtidon = false</span><span class="w">
+</span><span class="w">    </span>canal.instance.master.address<span class="w"> </span>=<span class="w"> </span>__RDS__<span class="p">:</span><span class="m">3306</span><span class="w">
+</span><span class="w">    </span>canal.instance.master.journal.name<span class="w"> </span>=<span class="w">
+</span><span class="w">    </span>canal.instance.master.position<span class="w"> </span>=<span class="w">
+</span><span class="w">    </span>canal.instance.dbUsername<span class="w"> </span>=<span class="w"> </span>reader<span class="w">
+</span><span class="w">    </span>canal.instance.dbPassword<span class="w"> </span>=<span class="w"> </span><span class="s2">&#34;readER!&#34;</span><span class="w">
+</span><span class="w">    </span>canal.instance.defaultDatabaseName<span class="w"> </span>=<span class="w"> </span>sys_info<span class="w">
+</span><span class="w">    </span>canal.instance.filter.regex<span class="w"> </span>=<span class="w"> </span>sys_info\\.jdp_tb_item<span class="w">
+</span><span class="w">  </span>application.yml<span class="p">:</span><span class="w"> </span><span class="sd">|
+</span><span class="sd">    server:</span><span class="w">
+</span><span class="w">      </span>port<span class="p">:</span><span class="w"> </span><span class="m">8081</span><span class="w">
+</span><span class="w">    </span>logging<span class="p">:</span><span class="w">
+</span><span class="w">      </span>level<span class="p">:</span><span class="w">
+</span><span class="w">        </span>org.springframework<span class="p">:</span><span class="w"> </span>WARN<span class="w">
+</span><span class="w">        </span>com.alibaba.otter.canal.client.adapter.rdb<span class="p">:</span><span class="w"> </span>WARN<span class="w">
+</span><span class="w">    </span>spring<span class="p">:</span><span class="w">
+</span><span class="w">      </span>jackson<span class="p">:</span><span class="w">
+</span><span class="w">        </span>date-format<span class="p">:</span><span class="w"> </span>yyyy-MM-dd<span class="w"> </span>HH<span class="p">:</span>mm<span class="p">:</span>ss<span class="w">
+</span><span class="w">        </span>time-zone<span class="p">:</span><span class="w"> </span>GMT+<span class="m">8</span><span class="w">
+</span><span class="w">        </span>default-property-inclusion<span class="p">:</span><span class="w"> </span>non_null<span class="w">
+</span><span class="w">    </span>canal.conf<span class="p">:</span><span class="w">
+</span><span class="w">      </span>zookeeperHosts<span class="p">:</span><span class="w"> </span>zookeeper<span class="p">:</span><span class="m">2181</span><span class="w">
+</span><span class="w">      </span>batchSize<span class="p">:</span><span class="w"> </span><span class="m">500</span><span class="w">
+</span><span class="w">      </span>syncBatchSize<span class="p">:</span><span class="w"> </span><span class="m">1000</span><span class="w">
+</span><span class="w">      </span>retries<span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w">
+</span><span class="w">      </span>mode<span class="p">:</span><span class="w"> </span>tcp<span class="w">
+</span><span class="w">      </span>canalAdapters<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>instance<span class="p">:</span><span class="w"> </span>sys_info<span class="w">
+</span><span class="w">        </span>groups<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>groupId<span class="p">:</span><span class="w"> </span>g1<span class="w">
+</span><span class="w">          </span>outerAdapters<span class="p">:</span><span class="w">
+</span><span class="w">          </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>rdb<span class="w">
+</span><span class="w">            </span>key<span class="p">:</span><span class="w"> </span>pg_52_50<span class="w">
+</span><span class="w">            </span>properties<span class="p">:</span><span class="w">
+</span><span class="w">              </span>jdbc.url<span class="p">:</span><span class="w"> </span>jdbc<span class="p">:</span>postgresql<span class="p">:</span>//__PG__<span class="p">:</span><span class="m">5432</span>/analytics<span class="w">
+</span><span class="w">              </span>jdbc.username<span class="p">:</span><span class="w"> </span>writer<span class="w">
+</span><span class="w">              </span>jdbc.password<span class="p">:</span><span class="w"> </span><span class="s2">&#34;writER!&#34;</span><span class="w">
+</span><span class="w">              </span>threads<span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="w">              </span>commitSize<span class="p">:</span><span class="w"> </span><span class="m">3000</span><span class="w">
+</span><span class="w">  </span>sys_info-jdp_tb_item.yml<span class="p">:</span><span class="w"> </span><span class="sd">|
+</span><span class="sd">    destination     : sys_info</span><span class="w">
+</span><span class="w">    </span>outerAdapterKey<span class="w"> </span><span class="p">:</span><span class="w"> </span>sys_info<span class="w">
+</span><span class="w">    </span>concurrent<span class="w">      </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">    </span>dbMapping<span class="p">:</span><span class="w">
+</span><span class="w">      </span>database<span class="w">    </span><span class="p">:</span><span class="w"> </span>sys_info<span class="w">
+</span><span class="w">      </span>table<span class="w">       </span><span class="p">:</span><span class="w"> </span>jdp_tb_item<span class="w">
+</span><span class="w">      </span>targetTable<span class="w"> </span><span class="p">:</span><span class="w"> </span>sys_info.jdp_tb_item<span class="w">
+</span><span class="w">      </span>targetColumns<span class="p">:</span><span class="w">
+</span><span class="w">        </span>num_iid<span class="w">        </span><span class="p">:</span><span class="w"> </span>num_iid<span class="w">
+</span><span class="w">        </span>nick<span class="w">           </span><span class="p">:</span><span class="w"> </span>nick<span class="w">
+</span><span class="w">        </span>approve_status<span class="w"> </span><span class="p">:</span><span class="w"> </span>approve_status<span class="w">
+</span><span class="w">        </span>has_showcase<span class="w">   </span><span class="p">:</span><span class="w"> </span>has_showcase<span class="w">
+</span><span class="w">        </span>created<span class="w">        </span><span class="p">:</span><span class="w"> </span>created<span class="w">
+</span><span class="w">        </span>modified<span class="w">       </span><span class="p">:</span><span class="w"> </span>modified<span class="w">
+</span><span class="w">        </span>cid<span class="w">            </span><span class="p">:</span><span class="w"> </span>cid<span class="w">
+</span><span class="w">        </span>has_discount<span class="w">   </span><span class="p">:</span><span class="w"> </span>has_discount<span class="w">
+</span><span class="w">        </span>jdp_hashcode<span class="w">   </span><span class="p">:</span><span class="w"> </span>jdp_hashcode<span class="w">
+</span><span class="w">        </span>jdp_response<span class="w">   </span><span class="p">:</span><span class="w"> </span>jdp_response<span class="w">
+</span><span class="w">        </span>jdp_delete<span class="w">     </span><span class="p">:</span><span class="w"> </span>jdp_delete<span class="w">
+</span><span class="w">        </span>jdp_created<span class="w">    </span><span class="p">:</span><span class="w"> </span>jdp_created<span class="w">
+</span><span class="w">        </span>jdp_modified<span class="w">   </span><span class="p">:</span><span class="w"> </span>jdp_modified<span class="w">
+</span><span class="w">      </span>targetPk<span class="p">:</span><span class="w">
+</span><span class="w">        </span>num_iid<span class="p">:</span><span class="w"> </span>num_iid<span class="w">
+</span><span class="w"></span>---<span class="w">
+</span><span class="w"></span>apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>zookeeper<span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>zk<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>port<span class="p">:</span><span class="w"> </span><span class="m">2181</span><span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>client<span class="w">
+</span><span class="w">  </span>clusterIP<span class="p">:</span><span class="w"> </span>None<span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>zk<span class="w">
+</span><span class="w"></span>---<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Deployment<span class="w">
+</span><span class="w"></span>apiVersion<span class="p">:</span><span class="w"> </span>extensions/v1beta1<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>ak<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>zookeeper<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>replicas<span class="p">:</span><span class="w"> </span><span class="m">1</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>matchLabels<span class="p">:</span><span class="w">
+</span><span class="w">      </span>app<span class="p">:</span><span class="w"> </span>zk<span class="w">
+</span><span class="w">  </span>template<span class="p">:</span><span class="w">
+</span><span class="w">    </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">      </span>name<span class="p">:</span><span class="w"> </span>zk<span class="w">
+</span><span class="w">      </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">        </span>app<span class="p">:</span><span class="w"> </span>zk<span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span>volumes<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>localtime<span class="w">
+</span><span class="w">        </span>hostPath<span class="p">:</span><span class="w">
+</span><span class="w">          </span>path<span class="p">:</span><span class="w"> </span>/usr/share/zoneinfo/Asia/Shanghai<span class="w">
+</span><span class="w">      </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>zookeeper<span class="w">
+</span><span class="w">        </span>image<span class="p">:</span><span class="w"> </span>zookeeper<span class="p">:</span><span class="m">3.3</span><span class="w">
+</span><span class="w">        </span>volumeMounts<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>localtime<span class="w">
+</span><span class="w">          </span>mountPath<span class="p">:</span><span class="w"> </span>/etc/localtime<span class="w">
+</span><span class="w">          </span>readOnly<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w"></span>---<span class="w">
+</span><span class="w"></span>apiVersion<span class="p">:</span><span class="w"> </span>v1<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Service<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>deployer<span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>canal-deployer<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>port<span class="p">:</span><span class="w"> </span><span class="m">11111</span><span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>deployer<span class="w">
+</span><span class="w">  </span>-<span class="w"> </span>port<span class="p">:</span><span class="w"> </span><span class="m">11112</span><span class="w">
+</span><span class="w">    </span>name<span class="p">:</span><span class="w"> </span>metrics<span class="w">
+</span><span class="w">  </span>clusterIP<span class="p">:</span><span class="w"> </span>None<span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>canal-deployer<span class="w">
+</span><span class="w"></span>---<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Deployment<span class="w">
+</span><span class="w"></span>apiVersion<span class="p">:</span><span class="w"> </span>extensions/v1beta1<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>canal-deployer<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>deployer<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>minReadySeconds<span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>matchLabels<span class="p">:</span><span class="w">
+</span><span class="w">      </span>app<span class="p">:</span><span class="w"> </span>canal-deployer<span class="w">
+</span><span class="w">  </span>template<span class="p">:</span><span class="w">
+</span><span class="w">    </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">      </span>name<span class="p">:</span><span class="w"> </span>canal-deployer<span class="w">
+</span><span class="w">      </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">        </span>app<span class="p">:</span><span class="w"> </span>canal-deployer<span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span>volumes<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>localtime<span class="w">
+</span><span class="w">        </span>hostPath<span class="p">:</span><span class="w">
+</span><span class="w">          </span>path<span class="p">:</span><span class="w"> </span>/usr/share/zoneinfo/Asia/Shanghai<span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>conf<span class="w">
+</span><span class="w">        </span>configMap<span class="p">:</span><span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>k8s-canal<span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>tsdb<span class="w">
+</span><span class="w">        </span>hostPath<span class="p">:</span><span class="w">
+</span><span class="w">          </span>path<span class="p">:</span><span class="w"> </span>/opt/canal-h2-tsdb<span class="w">
+</span><span class="w">      </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>deployer<span class="w">
+</span><span class="w">        </span>image<span class="p">:</span><span class="w"> </span>thenorthmemory/canal<span class="p">:</span>latest-alpine<span class="w">
+</span><span class="w">        </span>volumeMounts<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>mountPath<span class="p">:</span><span class="w"> </span>/etc/localtime<span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>localtime<span class="w">
+</span><span class="w">          </span>readOnly<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>mountPath<span class="p">:</span><span class="w"> </span>/alibaba/canal-deployer/conf/canal.properties<span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>conf<span class="w">
+</span><span class="w">          </span>subPath<span class="p">:</span><span class="w"> </span>canal.properties<span class="w">
+</span><span class="w">          </span>readOnly<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>mountPath<span class="p">:</span><span class="w"> </span>/alibaba/canal-deployer/conf/sys_info/instance.properties<span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>conf<span class="w">
+</span><span class="w">          </span>subPath<span class="p">:</span><span class="w"> </span>sys_info-instance.properties<span class="w">
+</span><span class="w">          </span>readOnly<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>mountPath<span class="p">:</span><span class="w"> </span>/alibaba/canal-deployer/tsdb<span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>tsdb<span class="w">
+</span><span class="w">        </span>env<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>TZ<span class="w">
+</span><span class="w">          </span>value<span class="p">:</span><span class="w"> </span>Asia/Shanghai<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>JAVA_OPTS<span class="w">
+</span><span class="w">          </span>value<span class="p">:</span><span class="w"> </span><span class="s2">&#34;-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Xmn138m -Xms256m -Xmx256m&#34;</span><span class="w">
+</span><span class="w">        </span>args<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>deployer<span class="w">
+</span><span class="w">        </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">11111</span><span class="w">
+</span><span class="w">          </span>protocol<span class="p">:</span><span class="w"> </span>TCP<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">11112</span><span class="w">
+</span><span class="w">          </span>protocol<span class="p">:</span><span class="w"> </span>TCP<span class="w">
+</span><span class="w">        </span>workingDir<span class="p">:</span><span class="w"> </span>/alibaba/canal-deployer<span class="w">
+</span><span class="w"></span>---<span class="w">
+</span><span class="w"></span>kind<span class="p">:</span><span class="w"> </span>Deployment<span class="w">
+</span><span class="w"></span>apiVersion<span class="p">:</span><span class="w"> </span>extensions/v1beta1<span class="w">
+</span><span class="w"></span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">  </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">    </span>app<span class="p">:</span><span class="w"> </span>canal-adapter<span class="w">
+</span><span class="w">  </span>name<span class="p">:</span><span class="w"> </span>adapter<span class="w">
+</span><span class="w"></span>spec<span class="p">:</span><span class="w">
+</span><span class="w">  </span>minReadySeconds<span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
+</span><span class="w">  </span>selector<span class="p">:</span><span class="w">
+</span><span class="w">    </span>matchLabels<span class="p">:</span><span class="w">
+</span><span class="w">      </span>app<span class="p">:</span><span class="w"> </span>canal-adapter<span class="w">
+</span><span class="w">  </span>template<span class="p">:</span><span class="w">
+</span><span class="w">    </span>metadata<span class="p">:</span><span class="w">
+</span><span class="w">      </span>name<span class="p">:</span><span class="w"> </span>canal-adapter<span class="w">
+</span><span class="w">      </span>labels<span class="p">:</span><span class="w">
+</span><span class="w">        </span>app<span class="p">:</span><span class="w"> </span>canal-adapter<span class="w">
+</span><span class="w">    </span>spec<span class="p">:</span><span class="w">
+</span><span class="w">      </span>volumes<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>localtime<span class="w">
+</span><span class="w">        </span>hostPath<span class="p">:</span><span class="w">
+</span><span class="w">          </span>path<span class="p">:</span><span class="w"> </span>/usr/share/zoneinfo/Asia/Shanghai<span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>conf<span class="w">
+</span><span class="w">        </span>configMap<span class="p">:</span><span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>k8s-canal<span class="w">
+</span><span class="w">      </span>containers<span class="p">:</span><span class="w">
+</span><span class="w">      </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>adapter<span class="w">
+</span><span class="w">        </span>image<span class="p">:</span><span class="w"> </span>thenorthmemory/canal<span class="p">:</span>latest-alpine<span class="w">
+</span><span class="w">        </span>volumeMounts<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>mountPath<span class="p">:</span><span class="w"> </span>/etc/localtime<span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>localtime<span class="w">
+</span><span class="w">          </span>readOnly<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>mountPath<span class="p">:</span><span class="w"> </span>/alibaba/canal-adapter/conf/application.yml<span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>conf<span class="w">
+</span><span class="w">          </span>subPath<span class="p">:</span><span class="w"> </span>application.yml<span class="w">
+</span><span class="w">          </span>readOnly<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>mountPath<span class="p">:</span><span class="w"> </span>/alibaba/canal-adapter/conf/rdb/mytest_user.yml<span class="w">
+</span><span class="w">          </span>name<span class="p">:</span><span class="w"> </span>conf<span class="w">
+</span><span class="w">          </span>subPath<span class="p">:</span><span class="w"> </span>sys_info-jdp_tb_item.yml<span class="w">
+</span><span class="w">          </span>readOnly<span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="w">        </span>env<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>TZ<span class="w">
+</span><span class="w">          </span>value<span class="p">:</span><span class="w"> </span>Asia/Shanghai<span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>name<span class="p">:</span><span class="w"> </span>JAVA_OPTS<span class="w">
+</span><span class="w">          </span>value<span class="p">:</span><span class="w"> </span><span class="s2">&#34;-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Xmn138m -Xms256m -Xmx256m&#34;</span><span class="w">
+</span><span class="w">        </span>args<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>adapter<span class="w">
+</span><span class="w">        </span>ports<span class="p">:</span><span class="w">
+</span><span class="w">        </span>-<span class="w"> </span>containerPort<span class="p">:</span><span class="w"> </span><span class="m">8081</span><span class="w">
+</span><span class="w">          </span>protocol<span class="p">:</span><span class="w"> </span>TCP<span class="w">
+</span><span class="w">        </span>workingDir<span class="p">:</span><span class="w"> </span>/alibaba/canal-adapter</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2019-10-16
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/the-media-upload-solution-for-wechatpay-guzzle-middleware/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">使用Guzzle标准包，向微信支付V3官方中间件添加媒体上传类</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/a-snowflake-style-id-generator-for-postgresql/">
+            <span class="next-text nav-default">A snowflake-style id generator for postgresql</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
