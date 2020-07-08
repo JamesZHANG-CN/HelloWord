@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>使用Getter构建基于HTTP传输协议的面向对象编程模式SDK - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="使用Object Getter方法，构建可动态弹性扩容的微信支付APIv3 SDK" /><meta name="keywords" content="微信支付V3, Wechatpay APIv3 SDK, Axios Plugin, wechatpay-axios-plugin npm" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/using-js-object-getter-to-map-of-the-wechatpay-apiv3/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="使用Getter构建基于HTTP传输协议的面向对象编程模式SDK" />
+<meta property="og:description" content="使用Object Getter方法，构建可动态弹性扩容的微信支付APIv3 SDK" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/using-js-object-getter-to-map-of-the-wechatpay-apiv3/" />
+<meta property="article:published_time" content="2020-07-08T22:40:12&#43;08:00"/>
+<meta property="article:modified_time" content="2020-07-08T22:40:12&#43;08:00"/>
+
+<meta itemprop="name" content="使用Getter构建基于HTTP传输协议的面向对象编程模式SDK">
+<meta itemprop="description" content="使用Object Getter方法，构建可动态弹性扩容的微信支付APIv3 SDK">
+
+
+<meta itemprop="datePublished" content="2020-07-08T22:40:12&#43;08:00" />
+<meta itemprop="dateModified" content="2020-07-08T22:40:12&#43;08:00" />
+<meta itemprop="wordCount" content="2533">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用Getter构建基于HTTP传输协议的面向对象编程模式SDK"/>
+<meta name="twitter:description" content="使用Object Getter方法，构建可动态弹性扩容的微信支付APIv3 SDK"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">使用Getter构建基于HTTP传输协议的面向对象编程模式SDK</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-07-08 </span>
+        <div class="post-category">
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#设计目标">设计目标</a></li>
+<li><a href="#之前的实践">之前的实践</a></li>
+<li><a href="#设计历程">设计历程</a>
+<ul>
+<li><a href="#1-uri转换成javascript资源对象">#1 URI转换成javascript资源对象</a></li>
+<li><a href="#2-对javscript资源对象绑定-http-methods">#2 对javscript资源对象绑定 HTTP METHODs</a></li>
+<li><a href="#3-随uri弹性扩容javascript实体资源对象">#3 随URI弹性扩容javascript实体资源对象</a></li>
+</ul></li>
+<li><a href="#约定">约定</a></li>
+<li><a href="#最终形态">最终形态</a></li>
+<li><a href="#结束语">结束语</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<p>有待于微信支付APIv3良好的接口设计，让基于getter模型构建可弹性扩容的SDK成为可能。RFC3986 已经规范化了 HTTP 协议，我们将要操作的API资源以及方法，均在规范范围之内，基于此，让我们来设计一款符合规范的SDK。</p>
+
+<h2 id="设计目标">设计目标</h2>
+
+<ol>
+<li><code>URI</code> 是要操作的资源标识，通过斜线<code>/</code>(slash)对实体做了分割；</li>
+<li><code>HTTP METHOD</code> <code>GET</code>/<code>POST</code> 是对URI资源的操作方法；</li>
+<li>URI 是可变化的，将要实施的SDK应该具备随 URI 伸缩而弹性扩容或者缩容功能；</li>
+</ol>
+
+<h2 id="之前的实践">之前的实践</h2>
+
+<p>很早就内置在 javascript 内核中的 <code>Proxy</code> 是一款好东西，详细介绍可参考 MDN ，这里不详述。我们回溯在18年中就已经实践过用 <code>Proxy</code> 来代理了基于 <code>Hessian2</code> 的 <code>WebService</code>，使二进制协议可以转换成了 JSON RPC，至今稳定运行且持续提供服务中。对于微信支付APIv3来说，我们少了一层协议转换，却多了一层资源弹性扩缩容功能，这个难度不是一丢丢，相当于要重新设计之前的设计。</p>
+
+<h2 id="设计历程">设计历程</h2>
+
+<h3 id="1-uri转换成javascript资源对象">#1 URI转换成javascript资源对象</h3>
+
+<p>这个相对来说，最简单，只须按照 <code>URL.pathname</code> 去掉开头斜线，中间部分按斜线分割就好，每个分割后的字符串，记之为实体Entity，例如</p>
+
+<p><code>/v3/ecommerce/profitsharing/orders</code> 即分割成 <code>v3</code> <code>ecommerce</code> <code>profitsharing</code> <code>orders</code> 4个实体，依次序即构成各个实体对象标识即 <code>v3.ecommerce.profitsharing.orders</code> .</p>
+
+<h3 id="2-对javscript资源对象绑定-http-methods">#2 对javscript资源对象绑定 HTTP METHODs</h3>
+
+<p>按照HTTP协议，从暴露出的根级开始，客户端均可以发起 <code>GET</code> <code>POST</code> <code>PATCH</code> <code>DELETE</code> 等请求。那么按照 #1 的拆分方法，串型的每一级实体，实际均须绑定上这些 <code>METHODs</code>，还好微信支付APIv3多见 <code>GET</code>和<code>POST</code>请求，那么每一级对象实体，就包含有至少这两个方法；</p>
+
+<p>特殊的，基于openAPI规范，对于动态path参数来说，某个实体有可能是个变量，在客户端最终发起请求之前，需要提供一个方法进行path参数替换，这就要求每个实体上，均需有个转换方法了；</p>
+
+<p>另外，微信支付APIv3的<code>URI</code> 中的实体资源标识，存在中线(<code>- dash</code>)分割单词的情形，虽然javascript对象可以按照属性方式进行获取，然则不好看呐。。。这里要做少许约定，即对中线分割的单词，可以按照驼峰式(<code>camelCase</code>)进行单词组合，这样就使资源实体紧凑化了；</p>
+
+<h3 id="3-随uri弹性扩容javascript实体资源对象">#3 随URI弹性扩容javascript实体资源对象</h3>
+
+<p>这是本类库的精华部分之一了，类似其他开发语言一样，<code>javascript</code>中的 <code>Object</code>对象，均含有 <code>getter</code> 及 <code>setter</code> ，详细介绍可翻 MDN， 这里不垒述。这里我们结合使用 <code>Proxy</code> 类，对每个<code>URI</code>实体对象绑定代理上一个<code>getter</code>方法，这样就无限可扩容本<code>SDK</code>要操作的实体资源标识。</p>
+
+<h2 id="约定">约定</h2>
+
+<p>此编程模型，在开发书写过程中，有如下约定：</p>
+
+<ol>
+<li>请求 <code>URI</code> 作为级联对象，可以轻松构建请求对象，例如 <code>/v3/pay/transactions/native</code> 即自然翻译成 <code>v3.pay.transactions.native</code>;</li>
+<li>每个 <code>URI</code> 所支持的 <code>HTTP METHOD</code>，即作为 请求对象的末尾执行方法，例如: <code>v3.pay.transactions.native.post({})</code>;</li>
+<li>每个 <code>URI</code> 有中线(dash)分隔符的，可以使用驼峰<code>camelCase</code>风格书写，例如: <code>merchant-service</code>可写成 <code>merchantService</code>，或者属性风格，例如 <code>v3['merchant-service']</code>;</li>
+<li>每个 <code>URI</code>.pathname 中，若有动态参数，例如 <code>business_code/{business_code}</code> 可写成 <code>business_code.$business_code$</code> 或者属性风格书写，例如 <code>business_code['{business_code}']</code>，抑或直接按属性风格，直接写参数值也可以，例如 <code>business_code['2000001234567890']</code>;</li>
+<li>建议 <code>URI</code> 按照 <code>PascalCase</code> 风格书写, <code>TS Definition</code> 已在路上(还有若干问题没解决)，将是这种风格，代码提示将会很自然;</li>
+</ol>
+
+<p>All of the remote&rsquo;s <code>URI.pathname</code> is mapping as the <code>SDK</code>&rsquo;s <code>Object</code> which contains the HTTP <code>get</code> <code>post</code> and <code>upload</code> (named for <code>multipart/form-data</code>) methods. Specially, while the <code>Object</code>(named as <code>container</code>) with dynamic veriable parameter(s) (<code>uri_template</code>), those may be transformed by the <code>container</code>&rsquo;s <code>withEntities</code> method.</p>
+
+<p>With this style, the following conversions should be known:</p>
+
+<ol>
+<li>Each of the <code>URI</code>, eg: <code>/v3/pay/transactions/native</code> is mapping to <code>v3.pay.transactions.native</code>;</li>
+<li>Each of the <code>URI</code>&rsquo;s <code>HTTP METHOD</code>，are mapping to the <code>container</code>&rsquo;s executor, eg: <code>v3.pay.transactions.native.post({})</code>;</li>
+<li>While the <code>URI</code> contains the <code>dash-split-words</code>, the entity can be wrote as <code>camelCase</code> style, eg: <code>merchant-service</code> to <code>merchantService</code> or by the <code>Object.property</code>&rsquo;s style as <code>v3['merchant-service']</code>;</li>
+<li>While the <code>URI</code> contains the <code>dynamic_veriable_parameter</code>, eg: <code>business_code/{business_code}</code>, it can be <code>business_code.$business_code$</code> or <code>business_code['{business_code}']</code> or directly replaced with actual value eg: <code>business_code['2000001234567890']</code>;</li>
+<li>Recommend writing the <code>URI</code> entities with <code>PascalCase</code> style. Because the <code>TS Definition</code> is on the road, those shall be this style;</li>
+</ol>
+
+<h2 id="最终形态">最终形态</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="nx">axios</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;axios&#39;</span><span class="p">)</span>
+<span class="k">const</span> <span class="nx">interceptor</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./interceptor&#39;</span><span class="p">)</span>
+
+<span class="cm">/**
+</span><span class="cm"> * A Wechatpay APIv3&#39;s amazing client.
+</span><span class="cm"> *
+</span><span class="cm"> * ```js
+</span><span class="cm"> * const {Wechatpay} = require(&#39;wechatpay-axios-plugin&#39;)
+</span><span class="cm"> * const wxpay = new Wechatpay({
+</span><span class="cm"> *   mchid,
+</span><span class="cm"> *   serial,
+</span><span class="cm"> *   privateKey: &#39;-----BEGIN PRIVATE KEY-----&#39; + &#39;...&#39; + &#39;-----END PRIVATE KEY-----&#39;,
+</span><span class="cm"> *   certs: {
+</span><span class="cm"> *     &#39;serial_number&#39;: &#39;-----BEGIN CERTIFICATE----- ... -----END CERTIFICATE-----&#39;
+</span><span class="cm"> *   }
+</span><span class="cm"> * })
+</span><span class="cm"> *
+</span><span class="cm"> * wxpay.V3.Marketing.Busifavor.Stocks.post({})
+</span><span class="cm"> *   .then(({data}) =&gt; console.info(data))
+</span><span class="cm"> *   .catch(({response: {data}}) =&gt; console.error(data))
+</span><span class="cm"> *
+</span><span class="cm"> * wxpay.V3.Pay.Transactions.Native.post({})
+</span><span class="cm"> *   .then(({data: {code_url}}) =&gt; console.info(code_url))
+</span><span class="cm"> *   .catch(({response: {data}}) =&gt; console.error(data))
+</span><span class="cm"> *
+</span><span class="cm"> * ;(async () =&gt; {
+</span><span class="cm"> *   try {
+</span><span class="cm"> *     const {data: detail} = await wxpay.V3.Pay.Transactions.Id.$transaction_id$
+</span><span class="cm"> *       .withEntities({transaction_id: &#39;1217752501201407033233368018&#39;})
+</span><span class="cm"> *       .get({params: {mchid: &#39;1230000109&#39;}})
+</span><span class="cm"> *     // or simple like this
+</span><span class="cm"> *     // const {data: detail} = await wxpay.V3.Pay.Transactions.Id[&#39;{transaction_id}&#39;]
+</span><span class="cm"> *     //   .withEntities({transaction_id: &#39;1217752501201407033233368018&#39;})
+</span><span class="cm"> *     //   .get({params: {mchid: &#39;1230000109&#39;}})
+</span><span class="cm"> *     // or simple like this
+</span><span class="cm"> *     // const {data: detail} = await wxpay.v3.pay.transactions.id[&#39;121775&#39;]
+</span><span class="cm"> *     //   .get({params: {mchid: &#39;1230000109&#39;}})
+</span><span class="cm"> *     console.info(detail)
+</span><span class="cm"> *   } catch({response: {status, statusText, data}}) {
+</span><span class="cm"> *     console.error(status, statusText, data)
+</span><span class="cm"> *   }
+</span><span class="cm"> * })()
+</span><span class="cm"> * ```
+</span><span class="cm"> */</span>
+<span class="k">class</span> <span class="nx">Wechatpay</span> <span class="p">{</span>
+  <span class="cm">/**
+</span><span class="cm">   * @property {import(&#39;axios&#39;).AxiosInstance} client - The axios instance
+</span><span class="cm">   */</span>
+  <span class="kr">static</span> <span class="nx">client</span><span class="p">;</span>
+
+  <span class="cm">/**
+</span><span class="cm">   * @property {RegExp} URI_ENTITY - The URI entity which&#39;s split by slash
+</span><span class="cm">   */</span>
+  <span class="cm">/*eslint-disable-next-line*/</span>
+  <span class="kr">static</span> <span class="nx">URI_ENTITY</span> <span class="o">=</span> <span class="sr">/^\{([^\}]+)\}$/</span><span class="p">;</span>
+
+  <span class="cm">/**
+</span><span class="cm">   * Compose the `URL`.pathname based on the container&#39;s entities
+</span><span class="cm">   * @param {array} entities - Each `container` of `entities`
+</span><span class="cm">   * @returns {string} - The `URL`.pathname
+</span><span class="cm">   */</span>
+  <span class="kr">static</span> <span class="nx">pathname</span><span class="p">(</span><span class="nx">entities</span> <span class="o">=</span> <span class="p">[])</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="sb">`/</span><span class="si">${</span><span class="nx">entities</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span>
+  <span class="p">}</span>
+
+  <span class="cm">/**
+</span><span class="cm">   * Normalize the `str` by the rules:
+</span><span class="cm">   *  `PascalCase` -&gt; `camelCase`
+</span><span class="cm">   * &amp; `camelCase` -&gt; `camel-case`
+</span><span class="cm">   * &amp; `$dynamic$` -&gt; `{dynamic}`
+</span><span class="cm">   *
+</span><span class="cm">   * @param {string} str - The string waiting for normalization
+</span><span class="cm">   * @returns {string} - The transformed string
+</span><span class="cm">   */</span>
+  <span class="kr">static</span> <span class="nx">normalize</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">str</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+      <span class="c1">// PascalCase` to `camelCase`
+</span><span class="c1"></span>      <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^[A-Z]/</span><span class="p">,</span> <span class="nx">w</span> <span class="p">=&gt;</span> <span class="nx">w</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">())</span>
+      <span class="c1">// `camelCase` to `camel-case`
+</span><span class="c1"></span>      <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[A-Z]/g</span><span class="p">,</span> <span class="nx">w</span> <span class="p">=&gt;</span> <span class="sb">`-</span><span class="si">${</span><span class="nx">w</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span><span class="si">}</span><span class="sb">`</span><span class="p">)</span>
+      <span class="c1">// `$dynamic_variable$` to `{dynamic_variable}`
+</span><span class="c1"></span>      <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\$/</span><span class="p">,</span> <span class="sb">`{`</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\$$/</span><span class="p">,</span> <span class="sb">`}`</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="cm">/**
+</span><span class="cm">   * @property {object} container - Client side the URIs&#39; entity mapper
+</span><span class="cm">   */</span>
+  <span class="kr">static</span> <span class="nx">container</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="cm">/**
+</span><span class="cm">     * @property {string[]} entities - The URI entities
+</span><span class="cm">     */</span>
+    <span class="nx">entities</span><span class="o">:</span> <span class="p">[],</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * @property {function} withEntities - Replace the `uri` with real entities&#39; value
+</span><span class="cm">     * @param {string[]} list - The real entities&#39; mapping
+</span><span class="cm">     * @returns {object} - the container&#39;s instance
+</span><span class="cm">     */</span>
+    <span class="nx">withEntities</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">list</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">entities</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">one</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">src</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">URI_ENTITY</span><span class="p">.</span><span class="nx">test</span><span class="p">(</span><span class="nx">one</span><span class="p">))</span> <span class="p">{</span>
+          <span class="k">const</span> <span class="nx">sign</span> <span class="o">=</span> <span class="nx">one</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">URI_ENTITY</span><span class="p">,</span> <span class="sb">`$1`</span><span class="p">)</span>
+          <span class="nx">src</span><span class="p">[</span><span class="nx">index</span><span class="p">]</span> <span class="o">=</span> <span class="nx">list</span><span class="p">[</span><span class="nx">sign</span><span class="p">]</span> <span class="o">?</span> <span class="nx">list</span><span class="p">[</span><span class="nx">sign</span><span class="p">]</span> <span class="o">:</span> <span class="nx">one</span>
+        <span class="p">}</span>
+      <span class="p">})</span>
+
+      <span class="k">return</span> <span class="k">this</span>
+    <span class="p">},</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * @property {function} get - The alias of the HTTP `GET` request
+</span><span class="cm">     * @param {...any} arg - The request arguments
+</span><span class="cm">     * @returns {PromiseLike} - The `AxiosPromise`
+</span><span class="cm">     */</span>
+    <span class="nx">get</span><span class="o">:</span> <span class="kr">async</span> <span class="kd">function</span><span class="p">(...</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">client</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">pathname</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">entities</span><span class="p">),</span> <span class="p">...</span><span class="nx">arg</span><span class="p">)</span>
+    <span class="p">},</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * @property {function} post - The alias of the HTTP `POST` request
+</span><span class="cm">     * @param {...any} arg - The request arguments
+</span><span class="cm">     * @returns {PromiseLike} - The `AxiosPromise`
+</span><span class="cm">     */</span>
+    <span class="nx">post</span><span class="o">:</span> <span class="kr">async</span> <span class="kd">function</span><span class="p">(...</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">client</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">pathname</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">entities</span><span class="p">),</span> <span class="p">...</span><span class="nx">arg</span><span class="p">)</span>
+    <span class="p">},</span>
+
+    <span class="cm">/**
+</span><span class="cm">     * @property {function} upload - The alias of the HTTP &#39;multipart/form-data&#39; request
+</span><span class="cm">     * @param {...any} arg - The request arguments
+</span><span class="cm">     * @returns {PromiseLike} - The `AxiosPromise`
+</span><span class="cm">     */</span>
+    <span class="nx">upload</span><span class="o">:</span> <span class="kr">async</span> <span class="kd">function</span><span class="p">(...</span><span class="nx">arg</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">//TODO: wrap the FormData and define the headers[&#39;content-type&#39;]
+</span><span class="c1"></span>      <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">post</span><span class="p">(...</span><span class="nx">arg</span><span class="p">)</span>
+    <span class="p">},</span>
+  <span class="p">};</span>
+
+  <span class="cm">/**
+</span><span class="cm">   * @property {object} handler - Handler of the container instance&#39;s `getter`
+</span><span class="cm">   */</span>
+  <span class="kr">static</span> <span class="nx">handler</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="cm">/**
+</span><span class="cm">     * @property {function} get - Object&#39;s `getter` handler
+</span><span class="cm">     * @param {object} target - The object
+</span><span class="cm">     * @param {string} property - The property
+</span><span class="cm">     * @returns {object} - An object or object&#39;s property
+</span><span class="cm">     */</span>
+    <span class="nx">get</span><span class="o">:</span> <span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">property</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">property</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">property</span> <span class="o">===</span> <span class="sb">`symbol`</span> <span class="o">||</span> <span class="nx">property</span> <span class="o">===</span> <span class="sb">`inspect`</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">target</span>
+      <span class="p">}</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="nx">property</span> <span class="k">in</span> <span class="nx">target</span><span class="p">))</span> <span class="p">{</span>
+        <span class="cm">/*eslint-disable-next-line*/</span>
+        <span class="nx">target</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Proxy</span><span class="p">({...</span><span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">container</span><span class="p">},</span> <span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">handler</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="sb">`entities`</span> <span class="k">in</span> <span class="nx">target</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">target</span><span class="p">[</span><span class="nx">property</span><span class="p">].</span><span class="nx">entities</span> <span class="o">=</span> <span class="p">[...</span><span class="nx">target</span><span class="p">.</span><span class="nx">entities</span><span class="p">,</span> <span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">normalize</span><span class="p">(</span><span class="nx">property</span><span class="p">)]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+
+      <span class="k">return</span> <span class="nx">target</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span>
+    <span class="p">},</span>
+  <span class="p">};</span>
+
+  <span class="cm">/**
+</span><span class="cm">   * Constructor of the magic APIv3 container
+</span><span class="cm">   * @param {object} wxpayConfig - @see {apiConfig}
+</span><span class="cm">   * @param {object} axiosConfig - @see {import(&#39;axios&#39;).AxiosRequestConfig}
+</span><span class="cm">   * @constructor
+</span><span class="cm">   * @returns {Proxy} - The magic APIv3 container
+</span><span class="cm">   */</span>
+  <span class="nx">constructor</span><span class="p">(</span>
+  	<span class="nx">wxpayConfig</span> <span class="o">=</span> <span class="p">{},</span>
+  	<span class="nx">axiosConfig</span> <span class="o">=</span> <span class="p">{</span><span class="nx">baseURL</span><span class="o">:</span> <span class="s1">&#39;https://api.mch.weixin.qq.com&#39;</span><span class="p">}</span>
+  <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">client</span> <span class="o">=</span> <span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">client</span>
+      <span class="o">||</span> <span class="nx">interceptor</span><span class="p">(</span><span class="nx">axios</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">axiosConfig</span><span class="p">),</span> <span class="nx">wxpayConfig</span><span class="p">)</span>
+
+    <span class="cm">/*eslint-disable-next-line*/</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nb">Proxy</span><span class="p">({...</span><span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">container</span><span class="p">},</span> <span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">handler</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="结束语">结束语</h2>
+
+<p>本类库遵循<code>CMD</code>模块设计，<code>class</code>上，仅且唯一向外暴露出构造函数，其他方法及属性均封装成静态<code>类</code>属性/方法，保证对象实例化之后全局均是操作同一对象/属性，然而这也同时是一把双刃剑，对持久进程多租户/商户来说，可能存有资源相互干扰情况。这一点上，请使用此类库的开发者特别注意。对于有此需求的开发者，我的建议是，在这之上，用容器技术(<code>docker</code>)进行租/商户环境唯一化，简单暴力。</p>
+
+<p>以上，已随 <code>wechatpay-axios-plugin</code> npm包，开源在GitHub上，喜欢就给点个 Star 吧。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-07-08
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/one-of-the-topest-sdk-in-the-nodejs-for-developing-wechatpay-apiv3/">
+            <span class="next-text nav-default">这很可能是NodeJS中用来开发微信支付APIv3的顶级SDK之一</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
