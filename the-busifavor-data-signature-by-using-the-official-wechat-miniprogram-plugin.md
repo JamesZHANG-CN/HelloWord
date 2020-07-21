@@ -7,7 +7,6 @@ tags: []
 categories: ["wechat"]
 summary: "微信支付官方「小程序发券插件」(≤1.1.3) 的商家券数据签名，单独抽离出数据转换函数，配合使用云开发NodeJS环境，让签名不再麻烦。"
 author: "James"
-title: "The Busifavor Data Signature by Using the Official Wechat Miniprogram Plugin"
 ---
 
 先来看看「[小程序发券插件](https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/marketing/miniprogram/chapter3_1.shtml)」所需参数，yaml格式如下：
