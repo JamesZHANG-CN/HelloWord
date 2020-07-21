@@ -6,10 +6,19 @@
     <description>Recent content in wechat on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Thu, 09 Jul 2020 13:33:33 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 21 Jul 2020 13:09:13 +0800</lastBuildDate>
     
 	<atom:link href="/categories/wechat/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>The Busifavor Data Signature by Using the Official Wechat Miniprogram Plugin</title>
+      <link>/post/the-busifavor-data-signature-by-using-the-official-wechat-miniprogram-plugin/</link>
+      <pubDate>Tue, 21 Jul 2020 13:09:13 +0800</pubDate>
+      
+      <guid>/post/the-busifavor-data-signature-by-using-the-official-wechat-miniprogram-plugin/</guid>
+      <description>微信支付官方「小程序发券插件」(≤1.1.3) 的商家券数据签名，单独抽离出数据转换函数，配合使用云开发NodeJS环境，让签名不再麻烦。</description>
+    </item>
     
     <item>
       <title>微信支付APIv3的Nodejs版SDK，让开发变得简单不再繁琐</title>
