@@ -11,7 +11,7 @@ summary: "docker image of the mysql binlog synchronism tool in alpine"
 
 ## Why
 
-The official docker containers should have a `PID 1` issue there, [this prject](https://github.com/TheNorthMemory/canal-docker) try to solve this problem and.
+The official docker containers should have a `PID 1` issue there, [this prject](https://github.com/TheNorthMemory/canal-docker) was made for try to solve this problem.
 
 ## Bootstrap
 
