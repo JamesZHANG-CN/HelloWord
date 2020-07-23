@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>微信支付APIv3接口文档及开发者工具 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="共计收录微信支付APIv3官方文档118&#43;18个开放接口定义，SPA单页应用，适配移动端，支持标签检索。" /><meta name="keywords" content="wechatpay apiv3 openapi yaml specifications" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/introduct-a-wechatpay-openapi-documentation-project/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="微信支付APIv3接口文档及开发者工具" />
+<meta property="og:description" content="共计收录微信支付APIv3官方文档118&#43;18个开放接口定义，SPA单页应用，适配移动端，支持标签检索。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/introduct-a-wechatpay-openapi-documentation-project/" />
+<meta property="article:published_time" content="2020-07-23T09:41:32&#43;08:00"/>
+<meta property="article:modified_time" content="2020-07-23T09:41:32&#43;08:00"/>
+
+<meta itemprop="name" content="微信支付APIv3接口文档及开发者工具">
+<meta itemprop="description" content="共计收录微信支付APIv3官方文档118&#43;18个开放接口定义，SPA单页应用，适配移动端，支持标签检索。">
+
+
+<meta itemprop="datePublished" content="2020-07-23T09:41:32&#43;08:00" />
+<meta itemprop="dateModified" content="2020-07-23T09:41:32&#43;08:00" />
+<meta itemprop="wordCount" content="1008">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="微信支付APIv3接口文档及开发者工具"/>
+<meta name="twitter:description" content="共计收录微信支付APIv3官方文档118&#43;18个开放接口定义，SPA单页应用，适配移动端，支持标签检索。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">微信支付APIv3接口文档及开发者工具</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-07-23 </span>
+        <div class="post-category">
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="项目地址">项目地址</h2>
+
+<p>整理自<a href="https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pages/Overview.shtml">微信支付官方文档</a> <a href="https://wechatpay-api.gitbook.io/wechatpay-api-v3/">WechatPay-API-v3</a>，SPA单页应用<a href="https://thenorthmemory.github.io/wechatpay-openapi/">戳这里体验</a>，共计收录118+18个开放接口，适配了移动端体验，支持标签检索。有如下约定：</p>
+
+<ol>
+<li>对于类型定义是 <strong>string($MediaId)</strong>， 需要用 <em>/通用接口</em> 媒体(图片/视频)上传获取到返回值；</li>
+<li>对于类型定义是 <strong>string($MediaUrl)</strong>，需要用 <em>/运营工具/通用接口</em> 营销图片上传接口取得返回值；</li>
+<li>对于类型定义是 <strong>string($rfc3339)</strong>，请使用时间带时区字符串；</li>
+<li>对于类型定义是 <strong>string($rfc2397)</strong>，官方文档说是可直接用于img标签，不确定是否符合RFC2397规范；</li>
+<li>对于类型定义是 <strong>string($numeric)</strong>，请留意其值传递实质是字符串类型，类型校对需要使用numeric校对；</li>
+<li>对于类型定义是 <strong>string($jsonArrayLike)</strong>，请使用数组对象转字符串；</li>
+<li>对于类型定义是 <strong>string($date)</strong>，请留意使用 <em>东八区</em> 日期格式；</li>
+<li>对于类型定义是 <strong>string($url)</strong>，请使用以https开头的URL；</li>
+<li>对于类型定义是 <strong>number($uint64)</strong>，请注意返回值JSON解码时，有可能整型溢出；</li>
+<li>对于对象属性 <strong>x-is-sensitive</strong>，请根据场景需要，在请求体内需要 <em>rsa.encrypt</em>, 在返回体需要 <em>rsa.decrypt</em> ；</li>
+</ol>
+
+<p>Q: 有官方文档，这个项目有啥用？</p>
+
+<p>A. 官方文档侧重点是业务介绍，感觉是顺带把接口释义也做了下，对开发来说，<strong>请求方法、URI地址、数据结构、数据类型</strong>这些才是关键点，本项目只摘录这些点，期望能给开发带来便利；另外这个项目其实是附产，本是为了生成代码，结果*悲伤*有一大筐，先就开源介绍一下这个项目吧。</p>
+
+<h2 id="spec文件化">SPEC文件化</h2>
+
+<ul>
+<li>./spec/-notify.yaml</li>
+<li>./spec/apply4sub/sub_merchants/{sub_mchid}/modify-settlement.yaml</li>
+<li>./spec/apply4sub/sub_merchants/{sub_mchid}/settlement.yaml</li>
+<li>./spec/apply4subject/applyment.yaml</li>
+<li>./spec/apply4subject/applyment/merchants/{sub_mchid}/state.yaml</li>
+<li>./spec/apply4subject/applyment/{applyment_id}/cancel.yaml</li>
+<li>./spec/apply4subject/applyment/{business_code}/cancel.yaml</li>
+<li>./spec/applyment4sub/applyment/applyment_id/{applyment_id}.yaml</li>
+<li>./spec/applyment4sub/applyment/business_code/{business_code}.yaml</li>
+<li>./spec/applyment4sub/applyment/stub.yaml</li>
+<li>./spec/bill/fundflowbill.yaml</li>
+<li>./spec/bill/tradebill.yaml</li>
+<li>./spec/billdownload/file.yaml</li>
+<li>./spec/certificates.yaml</li>
+<li>./spec/combine-transactions/app.yaml</li>
+<li>./spec/combine-transactions/h5.yaml</li>
+<li>./spec/combine-transactions/jsapi.yaml</li>
+<li>./spec/combine-transactions/native.yaml</li>
+<li>./spec/combine-transactions/out-trade-no/{combine_out_trade_no}.yaml</li>
+<li>./spec/combine-transactions/out-trade-no/{combine_out_trade_no}/close.yaml</li>
+<li>./spec/ecommerce/applyments/out-request-no/{out_request_no}.yaml</li>
+<li>./spec/ecommerce/applyments/stub.yaml</li>
+<li>./spec/ecommerce/applyments/{applyment_id}.yaml</li>
+<li>./spec/ecommerce/fund/balance/{sub_mchid}.yaml</li>
+<li>./spec/ecommerce/fund/enddaybalance/{sub_mchid}.yaml</li>
+<li>./spec/ecommerce/fund/withdraw.yaml</li>
+<li>./spec/ecommerce/fund/withdraw/{withdraw_id}.yaml</li>
+<li>./spec/ecommerce/profitsharing/finish-order.yaml</li>
+<li>./spec/ecommerce/profitsharing/orders.yaml</li>
+<li>./spec/ecommerce/profitsharing/receivers/add.yaml</li>
+<li>./spec/ecommerce/profitsharing/receivers/delete.yaml</li>
+<li>./spec/ecommerce/profitsharing/returnorders.yaml</li>
+<li>./spec/ecommerce/refunds/apply.yaml</li>
+<li>./spec/ecommerce/refunds/id/{refund_id}.yaml</li>
+<li>./spec/ecommerce/refunds/out-refund-no/{out_refund_no}.yaml</li>
+<li>./spec/ecommerce/subsidies/cancel.yaml</li>
+<li>./spec/ecommerce/subsidies/create.yaml</li>
+<li>./spec/ecommerce/subsidies/return.yaml</li>
+<li>./spec/goldplan/merchants/changecustompagestatus.yaml</li>
+<li>./spec/goldplan/merchants/changegoldplanstatus.yaml</li>
+<li>./spec/marketing/busifavor/callbacks.yaml</li>
+<li>./spec/marketing/busifavor/coupons/associate.yaml</li>
+<li>./spec/marketing/busifavor/coupons/disassociate.yaml</li>
+<li>./spec/marketing/busifavor/coupons/use.yaml</li>
+<li>./spec/marketing/busifavor/coupons/{card_id}/send.yaml</li>
+<li>./spec/marketing/busifavor/stocks.yaml</li>
+<li>./spec/marketing/busifavor/stocks/{stock_id}.yaml</li>
+<li>./spec/marketing/busifavor/stocks/{stock_id}/couponcodes.yaml</li>
+<li>./spec/marketing/busifavor/users/{openid}/coupons.yaml</li>
+<li>./spec/marketing/busifavor/users/{openid}/coupons/{coupon_code}/appids/{appid}.yaml</li>
+<li>./spec/marketing/favor/callbacks.yaml</li>
+<li>./spec/marketing/favor/coupon-stocks.yaml</li>
+<li>./spec/marketing/favor/media/image-upload.yaml</li>
+<li>./spec/marketing/favor/stocks.yaml</li>
+<li>./spec/marketing/favor/stocks/{stock_id}.yaml</li>
+<li>./spec/marketing/favor/stocks/{stock_id}/items.yaml</li>
+<li>./spec/marketing/favor/stocks/{stock_id}/merchants.yaml</li>
+<li>./spec/marketing/favor/stocks/{stock_id}/pause.yaml</li>
+<li>./spec/marketing/favor/stocks/{stock_id}/refund-flow.yaml</li>
+<li>./spec/marketing/favor/stocks/{stock_id}/restart.yaml</li>
+<li>./spec/marketing/favor/stocks/{stock_id}/start.yaml</li>
+<li>./spec/marketing/favor/stocks/{stock_id}/use-flow.yaml</li>
+<li>./spec/marketing/favor/users/{openid}/coupons.yaml</li>
+<li>./spec/marketing/favor/users/{openid}/coupons/{coupon_id}.yaml</li>
+<li>./spec/marketing/partnerships/build.yaml</li>
+<li>./spec/marketing/partnerships/terminate.yaml</li>
+<li>./spec/marketing/paygiftactivity/activities.yaml</li>
+<li>./spec/marketing/paygiftactivity/activities/{activity_id}.yaml</li>
+<li>./spec/marketing/paygiftactivity/activities/{activity_id}/goods.yaml</li>
+<li>./spec/marketing/paygiftactivity/activities/{activity_id}/merchants.yaml</li>
+<li>./spec/marketing/paygiftactivity/activities/{activity_id}/merchants/add.yaml</li>
+<li>./spec/marketing/paygiftactivity/activities/{activity_id}/merchants/delete.yaml</li>
+<li>./spec/marketing/paygiftactivity/activities/{activity_id}/terminate.yaml</li>
+<li>./spec/marketing/paygiftactivity/unique-threshold-activity.yaml</li>
+<li>./spec/merchant-service/complaint-notifications.yaml</li>
+<li>./spec/merchant-service/complaints.yaml</li>
+<li>./spec/merchant/fund/balance/{account_type}.yaml</li>
+<li>./spec/merchant/fund/dayendbalance/{account_type}.yaml</li>
+<li>./spec/merchant/fund/withdraw.yaml</li>
+<li>./spec/merchant/fund/withdraw/bill-type/{bill_type}.yaml</li>
+<li>./spec/merchant/fund/withdraw/out-request-no/{out_request_no}.yaml</li>
+<li>./spec/merchant/media/upload.yaml</li>
+<li>./spec/merchant/media/video_upload.yaml</li>
+<li>./spec/pay/partner/transactions/app.yaml</li>
+<li>./spec/pay/partner/transactions/h5.yaml</li>
+<li>./spec/pay/partner/transactions/id/{transaction_id}.yaml</li>
+<li>./spec/pay/partner/transactions/jsapi.yaml</li>
+<li>./spec/pay/partner/transactions/native.yaml</li>
+<li>./spec/pay/partner/transactions/out-trade-no/{out_trade_no}.yaml</li>
+<li>./spec/pay/partner/transactions/out-trade-no/{out_trade_no}/close.yaml</li>
+<li>./spec/pay/transactions/app.yaml</li>
+<li>./spec/pay/transactions/h5.yaml</li>
+<li>./spec/pay/transactions/id/{transaction_id}.yaml</li>
+<li>./spec/pay/transactions/jsapi.yaml</li>
+<li>./spec/pay/transactions/native.yaml</li>
+<li>./spec/pay/transactions/out-trade-no/{out_trade_no}.yaml</li>
+<li>./spec/pay/transactions/out-trade-no/{out_trade_no}/close.yaml</li>
+<li>./spec/payscore/serviceorder.yaml</li>
+<li>./spec/payscore/serviceorder/direct-complete.yaml</li>
+<li>./spec/payscore/serviceorder/{out_order_no}/cancel.yaml</li>
+<li>./spec/payscore/serviceorder/{out_order_no}/complete.yaml</li>
+<li>./spec/payscore/serviceorder/{out_order_no}/modify.yaml</li>
+<li>./spec/payscore/serviceorder/{out_order_no}/pay.yaml</li>
+<li>./spec/payscore/serviceorder/{out_order_no}/sync.yaml</li>
+<li>./spec/payscore/user-service-state.yaml</li>
+<li>./spec/payscore/users/{openid}/permissions/{service_id}/terminate.yaml</li>
+<li>./spec/smartguide/guides.yaml</li>
+<li>./spec/smartguide/guides/{guide_id}.yaml</li>
+<li>./spec/smartguide/guides/{guide_id}/assign.yaml</li>
+</ul>
+
+<p><strong>注</strong>: 有俩异形，这里就不表了，官方后期会修，等修完了我再更新同步。</p>
+
+<h2 id="后记">后记</h2>
+
+<p>其实吧，两周前，这个工具的高级用法已经做完了，即，可以作为官方接口开发者工具使用，思来想去还是不开源这个用法了，这里仅提供思路，供有需要的同学自行钻研吧。</p>
+
+<ol>
+<li>修改 <code>swagger.yaml</code> 中的 <code>baseURL</code> 为同域地址，并转发 <code>/v3</code> 至代理工具；</li>
+<li>可选修改 <code>schemas</code> 中的 <code>https</code> 为 <code>http</code>;</li>
+<li>做个代理工具（nodejs大概40行代码就搞完了），把界面提交的数据做签名，代理至官方接口地址，返回结果给界面；</li>
+</ol>
+
+<p>然后就没有然后了。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-07-23
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/the-busifavor-data-signature-by-using-the-official-wechat-miniprogram-plugin/">
+            <span class="next-text nav-default">微信支付官方「小程序发券插件」(≤1.1.3) 数据签名概要</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
