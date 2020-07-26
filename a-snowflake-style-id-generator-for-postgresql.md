@@ -4,7 +4,7 @@ date: 2019-07-06T16:06:57+08:00
 keywords: ["postgresql", "plpgql", "snowflake"]
 description: "a pretty elegant, twitter snowflake style id_generator for postgresql"
 tags: ["postgres"]
-categories: ["数据库"]
+categories: ["postgres"]
 author: "<a href=\"https://rob.conery.io/about-me/\">Rob Conery</a>"
 summary: "很有参考意义的一个 plpgql id_generator 解决方案，可能后期会应用到pg数据库上。"
 ---

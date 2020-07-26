@@ -1,6 +1,6 @@
 ---
 title: "微信支付APIv3接口文档及开发者工具"
-date: 2020-07-23T09:41:32+08:00
+date: 2020-07-26T17:51:32+08:00
 keywords: [wechatpay apiv3 openapi yaml specifications]
 description: "共计收录微信支付APIv3官方文档118+18个开放接口定义，SPA单页应用，适配移动端，支持标签检索。"
 tags: []
@@ -10,9 +10,9 @@ summary: "官方文档侧重点是业务介绍，感觉是顺带把接口释义�
 author: "James"
 ---
 
-## 项目地址
+## [项目地址](https://thenorthmemory.github.io/wechatpay-openapi/)
 
-整理自[微信支付官方文档](https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pages/Overview.shtml) [WechatPay-API-v3](https://wechatpay-api.gitbook.io/wechatpay-api-v3/)，SPA单页应用[戳这里体验](https://thenorthmemory.github.io/wechatpay-openapi/)，共计收录118+18个开放接口，适配了移动端体验，支持标签检索。有如下约定：
+整理自[微信支付官方文档](https://pay.weixin.qq.com/wiki/doc/apiv3/wxpay/pages/Overview.shtml) [WechatPay-API-v3](https://wechatpay-api.gitbook.io/wechatpay-api-v3/)，SPA单页应用[戳这里体验](https://thenorthmemory.github.io/wechatpay-openapi/)，共计收录121+19个开放接口，适配了移动端体验，支持标签检索。有如下约定：
 
 1. 对于类型定义是 **string($MediaId)**， 需要用 */通用接口* 媒体(图片/视频)上传获取到返回值；
 2. 对于类型定义是 **string($MediaUrl)**，需要用 */运营工具/通用接口* 营销图片上传接口取得返回值；
@@ -52,6 +52,8 @@ A. 官方文档侧重点是业务介绍，感觉是顺带把接口释义也做�
 - ./spec/combine-transactions/native.yaml
 - ./spec/combine-transactions/out-trade-no/{combine_out_trade_no}.yaml
 - ./spec/combine-transactions/out-trade-no/{combine_out_trade_no}/close.yaml
+- ./spec/discount-card/orders/out-trade-no/{out_trade_no}.yaml
+- ./spec/discount-card/orders/{out_order_no}.yaml
 - ./spec/ecommerce/applyments/out-request-no/{out_request_no}.yaml
 - ./spec/ecommerce/applyments/stub.yaml
 - ./spec/ecommerce/applyments/{applyment_id}.yaml

@@ -4,7 +4,7 @@ date: 2019-10-16T20:55:42+08:00
 keywords: [another mysql binlog synchronism tool]
 description: "Yet another alibaba canal tool in alpine, less size of the deployer&adapter together. Easy bootstrap and usage."
 tags: []
-categories: [alibaba]
+categories: [postgres]
 author: "James"
 summary: "docker image of the mysql binlog synchronism tool in alpine"
 ---
