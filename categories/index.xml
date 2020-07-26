@@ -6,7 +6,7 @@
     <description>Recent content in Categories on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Thu, 23 Jul 2020 09:41:32 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 26 Jul 2020 17:51:32 +0800</lastBuildDate>
     
 	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,27 +14,18 @@
     <item>
       <title>wechat</title>
       <link>/categories/wechat/</link>
-      <pubDate>Thu, 23 Jul 2020 09:41:32 +0800</pubDate>
+      <pubDate>Sun, 26 Jul 2020 17:51:32 +0800</pubDate>
       
       <guid>/categories/wechat/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>alibaba</title>
-      <link>/categories/alibaba/</link>
+      <title>postgres</title>
+      <link>/categories/postgres/</link>
       <pubDate>Wed, 16 Oct 2019 20:55:42 +0800</pubDate>
       
-      <guid>/categories/alibaba/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>数据库</title>
-      <link>/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</link>
-      <pubDate>Sat, 06 Jul 2019 16:06:57 +0800</pubDate>
-      
-      <guid>/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</guid>
+      <guid>/categories/postgres/</guid>
       <description></description>
     </item>
     
