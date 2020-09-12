@@ -5,6 +5,7 @@ keywords: ["微信支付", "Wechatpay SDK", "Axios Plugin"]
 description: "在2020这个时间节点，之所以还要再造一遍微信支付v2(相对于APIv3来说)的SDK轮子，实属是无奈之举，线下交易场景常见的付款码支付及退款功能，官方当下还没有开放出来v3版的，只能借助v2接口来处理； wechatpay-axios-plugin 从一开始目标就是为云原生而设计，遂再造一遍轮子，也抽出一些共生方法，为v3而用。"
 tags: []
 categories: ["wechat"]
+summary: "在2020这个时间节点，之所以还要再造一遍微信支付v2(相对于APIv3来说)的SDK轮子，实属是无奈之举，线下交易场景常见的付款码支付及退款功能，官方当下还没有开放出来v3版的，只能借助v2接口来处理； wechatpay-axios-plugin 从一开始目标就是为云原生而设计，遂再造一遍轮子，也抽出一些共生方法，为v3而用。"
 author: "James"
 ---
 
