@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>再造一遍微信支付v2版的nodejs版SDK - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="在2020这个时间节点，之所以还要再造一遍微信支付v2(相对于APIv3来说)的SDK轮子，实属是无奈之举，线下交易场景常见的付款码支付及退款功能，官方当下还没有开放出来v3版的，只能借助v2接口来处理； wechatpay-axios-plugin 从一开始目标就是为云原生而设计，遂再造一遍轮子，也抽出一些共生方法，为v3而用。" /><meta name="keywords" content="微信支付, Wechatpay SDK, Axios Plugin" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/yet-another-wechatpay-apiv2-sdk/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="再造一遍微信支付v2版的nodejs版SDK" />
+<meta property="og:description" content="在2020这个时间节点，之所以还要再造一遍微信支付v2(相对于APIv3来说)的SDK轮子，实属是无奈之举，线下交易场景常见的付款码支付及退款功能，官方当下还没有开放出来v3版的，只能借助v2接口来处理； wechatpay-axios-plugin 从一开始目标就是为云原生而设计，遂再造一遍轮子，也抽出一些共生方法，为v3而用。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/yet-another-wechatpay-apiv2-sdk/" />
+<meta property="article:published_time" content="2020-09-12T15:31:43&#43;08:00"/>
+<meta property="article:modified_time" content="2020-09-12T15:31:43&#43;08:00"/>
+
+<meta itemprop="name" content="再造一遍微信支付v2版的nodejs版SDK">
+<meta itemprop="description" content="在2020这个时间节点，之所以还要再造一遍微信支付v2(相对于APIv3来说)的SDK轮子，实属是无奈之举，线下交易场景常见的付款码支付及退款功能，官方当下还没有开放出来v3版的，只能借助v2接口来处理； wechatpay-axios-plugin 从一开始目标就是为云原生而设计，遂再造一遍轮子，也抽出一些共生方法，为v3而用。">
+
+
+<meta itemprop="datePublished" content="2020-09-12T15:31:43&#43;08:00" />
+<meta itemprop="dateModified" content="2020-09-12T15:31:43&#43;08:00" />
+<meta itemprop="wordCount" content="1573">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="再造一遍微信支付v2版的nodejs版SDK"/>
+<meta name="twitter:description" content="在2020这个时间节点，之所以还要再造一遍微信支付v2(相对于APIv3来说)的SDK轮子，实属是无奈之举，线下交易场景常见的付款码支付及退款功能，官方当下还没有开放出来v3版的，只能借助v2接口来处理； wechatpay-axios-plugin 从一开始目标就是为云原生而设计，遂再造一遍轮子，也抽出一些共生方法，为v3而用。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">再造一遍微信支付v2版的nodejs版SDK</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-09-12 </span>
+        <div class="post-category">
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#设计思路">设计思路</a>
+<ul>
+<li><a href="#transform-request">Transform.request</a></li>
+<li><a href="#transform-response">Transform.response</a></li>
+</ul></li>
+<li><a href="#证书设置">证书设置</a></li>
+<li><a href="#自定义打印日志">自定义打印日志</a></li>
+<li><a href="#使用示例">使用示例</a>
+<ul>
+<li><a href="#申请退款">申请退款</a></li>
+<li><a href="#付款码支付">付款码支付</a></li>
+<li><a href="#现金红包">现金红包</a></li>
+<li><a href="#企业付款">企业付款</a></li>
+</ul></li>
+<li><a href="#和v3一起用">和v3一起用</a>
+<ul>
+<li><a href="#native下单">Native下单</a></li>
+<li><a href="#查询订单">查询订单</a></li>
+<li><a href="#关单">关单</a></li>
+<li><a href="#创建商家券">创建商家券</a></li>
+<li><a href="#查询用户单张券详情">查询用户单张券详情</a></li>
+<li><a href="#上传图片">上传图片</a></li>
+<li><a href="#下载账单并格式化">下载账单并格式化</a></li>
+<li><a href="#委托营销">委托营销</a></li>
+<li><a href="#查询投诉信息并解密">查询投诉信息并解密</a></li>
+</ul></li>
+<li><a href="#todo">TODO</a></li>
+<li><a href="#写到最后">写到最后</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<p>在2020这个时间节点，之所以还要再造一遍微信支付v2(相对于APIv3来说)的SDK轮子，实属是无奈之举，线下交易场景常见的付款码支付及退款功能，官方当下还没有开放出来v3版的，只能借助v2接口来处理；<code>wechatpay-axios-plugin</code> 从一开始目标就是为云原生而设计，遂再造一遍轮子，也抽出一些共生方法，为v3而用。</p>
+
+<h2 id="设计思路">设计思路</h2>
+
+<p>此核心部件是利用了Axios的transform功能，数据在类库内部流转过程中，经过 <code>transformRequest</code> 及 <code>transformResponse</code> 处理，通过类库在本身功能，自定义这两个transformer，从而达到 HTTP 请求/响应 处理。</p>
+
+<h3 id="transform-request">Transform.request</h3>
+
+<p>方法返回值是个数组，含两个方法 <code>[signer, toXml]</code>，字面意思即，对输入数据签名，然后转换成xml；</p>
+
+<h3 id="transform-response">Transform.response</h3>
+
+<p>方法返回值是个数组，含两个方法 <code>[toObject, verifier]</code>，字面意思即，返回值做数据转换为对象，然后校验签名；</p>
+
+<h2 id="证书设置">证书设置</h2>
+
+<p>凡是涉及资金变动的接口，均需要商户证书，此实现同时支持 <code>pem</code> 及 <code>p12</code> 格式的证书，使用方法见随包README：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="p">{</span><span class="nx">Wechatpay</span><span class="p">,</span> <span class="nx">Formatter</span><span class="o">:</span> <span class="nx">fmt</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;wechatpay-axios-plugin&#39;</span><span class="p">)</span>
+<span class="k">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">xmlBased</span><span class="p">({</span>
+  <span class="nx">secret</span><span class="o">:</span> <span class="s1">&#39;your_merchant_secret_key_string&#39;</span><span class="p">,</span>
+  <span class="nx">merchant</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">cert</span><span class="o">:</span> <span class="s1">&#39;-----BEGIN CERTIFICATE-----&#39;</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="s1">&#39;-----END CERTIFICATE-----&#39;</span><span class="p">,</span>
+    <span class="nx">key</span><span class="o">:</span> <span class="s1">&#39;-----BEGIN PRIVATE KEY-----&#39;</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="s1">&#39;-----END PRIVATE KEY-----&#39;</span><span class="p">,</span>
+    <span class="c1">// or
+</span><span class="c1"></span>    <span class="c1">// passphrase: &#39;your_merchant_id&#39;,
+</span><span class="c1"></span>    <span class="c1">// pfx: fs.readFileSync(&#39;/your/merchant/cert/apiclient_cert.p12&#39;),
+</span><span class="c1"></span>  <span class="p">},</span>
+<span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>实力化一个 <code>client</code> 的最小参数为 <code>secret</code>，即所谓的 <strong>密钥</strong>，字符串形式，32字节长度。</p>
+
+<h2 id="自定义打印日志">自定义打印日志</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">//在格式转换完后，打印日志
+</span><span class="c1"></span><span class="nx">client</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">transformRequest</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="nx">data</span><span class="p">))</span>
+<span class="c1">//在请求返回，先行打印日志
+</span><span class="c1"></span><span class="nx">client</span><span class="p">.</span><span class="nx">defaults</span><span class="p">.</span><span class="nx">transformResponse</span><span class="p">.</span><span class="nx">unshift</span><span class="p">(</span><span class="nx">data</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">),</span> <span class="nx">data</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="使用示例">使用示例</h2>
+
+<p>实例化对象 <code>secret</code> 所对应的商户类型，可以是服务商、普通商户、特约商户，入参按照官方文档，手捋填入即可，以下几个方法，均测试过，正常运转。</p>
+
+<h3 id="申请退款">申请退款</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">client</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/secapi/pay/refund&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">appid</span><span class="o">:</span> <span class="s1">&#39;wx8888888888888888&#39;</span><span class="p">,</span>
+  <span class="nx">mch_id</span><span class="o">:</span> <span class="s1">&#39;1900000109&#39;</span><span class="p">,</span>
+  <span class="nx">out_trade_no</span><span class="o">:</span> <span class="s1">&#39;1217752501201407033233368018&#39;</span><span class="p">,</span>
+  <span class="nx">out_refund_no</span><span class="o">:</span> <span class="s1">&#39;1217752501201407033233368018&#39;</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="nx">refund_fee</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span>
+  <span class="nx">refund_fee_type</span><span class="o">:</span> <span class="s1">&#39;CNY&#39;</span><span class="p">,</span>
+  <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">)).</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">response</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">//log输入
+</span><span class="c1"></span><span class="p">{</span>
+  <span class="nx">return_code</span><span class="o">:</span> <span class="s1">&#39;SUCCESS&#39;</span><span class="p">,</span>
+  <span class="nx">return_msg</span><span class="o">:</span> <span class="s1">&#39;OK&#39;</span><span class="p">,</span>
+  <span class="nx">appid</span><span class="o">:</span> <span class="s1">&#39;wx8888888888888888&#39;</span><span class="p">,</span>
+  <span class="nx">mch_id</span><span class="o">:</span> <span class="s1">&#39;1365319302&#39;</span><span class="p">,</span>
+  <span class="nx">nonce_str</span><span class="o">:</span> <span class="s1">&#39;X8bpYtUJbPHK0Fyd&#39;</span><span class="p">,</span>
+  <span class="nx">sign</span><span class="o">:</span> <span class="s1">&#39;12BDC0390958455875108947AD51D897&#39;</span><span class="p">,</span>
+  <span class="nx">result_code</span><span class="o">:</span> <span class="s1">&#39;SUCCESS&#39;</span><span class="p">,</span>
+  <span class="nx">transaction_id</span><span class="o">:</span> <span class="s1">&#39;4200000684202009114087736848&#39;</span><span class="p">,</span>
+  <span class="nx">out_trade_no</span><span class="o">:</span> <span class="s1">&#39;1217752501201407033233368018&#39;</span><span class="p">,</span>
+  <span class="nx">out_refund_no</span><span class="o">:</span> <span class="s1">&#39;1217752501201407033233368018&#39;</span><span class="p">,</span>
+  <span class="nx">refund_id</span><span class="o">:</span> <span class="s1">&#39;50300005642020091102621479983&#39;</span><span class="p">,</span>
+  <span class="nx">refund_channel</span><span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+  <span class="nx">refund_fee</span><span class="o">:</span> <span class="s1">&#39;100&#39;</span><span class="p">,</span>
+  <span class="nx">coupon_refund_fee</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="o">:</span> <span class="s1">&#39;100&#39;</span><span class="p">,</span>
+  <span class="nx">cash_fee</span><span class="o">:</span> <span class="s1">&#39;100&#39;</span><span class="p">,</span>
+  <span class="nx">coupon_refund_count</span><span class="o">:</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span>
+  <span class="nx">cash_refund_fee</span><span class="o">:</span> <span class="s1">&#39;100&#39;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="付款码支付">付款码支付</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">client</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/pay/micropay&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">appid</span><span class="o">:</span> <span class="s1">&#39;wx8888888888888888&#39;</span><span class="p">,</span>
+  <span class="nx">mch_id</span><span class="o">:</span> <span class="s1">&#39;1900000109&#39;</span><span class="p">,</span>
+  <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+  <span class="nx">sign_type</span><span class="o">:</span> <span class="s1">&#39;HMAC-SHA256&#39;</span><span class="p">,</span>
+  <span class="nx">body</span><span class="o">:</span> <span class="s1">&#39;image形象店-深圳腾大-QQ公仔&#39;</span><span class="p">,</span>
+  <span class="nx">out_trade_no</span><span class="o">:</span> <span class="s1">&#39;1217752501201407033233368018&#39;</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="o">:</span> <span class="mi">888</span><span class="p">,</span>
+  <span class="nx">fee_type</span><span class="o">:</span> <span class="s1">&#39;CNY&#39;</span><span class="p">,</span>
+  <span class="nx">spbill_create_ip</span><span class="o">:</span> <span class="s1">&#39;8.8.8.8&#39;</span><span class="p">,</span>
+  <span class="nx">auth_code</span><span class="o">:</span> <span class="s1">&#39;120061098828009406&#39;</span><span class="p">,</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">)).</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">response</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="现金红包">现金红包</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">client</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/mmpaymkttransfers/sendredpack&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+  <span class="nx">mch_billno</span><span class="o">:</span> <span class="s1">&#39;10000098201411111234567890&#39;</span><span class="p">,</span>
+  <span class="nx">mch_id</span><span class="o">:</span> <span class="s1">&#39;10000098&#39;</span><span class="p">,</span>
+  <span class="nx">wxappid</span><span class="o">:</span> <span class="s1">&#39;wx8888888888888888&#39;</span><span class="p">,</span>
+  <span class="nx">send_name</span><span class="o">:</span> <span class="s1">&#39;鹅企支付&#39;</span><span class="p">,</span>
+  <span class="nx">re_openid</span><span class="o">:</span> <span class="s1">&#39;oxTWIuGaIt6gTKsQRLau2M0yL16E&#39;</span><span class="p">,</span>
+  <span class="nx">total_amount</span><span class="o">:</span> <span class="mi">1000</span><span class="p">,</span>
+  <span class="nx">total_num</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="nx">wishing</span><span class="o">:</span> <span class="s1">&#39;HAPPY BIRTHDAY&#39;</span><span class="p">,</span>
+  <span class="nx">client_ip</span><span class="o">:</span> <span class="s1">&#39;192.168.0.1&#39;</span><span class="p">,</span>
+  <span class="nx">act_name</span><span class="o">:</span> <span class="s1">&#39;回馈活动&#39;</span><span class="p">,</span>
+  <span class="nx">remark</span><span class="o">:</span> <span class="s1">&#39;会员回馈活动&#39;</span><span class="p">,</span>
+  <span class="nx">scene_id</span><span class="o">:</span> <span class="s1">&#39;PRODUCT_4&#39;</span><span class="p">,</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">)).</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">response</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="企业付款">企业付款</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">client</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/mmpaymkttransfers/promotion/transfers&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">appid</span><span class="o">:</span> <span class="s1">&#39;wx8888888888888888&#39;</span><span class="p">,</span>
+  <span class="nx">mch_id</span><span class="o">:</span> <span class="s1">&#39;1900000109&#39;</span><span class="p">,</span>
+  <span class="nx">partner_trade_no</span><span class="o">:</span> <span class="s1">&#39;10000098201411111234567890&#39;</span><span class="p">,</span>
+  <span class="nx">openid</span><span class="o">:</span> <span class="s1">&#39;oxTWIuGaIt6gTKsQRLau2M0yL16E&#39;</span><span class="p">,</span>
+  <span class="nx">check_name</span><span class="o">:</span> <span class="s1">&#39;FORCE_CHECK&#39;</span><span class="p">,</span>
+  <span class="nx">re_user_name</span><span class="o">:</span> <span class="s1">&#39;王小王&#39;</span><span class="p">,</span>
+  <span class="nx">amount</span><span class="o">:</span> <span class="mi">10099</span><span class="p">,</span>
+  <span class="nx">desc</span><span class="o">:</span> <span class="s1">&#39;理赔&#39;</span><span class="p">,</span>
+  <span class="nx">spbill_create_ip</span><span class="o">:</span> <span class="s1">&#39;192.168.0.1&#39;</span><span class="p">,</span>
+  <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">fmt</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">)).</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">response</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="和v3一起用">和v3一起用</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="nx">wxpay</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wechatpay</span><span class="p">({</span>
+  <span class="nx">mchid</span><span class="o">:</span> <span class="s1">&#39;your_merchant_id&#39;</span><span class="p">,</span>
+  <span class="nx">serial</span><span class="o">:</span> <span class="s1">&#39;serial_number_of_your_merchant_public_cert&#39;</span><span class="p">,</span>
+  <span class="nx">privateKey</span><span class="o">:</span> <span class="s1">&#39;-----BEGIN PRIVATE KEY-----&#39;</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="s1">&#39;-----END PRIVATE KEY-----&#39;</span><span class="p">,</span>
+  <span class="nx">certs</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">&#39;serial_number&#39;</span><span class="o">:</span> <span class="s1">&#39;-----BEGIN CERTIFICATE-----&#39;</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="s1">&#39;-----END CERTIFICATE-----&#39;</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="native下单">Native下单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">wxpay</span><span class="p">.</span><span class="nx">v3</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">transactions</span><span class="p">.</span><span class="kr">native</span>
+  <span class="p">.</span><span class="nx">post</span><span class="p">({</span><span class="cm">/*文档参数放这里就好*/</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="o">:</span> <span class="p">{</span><span class="nx">code_url</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">code_url</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="查询订单">查询订单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">wxpay</span><span class="p">.</span><span class="nx">v3</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">transactions</span><span class="p">.</span><span class="nx">id</span><span class="p">[</span><span class="s1">&#39;{transaction_id}&#39;</span><span class="p">]</span>
+  <span class="p">.</span><span class="nx">withEntities</span><span class="p">({</span><span class="nx">transaction_id</span><span class="o">:</span> <span class="s1">&#39;1217752501201407033233368018&#39;</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">get</span><span class="p">({</span><span class="nx">params</span><span class="o">:</span> <span class="p">{</span><span class="nx">mchid</span><span class="o">:</span> <span class="s1">&#39;1230000109&#39;</span><span class="p">}})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="关单">关单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">wxpay</span><span class="p">.</span><span class="nx">v3</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">transactions</span><span class="p">.</span><span class="nx">outTradeNo</span><span class="p">[</span><span class="s1">&#39;1217752501201407033233368018&#39;</span><span class="p">]</span>
+  <span class="p">.</span><span class="nx">post</span><span class="p">({</span><span class="nx">mchid</span><span class="o">:</span> <span class="s1">&#39;1230000109&#39;</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="创建商家券">创建商家券</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">wxpay</span><span class="p">.</span><span class="nx">v3</span><span class="p">.</span><span class="nx">marketing</span><span class="p">.</span><span class="nx">busifavor</span><span class="p">.</span><span class="nx">stocks</span>
+  <span class="p">.</span><span class="nx">post</span><span class="p">({</span><span class="cm">/*商家券创建条件*/</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="查询用户单张券详情">查询用户单张券详情</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="p">;(</span><span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="p">{</span><span class="nx">data</span><span class="o">:</span> <span class="nx">detail</span><span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v3</span><span class="p">.</span><span class="nx">marketing</span><span class="p">.</span><span class="nx">busifavor</span><span class="p">.</span><span class="nx">users</span><span class="p">.</span><span class="nx">$openid$</span><span class="p">.</span><span class="nx">coupons</span><span class="p">[</span><span class="s1">&#39;{coupon_code}&#39;</span><span class="p">].</span><span class="nx">appids</span><span class="p">[</span><span class="s1">&#39;wx233544546545989&#39;</span><span class="p">]</span>
+      <span class="p">.</span><span class="nx">withEntities</span><span class="p">({</span><span class="nx">openid</span><span class="o">:</span> <span class="s1">&#39;2323dfsdf342342&#39;</span><span class="p">,</span> <span class="nx">coupon_code</span><span class="o">:</span> <span class="s1">&#39;123446565767&#39;</span><span class="p">})</span>
+      <span class="p">.</span><span class="nx">get</span><span class="p">()</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">detail</span><span class="p">)</span>
+  <span class="p">}</span> <span class="k">catch</span><span class="p">({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">}})</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="上传图片">上传图片</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="nx">FormData</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;form-data&#39;</span><span class="p">)</span>
+<span class="k">const</span> <span class="p">{</span><span class="nx">createReadStream</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">)</span>
+
+<span class="k">const</span> <span class="nx">imageMeta</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">filename</span><span class="o">:</span> <span class="s1">&#39;hellowechatpay.png&#39;</span><span class="p">,</span>
+  <span class="c1">// easy calculated by the command `sha256sum hellowechatpay.png` on OSX
+</span><span class="c1"></span>  <span class="c1">// or by require(&#39;wechatpay-axios-plugin&#39;).Hash.sha256(filebuffer)
+</span><span class="c1"></span>  <span class="nx">sha256</span><span class="o">:</span> <span class="s1">&#39;1a47b1eb40f501457eaeafb1b1417edaddfbe7a4a8f9decec2d330d1b4477fbe&#39;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="k">const</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FormData</span><span class="p">()</span>
+<span class="nx">imageData</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">imageMeta</span><span class="p">),</span> <span class="p">{</span><span class="nx">contentType</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">})</span>
+<span class="nx">imageData</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;./hellowechatpay.png&#39;</span><span class="p">))</span>
+
+<span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">client</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;/v3/marketing/favor/media/image-upload&#39;</span><span class="p">,</span> <span class="nx">imageData</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">meta</span><span class="o">:</span> <span class="nx">imageMeta</span><span class="p">,</span>
+  <span class="nx">headers</span><span class="o">:</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">getHeaders</span><span class="p">()</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">media_url</span><span class="p">)</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="下载账单并格式化">下载账单并格式化</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="nx">assert</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;assert&#39;</span><span class="p">)</span>
+<span class="k">const</span> <span class="p">{</span><span class="nx">Hash</span><span class="o">:</span> <span class="p">{</span><span class="nx">sha1</span><span class="p">}}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;wechatpay-axios-plugin&#39;</span><span class="p">)</span>
+
+<span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">client</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/v3/bill/tradebill&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">params</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">bill_date</span><span class="o">:</span> <span class="s1">&#39;2020-06-01&#39;</span><span class="p">,</span>
+    <span class="nx">bill_type</span><span class="o">:</span> <span class="s1">&#39;ALL&#39;</span><span class="p">,</span>
+  <span class="p">}</span>
+<span class="p">}).</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="o">:</span> <span class="p">{</span><span class="nx">download_url</span><span class="p">,</span> <span class="nx">hash_value</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">client</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">download_url</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">signed</span><span class="o">:</span> <span class="nx">hash_value</span><span class="p">,</span>
+    <span class="nx">responseType</span><span class="o">:</span> <span class="s1">&#39;arraybuffer&#39;</span><span class="p">,</span>
+<span class="p">})).</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">assert</span><span class="p">(</span><span class="nx">sha1</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span> <span class="o">===</span> <span class="nx">res</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">signed</span><span class="p">,</span> <span class="s1">&#39;verify the SHA1 digest failed.&#39;</span><span class="p">)</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">fmt</span><span class="p">.</span><span class="nx">castCsvBill</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">))</span>
+<span class="p">}).</span><span class="k">catch</span><span class="p">(</span><span class="nx">error</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span>
+<span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="委托营销">委托营销</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="p">(</span><span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="nx">res</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">client</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="sb">`/v3/marketing/partnerships/build`</span><span class="p">,</span> <span class="p">{</span>
+      <span class="nx">partner</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">type</span><span class="p">,</span>
+        <span class="nx">appid</span>
+      <span class="p">},</span>
+      <span class="nx">authorized_data</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">business_type</span><span class="p">,</span>
+        <span class="nx">stock_id</span>
+      <span class="p">}</span>
+    <span class="p">},</span> <span class="p">{</span>
+      <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+        <span class="p">[</span><span class="sb">`Idempotency-Key`</span><span class="p">]</span><span class="o">:</span> <span class="mi">12345</span>
+      <span class="p">}</span>
+    <span class="p">})</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})()</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="查询投诉信息并解密">查询投诉信息并解密</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="p">;(</span><span class="kr">async</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="nx">res</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">Wechatpay</span><span class="p">.</span><span class="nx">client</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/v3/merchant-service/complaints&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">params</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">limit</span><span class="o">:</span> <span class="mi">50</span><span class="p">,</span>
+      <span class="nx">offset</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+      <span class="nx">begin_date</span><span class="o">:</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="o">+</span><span class="k">new</span> <span class="nb">Date</span> <span class="o">-</span> <span class="mi">29</span><span class="o">*</span><span class="mi">86400</span><span class="o">*</span><span class="mi">1000</span><span class="p">)).</span><span class="nx">toJSON</span><span class="p">().</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+      <span class="nx">end_date</span><span class="o">:</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">).</span><span class="nx">toJSON</span><span class="p">().</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+    <span class="p">}})</span>
+    <span class="c1">// decrypt the `Sensitive Information`
+</span><span class="c1"></span>    <span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="nx">row</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">payer_phone</span> <span class="o">=</span> <span class="nx">rsa</span><span class="p">.</span><span class="nx">decrypt</span><span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">payer_phone</span><span class="p">,</span> <span class="nx">merchantPrivateKey</span><span class="p">),</span> <span class="nx">row</span><span class="p">))</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+  <span class="p">}</span> <span class="k">catch</span><span class="p">({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">headers</span><span class="p">},</span> <span class="nx">request</span><span class="p">,</span> <span class="nx">config</span><span class="p">})</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})()</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="todo">TODO</h2>
+
+<p>v2版的<code>AES-256-ECB/PKCS7Padding</code>未做封装，这个不难，npm上也有许多优秀的类库可用，暂且先这样。</p>
+
+<h2 id="写到最后">写到最后</h2>
+
+<p>MIT开放源码@<a href="https://www.npmjs.com/package/wechatpay-axios-plugin">npm</a>, <a href="https://github.com/TheNorthMemory/wechatpay-axios-plugin">github</a> ，可用于企业商业用途。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-09-12
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/introduce-a-wechatpay-openapi-documentation-project/">
+            <span class="next-text nav-default">微信支付APIv3接口文档及开发者工具</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

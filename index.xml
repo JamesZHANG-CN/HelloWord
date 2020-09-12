@@ -6,10 +6,19 @@
     <description>Recent content on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Sun, 26 Jul 2020 17:51:32 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 12 Sep 2020 15:31:43 +0800</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>再造一遍微信支付v2版的nodejs版SDK</title>
+      <link>/post/yet-another-wechatpay-apiv2-sdk/</link>
+      <pubDate>Sat, 12 Sep 2020 15:31:43 +0800</pubDate>
+      
+      <guid>/post/yet-another-wechatpay-apiv2-sdk/</guid>
+      <description>在2020这个时间节点，之所以还要再造一遍微信支付v2(相对于APIv3来说)的SDK轮子，实属是无奈之举，线下交易场景常见的付款码支付及退</description>
+    </item>
     
     <item>
       <title>微信支付APIv3接口文档及开发者工具</title>
