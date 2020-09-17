@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Pkcs7 Padding Unpadding Research in Nodejs Env - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="PKCS7/Padding implementation on ES2015&#43;, just using the Native `Buffer` library to do the right things." /><meta name="keywords" content="PKCS7, rfc2315, NodeJS" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/pkcs7-padding-unpadding-research-in-nodejs-env/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="Pkcs7 Padding Unpadding Research in Nodejs Env" />
+<meta property="og:description" content="PKCS7/Padding implementation on ES2015&#43;, just using the Native `Buffer` library to do the right things." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/pkcs7-padding-unpadding-research-in-nodejs-env/" />
+<meta property="article:published_time" content="2020-09-17T18:24:20&#43;08:00"/>
+<meta property="article:modified_time" content="2020-09-17T18:24:20&#43;08:00"/>
+
+<meta itemprop="name" content="Pkcs7 Padding Unpadding Research in Nodejs Env">
+<meta itemprop="description" content="PKCS7/Padding implementation on ES2015&#43;, just using the Native `Buffer` library to do the right things.">
+
+
+<meta itemprop="datePublished" content="2020-09-17T18:24:20&#43;08:00" />
+<meta itemprop="dateModified" content="2020-09-17T18:24:20&#43;08:00" />
+<meta itemprop="wordCount" content="456">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Pkcs7 Padding Unpadding Research in Nodejs Env"/>
+<meta name="twitter:description" content="PKCS7/Padding implementation on ES2015&#43;, just using the Native `Buffer` library to do the right things."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Pkcs7 Padding Unpadding Research in Nodejs Env</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-09-17 </span>
+        <div class="post-category">
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+    <div class="post-content">
+      <p>It&rsquo;s a part of the <a href="https://github.com/TheNorthMemory/wechatpay-axios-plugin">wechatpay-axios-plugin</a> codes, regarding by the <a href="https://tools.ietf.org/html/rfc2315#section-10.3">rfc2315</a>, the <code>PKCS7/Padding</code> spec was post a notes there: <blockquote>The padding can be removed unambiguously since all input is padded and no padding string is a suffix of another. This padding method is well-defined if and only if k &lt; 256; methods for larger k are an open issue for further study.</blockquote></p>
+
+<p>For other developing language, there were more than one librares did the right thing. In Javascript, there were also lots of librares too. The following codes is another implementation on ES2015+ style. It just using the Native <code>Buffer</code> library to do the right things.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">class</span> <span class="nx">Aes</span> <span class="p">{</span>
+  <span class="cm">/**
+</span><span class="cm">   * @property {integer} BLOCK_SIZE - The `aes` block size
+</span><span class="cm">   */</span>
+  <span class="kr">static</span> <span class="nx">get</span> <span class="nx">BLOCK_SIZE</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">16</span> <span class="p">}</span>
+
+  <span class="cm">/**
+</span><span class="cm">   * @property {object} pkcs7 - The PKCS7 padding/unpadding container
+</span><span class="cm">   */</span>
+  <span class="kr">static</span> <span class="nx">get</span> <span class="nx">pkcs7</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="p">{</span><span class="nx">BLOCK_SIZE</span><span class="p">}</span> <span class="o">=</span> <span class="k">this</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+      <span class="cm">/**
+</span><span class="cm">       * padding, 32 bytes/256 bits `secret key` may optional need the last block.
+</span><span class="cm">       * @see https://tools.ietf.org/html/rfc2315#section-10.3
+</span><span class="cm">       * &lt;quote&gt;
+</span><span class="cm">       * The padding can be removed unambiguously since all input is
+</span><span class="cm">       *     padded and no padding string is a suffix of another. This
+</span><span class="cm">       *     padding method is well-defined if and only if k &lt; 256;
+</span><span class="cm">       *     methods for larger k are an open issue for further study.
+</span><span class="cm">       * &lt;/quote&gt;
+</span><span class="cm">       *
+</span><span class="cm">       * @param {string|Buffer} thing - The input
+</span><span class="cm">       * @param {boolean} [optional = true] - The flag for the last padding
+</span><span class="cm">       *
+</span><span class="cm">       * @return {Buffer} - The PADDING tailed payload
+</span><span class="cm">       */</span>
+      <span class="nx">padding</span><span class="o">:</span> <span class="p">(</span><span class="nx">thing</span><span class="p">,</span> <span class="nx">optional</span> <span class="o">=</span> <span class="kc">true</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nx">thing</span><span class="p">)</span>
+        <span class="k">const</span> <span class="nx">pad</span> <span class="o">=</span> <span class="nx">BLOCK_SIZE</span> <span class="o">-</span> <span class="nx">payload</span><span class="p">.</span><span class="nx">length</span> <span class="o">%</span> <span class="nx">BLOCK_SIZE</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nx">optional</span> <span class="o">&amp;&amp;</span> <span class="nx">pad</span> <span class="o">===</span> <span class="nx">BLOCK_SIZE</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">payload</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">([</span><span class="nx">payload</span><span class="p">,</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="nx">pad</span><span class="p">,</span> <span class="nx">pad</span><span class="p">)])</span>
+      <span class="p">},</span>
+
+      <span class="cm">/**
+</span><span class="cm">       * unpadding
+</span><span class="cm">       *
+</span><span class="cm">       * @param  {string|Buffer} thing - The input
+</span><span class="cm">       * @return {Buffer} - The PADDING wiped payload
+</span><span class="cm">       */</span>
+      <span class="nx">unpadding</span><span class="o">:</span> <span class="nx">thing</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">const</span> <span class="kr">byte</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nx">thing</span><span class="p">)</span>
+        <span class="nx">payload</span><span class="p">.</span><span class="nx">copy</span><span class="p">(</span><span class="kr">byte</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">payload</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">const</span> <span class="nx">pad</span> <span class="o">=</span> <span class="kr">byte</span><span class="p">.</span><span class="nx">readUInt8</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!~~</span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">compare</span><span class="p">(</span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">alloc</span><span class="p">(</span><span class="nx">pad</span><span class="p">,</span> <span class="nx">pad</span><span class="p">),</span> <span class="nx">payload</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="nx">pad</span><span class="p">)))</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">payload</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="nx">pad</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">payload</span>
+      <span class="p">},</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>Usage manual</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Aes</span><span class="p">.</span><span class="nx">pkcs7</span><span class="p">.</span><span class="nx">padding</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&lt;Buffer &gt;</pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Aes</span><span class="p">.</span><span class="nx">pkcs7</span><span class="p">.</span><span class="nx">padding</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&lt;Buffer 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10 10&gt;</pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Aes</span><span class="p">.</span><span class="nx">pkcs7</span><span class="p">.</span><span class="nx">padding</span><span class="p">(</span><span class="s1">&#39;1234567890&#39;</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&lt;Buffer 31 32 33 34 35 36 37 38 39 30 06 06 06 06 06 06&gt;</pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Aes</span><span class="p">.</span><span class="nx">pkcs7</span><span class="p">.</span><span class="nx">unpadding</span><span class="p">(</span><span class="nx">Aes</span><span class="p">.</span><span class="nx">pkcs7</span><span class="p">.</span><span class="nx">padding</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="kc">false</span><span class="p">)).</span><span class="nx">toString</span><span class="p">())</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">&#39;&#39;</pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Aes</span><span class="p">.</span><span class="nx">pkcs7</span><span class="p">.</span><span class="nx">unpadding</span><span class="p">(</span><span class="nx">Aes</span><span class="p">.</span><span class="nx">pkcs7</span><span class="p">.</span><span class="nx">padding</span><span class="p">(</span><span class="s1">&#39;1234567890&#39;</span><span class="p">)).</span><span class="nx">toString</span><span class="p">())</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">1234567890</pre></td></tr></table>
+</div>
+</div>
+<p>That&rsquo;s it!</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-09-17
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/yet-another-wechatpay-apiv2-sdk/">
+            <span class="next-text nav-default">再造一遍微信支付v2版的nodejs版SDK</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

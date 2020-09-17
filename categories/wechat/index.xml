@@ -6,10 +6,19 @@
     <description>Recent content in wechat on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Sat, 12 Sep 2020 15:31:43 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 17 Sep 2020 18:24:20 +0800</lastBuildDate>
     
 	<atom:link href="/categories/wechat/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Pkcs7 Padding Unpadding Research in Nodejs Env</title>
+      <link>/post/pkcs7-padding-unpadding-research-in-nodejs-env/</link>
+      <pubDate>Thu, 17 Sep 2020 18:24:20 +0800</pubDate>
+      
+      <guid>/post/pkcs7-padding-unpadding-research-in-nodejs-env/</guid>
+      <description>Pure javascript codes to implement the &lt;code&gt;PKCS7/Padding&lt;/code&gt; specification, regarding by rfc2315. It just using the Native &lt;code&gt;Buffer&lt;/code&gt; library to do the right things.</description>
+    </item>
     
     <item>
       <title>再造一遍微信支付v2版的nodejs版SDK</title>
