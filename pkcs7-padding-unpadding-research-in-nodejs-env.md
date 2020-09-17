@@ -8,7 +8,7 @@ categories: ["wechat"]
 author: "James"
 summary: "Pure javascript codes to implement the `PKCS7/Padding` specification, regarding by rfc2315. It just using the Native `Buffer` library to do the right things."
 ---
-It's a part of the `wechatpay-axios-plugin` codes, regarding by the [rfc2315](https://tools.ietf.org/html/rfc2315#section-10.3), the `PKCS7/Padding` spec was post a notes there <quote>The padding can be removed unambiguously since all input is padded and no padding string is a suffix of another. This padding method is well-defined if and only if k < 256; methods for larger k are an open issue for further study.</quote>
+It's a part of the [wechatpay-axios-plugin](https://github.com/TheNorthMemory/wechatpay-axios-plugin) codes, regarding by the [rfc2315](https://tools.ietf.org/html/rfc2315#section-10.3), the `PKCS7/Padding` spec was post a notes there: <blockquote>The padding can be removed unambiguously since all input is padded and no padding string is a suffix of another. This padding method is well-defined if and only if k < 256; methods for larger k are an open issue for further study.</blockquote>
 
 For other developing language, there were more than one librares did the right thing. In Javascript, there were also lots of librares too. The following codes is another implementation on ES2015+ style. It just using the Native `Buffer` library to do the right things.
 
