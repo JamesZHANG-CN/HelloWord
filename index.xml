@@ -6,10 +6,19 @@
     <description>Recent content on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Thu, 17 Sep 2020 18:24:20 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 20 Sep 2020 12:29:04 +0800</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Pure Simple DateTime Formatter With Locale in Nodejs Env</title>
+      <link>/post/pure-simple-date-formatter-with-locale-in-nodejs-env/</link>
+      <pubDate>Sun, 20 Sep 2020 12:29:04 +0800</pubDate>
+      
+      <guid>/post/pure-simple-date-formatter-with-locale-in-nodejs-env/</guid>
+      <description>It&amp;rsquo;s a practice of the &lt;code&gt;Date&lt;/code&gt; and &lt;code&gt;Intl.DateTimeFormat&lt;/code&gt; usage regarding by BCP47 and rfc3339, Formatting the datetime in &lt;code&gt;yyyy-MM-dd HH:mm:ss&lt;/code&gt; style.</description>
+    </item>
     
     <item>
       <title>Pkcs7 Padding Unpadding Research in Nodejs Env</title>

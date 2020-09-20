@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>javascript on TheNorthMemory</title>
+    <link>/categories/javascript/</link>
+    <description>Recent content in javascript on TheNorthMemory</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh_CN</language>
+    <lastBuildDate>Sun, 20 Sep 2020 12:29:04 +0800</lastBuildDate>
+    
+	<atom:link href="/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Pure Simple DateTime Formatter With Locale in Nodejs Env</title>
+      <link>/post/pure-simple-date-formatter-with-locale-in-nodejs-env/</link>
+      <pubDate>Sun, 20 Sep 2020 12:29:04 +0800</pubDate>
+      
+      <guid>/post/pure-simple-date-formatter-with-locale-in-nodejs-env/</guid>
+      <description>It&amp;rsquo;s a practice of the &lt;code&gt;Date&lt;/code&gt; and &lt;code&gt;Intl.DateTimeFormat&lt;/code&gt; usage regarding by BCP47 and rfc3339, Formatting the datetime in &lt;code&gt;yyyy-MM-dd HH:mm:ss&lt;/code&gt; style.</description>
+    </item>
+    
+  </channel>
+</rss>
