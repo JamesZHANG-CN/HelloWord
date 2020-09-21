@@ -53,7 +53,7 @@
 
 <meta itemprop="datePublished" content="2020-09-20T12:29:04&#43;08:00" />
 <meta itemprop="dateModified" content="2020-09-20T12:29:04&#43;08:00" />
-<meta itemprop="wordCount" content="346">
+<meta itemprop="wordCount" content="352">
 
 
 
@@ -137,13 +137,13 @@
   </div>
 </div>
     <div class="post-content">
-      <p>It&rsquo;s a practice of the <code>Date</code> and <code>Intl.DateTimeFormat</code> usage sample. I&rsquo;d researched some resources such as BCP47, rfc3339 about the <code>DateTimeFormat</code>. It&rsquo;s not easier to scope and use that <code>options</code> for me. So sad so bad.</p>
+      <p>As of a special project, there were mentioned that the <code>Date</code> should always as <code>yyyy-MM-dd HH:mm:ss</code> format. But there should have a <code>timezone</code> potential risk while the program were running on the place globally. Especially under the <code>BaaS</code> or <code>FaaS</code> AKA <code>Serverless</code> environment.</p>
 
-<p>In a special project, there were mentioned the <code>Date</code> should always as <code>yyyy-MM-dd HH:mm:ss</code> format. But that <code>key point</code> maybe have some <code>timezone</code> potential risks while the codes were running under the <code>BaaS</code> or <code>FaaS</code> AKA <code>Serverless</code> environment.</p>
+<p>I&rsquo;d researched some resources such as BCP47, rfc3339 about the <code>DateTimeFormat</code>. Those specifications It&rsquo;s not easier to scope and use that <code>options</code> for me. So sad so bad.</p>
 
-<p>As of the <code>Moment.js</code> was under LTS situation, here&rsquo;s a pure simple way to do the formatting date and time with locale.</p>
+<p>As of the <code>Moment.js</code> was under LTS situation, here&rsquo;s a pure simple way to do the formatting date and time with locale, just using the build-in <code>Date</code> and <code>Intl.DateTimeFormat</code> classes.</p>
 
-<p>The <code>DateTimeFormat</code> of the <code>en-GB</code> locale was <code>dd/MM/yyyy, HH:mm:ss</code>, it&rsquo;s similar to <code>yyyy-MM-dd HH:mm:ss</code>. Here&rsquo;s need convert the <code>date</code> only. Codes below:</p>
+<p>Generally, the <code>en-GB</code> locale which was <code>dd/MM/yyyy, HH:mm:ss</code> format and it&rsquo;s similar to <code>yyyy-MM-dd HH:mm:ss</code>. Here&rsquo;s just need put the <code>source</code>in that particular order. Codes below:</p>
 
 <p>v1</p>
 <div class="highlight"><div class="chroma">
@@ -205,7 +205,7 @@
 </code></pre></td></tr></table>
 </div>
 </div>
-<p>Great features of the <code>ES2018</code> RegExp named capture groups(since nodejs v10.8.0 available), the codes should should more readable with v3:</p>
+<p>As of the <code>ES2018</code> RegExp named capture groups(since nodejs v10.8.0) available, the codes should more readable with v3:</p>
 
 <p>v3</p>
 <div class="highlight"><div class="chroma">
@@ -237,7 +237,7 @@
 </code></pre></td></tr></table>
 </div>
 </div>
-<p>final version 4</p>
+<p>v4 finally</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
