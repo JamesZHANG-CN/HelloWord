@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Yet Another Alipay OpenAPI Smart Development Kit - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="Alipay OpenAPI Smart Development Kit, OOP风格化的，可弹性扩容的，支付宝OpenAPI SDK" /><meta name="keywords" content="Alipay OpenAPI SDK OOP风格化的 可弹性扩容的 支付宝OpenAPI" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/yet-another-alipay-openapi-smart-development-kit-in-nodejs-env/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="Yet Another Alipay OpenAPI Smart Development Kit" />
+<meta property="og:description" content="Alipay OpenAPI Smart Development Kit, OOP风格化的，可弹性扩容的，支付宝OpenAPI SDK" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/yet-another-alipay-openapi-smart-development-kit-in-nodejs-env/" />
+<meta property="article:published_time" content="2020-09-26T15:57:51&#43;08:00"/>
+<meta property="article:modified_time" content="2020-09-26T15:57:51&#43;08:00"/>
+
+<meta itemprop="name" content="Yet Another Alipay OpenAPI Smart Development Kit">
+<meta itemprop="description" content="Alipay OpenAPI Smart Development Kit, OOP风格化的，可弹性扩容的，支付宝OpenAPI SDK">
+
+
+<meta itemprop="datePublished" content="2020-09-26T15:57:51&#43;08:00" />
+<meta itemprop="dateModified" content="2020-09-26T15:57:51&#43;08:00" />
+<meta itemprop="wordCount" content="1852">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Yet Another Alipay OpenAPI Smart Development Kit"/>
+<meta name="twitter:description" content="Alipay OpenAPI Smart Development Kit, OOP风格化的，可弹性扩容的，支付宝OpenAPI SDK"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Yet Another Alipay OpenAPI Smart Development Kit</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-09-26 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#主要功能">主要功能</a></li>
+<li><a href="#sdk约定">SDK约定</a></li>
+<li><a href="#使用手册">使用手册</a>
+<ul>
+<li><a href="#初始化">初始化</a>
+<ul>
+<li><a href="#统一收单线下交易查询">统一收单线下交易查询</a></li>
+<li><a href="#统一收单交易支付接口">统一收单交易支付接口</a></li>
+<li><a href="#统一收单线下交易预创建">统一收单线下交易预创建</a></li>
+<li><a href="#订单咨询服务">订单咨询服务</a></li>
+<li><a href="#口碑营销活动列表查询">口碑营销活动列表查询</a></li>
+<li><a href="#支付api-图片上传">支付API &gt; 图片上传</a></li>
+<li><a href="#店铺api-上传门店照片和视频接口">店铺API &gt; 上传门店照片和视频接口</a></li>
+<li><a href="#芝麻信用api-授权查询">芝麻信用API &gt; 授权查询</a></li>
+<li><a href="#车主服务api-车辆驶入接口">车主服务API &gt; 车辆驶入接口</a></li>
+<li><a href="#资金api-单笔转账接口">资金API &gt; 单笔转账接口</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#何以弹性扩容">何以弹性扩容</a></li>
+<li><a href="#项目源码">项目源码</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="主要功能">主要功能</h2>
+
+<ul class="task-list">
+<li><label><input type="checkbox" checked disabled class="task-list-item"> OOP风格化的，可弹性扩容的，支付宝OpenAPI SDK</label></li>
+<li><label><input type="checkbox" checked disabled class="task-list-item"> 低依赖，目前仅依赖 <code>Axios</code></label></li>
+<li><label><input type="checkbox" checked disabled class="task-list-item"> 使用Node原生代码实现支付宝OpenAPI的AES(<code>aes-128-cbc</code>)加/解密功能</label></li>
+<li><label><input type="checkbox" checked disabled class="task-list-item"> 使用Node原生代码实现支付宝OpenAPI的RSA(<code>sha1WithRsaEncryption</code>)及RSA2(<code>sha256WithRSAEncryption</code>)签名、验签功能</label></li>
+</ul>
+
+<h2 id="sdk约定">SDK约定</h2>
+
+<ul>
+<li>对于 Alipay OpenAPI 接口定义中的<code>公共请求参数</code>，以 <code>URLSearchParams</code> 对象传递</li>
+<li>对于 Alipay OpenAPI 接口定义中的 <code>请求参数</code> 参数部分，本SDK以标准 <code>JSON</code> 对象入参</li>
+<li>对于 Alipay OpenAPI 接口定义中<code>公共请求参数</code>的 <code>method</code>，即作为本SDK标准方法链，弹性扩容，示例使用方法如下，详细审查见文末</li>
+<li>请求数据签名以及返回数据验签均自动完成，开发者仅需关注业务代码即可；特别地，对于验签结果有依赖的情况，可以从返回值的头部获取：
+
+<ul>
+<li><code>headers[x-alipay-verified]</code> 为验签结果，值可能为 <code>ok</code>, <code>undefined</code></li>
+<li><code>headers[x-alipay-signature]</code> 为源返回数据签名值，值可能为 <code>undefined</code></li>
+<li><code>headers[x-alipay-responder]</code> 为源返回值字段名转译，值可能为 <code>undefined</code>, <code>error</code> 或者实际请求的 <code>method</code> 值</li>
+</ul></li>
+</ul>
+
+<h2 id="使用手册">使用手册</h2>
+
+<h3 id="初始化">初始化</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="p">{</span><span class="nx">readFileSync</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">)</span>
+<span class="k">const</span> <span class="p">{</span><span class="nx">Alipay</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;whats-alipay&#39;</span><span class="p">)</span>
+
+<span class="c1">//应用app_id
+</span><span class="c1"></span><span class="k">const</span> <span class="nx">app_id</span> <span class="o">=</span> <span class="s1">&#39;2014072300007148&#39;</span>
+
+<span class="c1">//商户私钥证书，须完整格式，同时支持 `PKCS#1` `PKCS#8` 格式
+</span><span class="c1"></span><span class="k">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/your/openapi/private_key.pem&#39;</span><span class="p">)</span>
+
+<span class="c1">//支付宝公钥证书，须完整格式，同时支持 `PKCS#1` `PKCS#8` 格式
+</span><span class="c1"></span><span class="k">const</span> <span class="nx">publicCert</span> <span class="o">=</span> <span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/the/alipay/public_cert.pem&#39;</span><span class="p">)</span>
+
+<span class="k">const</span> <span class="nx">whats</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Alipay</span><span class="p">({</span> <span class="nx">privateKey</span><span class="p">,</span> <span class="nx">publicCert</span><span class="p">,</span> <span class="nx">params</span><span class="o">:</span> <span class="p">{</span> <span class="nx">app_id</span><span class="p">,</span> <span class="p">}</span> <span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="统一收单线下交易查询">统一收单线下交易查询</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">whats</span>
+  <span class="p">.</span><span class="nx">alipay</span><span class="p">.</span><span class="nx">trade</span><span class="p">.</span><span class="nx">query</span><span class="p">({</span><span class="nx">out_trade_no</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">headers</span><span class="p">,</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="p">({</span><span class="nx">headers</span><span class="p">,</span><span class="nx">data</span><span class="p">}))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+
+<span class="p">{</span>
+  <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">server</span><span class="o">:</span> <span class="s1">&#39;Tengine/2.1.0&#39;</span><span class="p">,</span>
+    <span class="nx">date</span><span class="o">:</span> <span class="s1">&#39;Fri, 25 Sep 2020 03:27:32 GMT&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;content-type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/html;charset=utf-8&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;content-length&#39;</span><span class="o">:</span> <span class="s1">&#39;829&#39;</span><span class="p">,</span>
+    <span class="nx">connection</span><span class="o">:</span> <span class="s1">&#39;close&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;set-cookie&#39;</span><span class="o">:</span> <span class="p">[</span>
+      <span class="s1">&#39;JSESSIONID=6FF6F65BB1EC785992117C95EA7C27BB; Path=/; HttpOnly&#39;</span><span class="p">,</span>
+      <span class="s1">&#39;spanner=ubOmkyHGnYLtouOsffShT4n70pJgSji6Xt2T4qEYgj0=;path=/;secure;&#39;</span>
+    <span class="p">],</span>
+    <span class="nx">via</span><span class="o">:</span> <span class="s1">&#39;spanner-internet-5396.sa127[200]&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;x-alipay-responder&#39;</span><span class="o">:</span> <span class="s1">&#39;alipay.trade.query&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;x-alipay-signature&#39;</span><span class="o">:</span> <span class="s1">&#39;gALtsKSWEWRG4wSx8f1aPcLXYrro3ZLGplxNWerZkIAGR4qNz3fP4JCjdRx2M4uFfLfL1uIQ/L1Rt/oZD+NVKn46rLj7YLXWz2jTEnPPofgXywhwHIZ/MfrRc1DjL0xAh00OI6Gur2lileXmn7zaOG0RQoc0mXkSO5AwLWbiO0EnSoh3897TgQFp1hRDpTpXjnxvKSSFiUgr4EDCklfJbc6B3I1i3BvHtzB+lXtHPABukAvzJD/QtjjglIyOeZZ03699cCEl2JmJYGdA1Du+bBjsycLogCNXBLCmdOi5ntRVEo/Tlvl0QYTRleC7dGuCCn1ousZXLy09VUzJ1m85Fw==&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;x-alipay-verified&#39;</span><span class="o">:</span> <span class="s1">&#39;ok&#39;</span>
+  <span class="p">},</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">code</span><span class="o">:</span> <span class="s1">&#39;10000&#39;</span><span class="p">,</span>
+    <span class="nx">msg</span><span class="o">:</span> <span class="s1">&#39;Success&#39;</span><span class="p">,</span>
+    <span class="nx">buyer_logon_id</span><span class="o">:</span> <span class="s1">&#39;134******38&#39;</span><span class="p">,</span>
+    <span class="nx">buyer_pay_amount</span><span class="o">:</span> <span class="s1">&#39;183.00&#39;</span><span class="p">,</span>
+    <span class="nx">buyer_user_id</span><span class="o">:</span> <span class="s1">&#39;2088101117955611&#39;</span><span class="p">,</span>
+    <span class="nx">fund_bill_list</span><span class="o">:</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">amount</span><span class="o">:</span> <span class="s1">&#39;183.00&#39;</span><span class="p">,</span> <span class="nx">fund_channel</span><span class="o">:</span> <span class="s1">&#39;ALIPAYACCOUNT&#39;</span> <span class="p">}</span> <span class="p">],</span>
+    <span class="nx">invoice_amount</span><span class="o">:</span> <span class="s1">&#39;183.00&#39;</span><span class="p">,</span>
+    <span class="nx">out_trade_no</span><span class="o">:</span> <span class="s1">&#39;6823789339978248&#39;</span><span class="p">,</span>
+    <span class="nx">point_amount</span><span class="o">:</span> <span class="s1">&#39;0.00&#39;</span><span class="p">,</span>
+    <span class="nx">receipt_amount</span><span class="o">:</span> <span class="s1">&#39;183.00&#39;</span><span class="p">,</span>
+    <span class="nx">send_pay_date</span><span class="o">:</span> <span class="s1">&#39;2020-09-19 17:00:28&#39;</span><span class="p">,</span>
+    <span class="nx">total_amount</span><span class="o">:</span> <span class="s1">&#39;183.00&#39;</span><span class="p">,</span>
+    <span class="nx">trade_no</span><span class="o">:</span> <span class="s1">&#39;2013112011001004330000121536&#39;</span><span class="p">,</span>
+    <span class="nx">trade_status</span><span class="o">:</span> <span class="s1">&#39;TRADE_SUCCESS&#39;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="统一收单交易支付接口">统一收单交易支付接口</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">whats</span>
+  <span class="p">.</span><span class="nx">alipay</span><span class="p">.</span><span class="nx">trade</span><span class="p">.</span><span class="nx">pay</span><span class="p">({</span>
+    <span class="nx">out_trade_no</span><span class="p">,</span>
+    <span class="nx">scene</span><span class="p">,</span>
+    <span class="nx">auth_code</span><span class="p">,</span>
+    <span class="nx">product_code</span><span class="p">,</span>
+    <span class="nx">subject</span><span class="p">,</span>
+    <span class="nx">total_amount</span><span class="p">,</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="统一收单线下交易预创建">统一收单线下交易预创建</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">whats</span>
+  <span class="p">.</span><span class="nx">alipay</span><span class="p">.</span><span class="nx">trade</span><span class="p">.</span><span class="nx">precreate</span><span class="p">({</span>
+    <span class="nx">out_trade_no</span><span class="p">,</span>
+    <span class="nx">subject</span><span class="p">,</span>
+    <span class="nx">total_amount</span><span class="p">,</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="订单咨询服务">订单咨询服务</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">whats</span>
+  <span class="p">.</span><span class="nx">alipay</span><span class="p">.</span><span class="nx">trade</span><span class="p">.</span><span class="nx">advance</span><span class="p">.</span><span class="nx">consult</span><span class="p">({</span><span class="cm">/*文档上的参数就好*/</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="口碑营销活动列表查询">口碑营销活动列表查询</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">whats</span>
+  <span class="p">.</span><span class="nx">koubei</span><span class="p">.</span><span class="nx">marketing</span><span class="p">.</span><span class="nx">campaign</span><span class="p">.</span><span class="nx">activity</span><span class="p">.</span><span class="nx">batchquery</span><span class="p">(</span><span class="cm">/*文档上的参数就好*/</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="支付api-图片上传">支付API &gt; 图片上传</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="nx">FormData</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;form-data&#39;</span><span class="p">)</span>
+<span class="k">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FormData</span><span class="p">()</span>
+<span class="nx">payload</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;image_content&#39;</span><span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">).</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/path/for/uploading.jpg&#39;</span><span class="p">),</span> <span class="s1">&#39;uploading.jpg&#39;</span><span class="p">)</span>
+
+<span class="nx">whats</span>
+  <span class="p">.</span><span class="nx">ant</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">expand</span><span class="p">.</span><span class="nx">indirect</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">upload</span><span class="p">(</span>
+    <span class="nx">payload</span><span class="p">.</span><span class="nx">getBuffer</span><span class="p">(),</span>
+    <span class="p">{</span><span class="nx">image_type</span><span class="o">:</span> <span class="s1">&#39;jpg&#39;</span><span class="p">},</span>
+    <span class="p">{...</span><span class="nx">payload</span><span class="p">.</span><span class="nx">getHeaders</span><span class="p">()}</span>
+  <span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="店铺api-上传门店照片和视频接口">店铺API &gt; 上传门店照片和视频接口</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="nx">FormData</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;form-data&#39;</span><span class="p">)</span>
+<span class="k">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FormData</span><span class="p">()</span>
+<span class="nx">payload</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;image_content&#39;</span><span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">).</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/path/for/uploading.jpg&#39;</span><span class="p">),</span> <span class="s1">&#39;uploading.jpg&#39;</span><span class="p">)</span>
+
+<span class="nx">whats</span>
+  <span class="p">.</span><span class="nx">alipay</span><span class="p">.</span><span class="nx">offline</span><span class="p">.</span><span class="nx">material</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">upload</span><span class="p">(</span>
+    <span class="nx">payload</span><span class="p">.</span><span class="nx">getBuffer</span><span class="p">(),</span>
+    <span class="p">{</span><span class="nx">image_type</span><span class="o">:</span> <span class="s1">&#39;jpg&#39;</span><span class="p">,</span> <span class="nx">image_name</span><span class="o">:</span> <span class="s1">&#39;uploading.jpg&#39;</span><span class="p">},</span>
+    <span class="p">{...</span><span class="nx">payload</span><span class="p">.</span><span class="nx">getHeaders</span><span class="p">()}</span>
+  <span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="芝麻信用api-授权查询">芝麻信用API &gt; 授权查询</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">whats</span>
+  <span class="p">.</span><span class="nx">zhima</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">info</span><span class="p">.</span><span class="nx">authquery</span><span class="p">(</span><span class="cm">/*文档上的参数就好*/</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="车主服务api-车辆驶入接口">车主服务API &gt; 车辆驶入接口</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">whats</span>
+  <span class="p">.</span><span class="nx">alipay</span><span class="p">.</span><span class="nx">eco</span><span class="p">.</span><span class="nx">mycar</span><span class="p">.</span><span class="nx">parking</span><span class="p">.</span><span class="nx">enterinfo</span><span class="p">.</span><span class="nx">sync</span><span class="p">(</span><span class="cm">/*文档上的参数就好*/</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h4 id="资金api-单笔转账接口">资金API &gt; 单笔转账接口</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">whats</span>
+  <span class="p">.</span><span class="nx">alipay</span><span class="p">.</span><span class="nx">fund</span><span class="p">.</span><span class="nx">trans</span><span class="p">.</span><span class="nx">uni</span><span class="p">.</span><span class="nx">transfer</span><span class="p">(</span><span class="cm">/*文档上的参数就好*/</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="何以弹性扩容">何以弹性扩容</h2>
+
+<p><code>whats</code> 上绑定多少 <code>method</code>，即扩容至多少，以上示例打印如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">whats</span><span class="p">)</span>
+
+<span class="p">[</span><span class="nb">Function</span> <span class="p">(</span><span class="nx">anonymous</span><span class="p">)]</span> <span class="p">{</span>
+  <span class="nx">ant</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">ant</span><span class="p">]</span> <span class="p">{</span>
+    <span class="nx">merchant</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">ant</span><span class="p">.</span><span class="nx">merchant</span><span class="p">]</span> <span class="p">{</span>
+      <span class="nx">expand</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">ant</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">expand</span><span class="p">]</span> <span class="p">{</span>
+        <span class="nx">indirect</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">ant</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">expand</span><span class="p">.</span><span class="nx">indirect</span><span class="p">]</span> <span class="p">{</span>
+          <span class="nx">image</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">ant</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">expand</span><span class="p">.</span><span class="nx">indirect</span><span class="p">.</span><span class="nx">image</span><span class="p">]</span> <span class="p">{</span>
+            <span class="nx">upload</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">ant</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">expand</span><span class="p">.</span><span class="nx">indirect</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">upload</span><span class="p">]</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nx">alipay</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">]</span> <span class="p">{</span>
+    <span class="nx">trade</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">trade</span><span class="p">]</span> <span class="p">{</span>
+      <span class="nx">query</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">trade</span><span class="p">.</span><span class="nx">query</span><span class="p">],</span>
+      <span class="nx">precreate</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">trade</span><span class="p">.</span><span class="nx">precreate</span><span class="p">],</span>
+      <span class="nx">advance</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">trade</span><span class="p">.</span><span class="nx">advance</span><span class="p">]</span> <span class="p">{</span>
+        <span class="nx">consult</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">trade</span><span class="p">.</span><span class="nx">advance</span><span class="p">.</span><span class="nx">consult</span><span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">fund</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">fund</span><span class="p">]</span> <span class="p">{</span>
+      <span class="nx">trans</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">fund</span><span class="p">.</span><span class="nx">trans</span><span class="p">]</span> <span class="p">{</span>
+        <span class="nx">uni</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">fund</span><span class="p">.</span><span class="nx">trans</span><span class="p">.</span><span class="nx">uni</span><span class="p">]</span> <span class="p">{</span>
+          <span class="nx">transfer</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">fund</span><span class="p">.</span><span class="nx">trans</span><span class="p">.</span><span class="nx">uni</span><span class="p">.</span><span class="nx">transfer</span><span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">eco</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">eco</span><span class="p">]</span> <span class="p">{</span>
+      <span class="nx">mycar</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">eco</span><span class="p">.</span><span class="nx">mycar</span><span class="p">]</span> <span class="p">{</span>
+        <span class="nx">parking</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">eco</span><span class="p">.</span><span class="nx">mycar</span><span class="p">.</span><span class="nx">parking</span><span class="p">]</span> <span class="p">{</span>
+          <span class="nx">enterinfo</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">eco</span><span class="p">.</span><span class="nx">mycar</span><span class="p">.</span><span class="nx">parking</span><span class="p">.</span><span class="nx">enterinfo</span><span class="p">]</span> <span class="p">{</span>
+            <span class="nx">sync</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">eco</span><span class="p">.</span><span class="nx">mycar</span><span class="p">.</span><span class="nx">parking</span><span class="p">.</span><span class="nx">enterinfo</span><span class="p">.</span><span class="nx">sync</span><span class="p">]</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">offline</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">offline</span><span class="p">]</span> <span class="p">{</span>
+      <span class="nx">material</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">offline</span><span class="p">.</span><span class="nx">material</span><span class="p">]</span> <span class="p">{</span>
+        <span class="nx">image</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">offline</span><span class="p">.</span><span class="nx">material</span><span class="p">.</span><span class="nx">image</span><span class="p">]</span> <span class="p">{</span>
+          <span class="nx">upload</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">alipay</span><span class="p">.</span><span class="nx">offline</span><span class="p">.</span><span class="nx">material</span><span class="p">.</span><span class="nx">image</span><span class="p">.</span><span class="nx">upload</span><span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nx">zhima</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">zhima</span><span class="p">]</span> <span class="p">{</span>
+    <span class="nx">auth</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">zhima</span><span class="p">.</span><span class="nx">auth</span><span class="p">]</span> <span class="p">{</span>
+      <span class="nx">info</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">zhima</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">info</span><span class="p">]</span> <span class="p">{</span>
+        <span class="nx">authquery</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">zhima</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">info</span><span class="p">.</span><span class="nx">authquery</span><span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nx">koubei</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">koubei</span><span class="p">]</span> <span class="p">{</span>
+    <span class="nx">marketing</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">koubei</span><span class="p">.</span><span class="nx">marketing</span><span class="p">]</span> <span class="p">{</span>
+      <span class="nx">campaign</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">koubei</span><span class="p">.</span><span class="nx">marketing</span><span class="p">.</span><span class="nx">campaign</span><span class="p">]</span> <span class="p">{</span>
+        <span class="nx">activity</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">koubei</span><span class="p">.</span><span class="nx">marketing</span><span class="p">.</span><span class="nx">campaign</span><span class="p">.</span><span class="nx">activity</span><span class="p">]</span> <span class="p">{</span>
+          <span class="nx">batchquery</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">koubei</span><span class="p">.</span><span class="nx">marketing</span><span class="p">.</span><span class="nx">campaign</span><span class="p">.</span><span class="nx">activity</span><span class="p">.</span><span class="nx">batchquery</span><span class="p">]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p><code>Alipay</code> 类实例链如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">Alipay</span><span class="p">)</span>
+
+<span class="o">&lt;</span><span class="nx">ref</span> <span class="o">*</span><span class="mi">1</span><span class="o">&gt;</span> <span class="p">[</span><span class="k">class</span> <span class="nx">Alipay</span><span class="p">]</span> <span class="p">{</span>
+  <span class="k">default</span><span class="o">:</span> <span class="p">[</span><span class="nx">Circular</span> <span class="o">*</span><span class="mi">1</span><span class="p">],</span>
+  <span class="nx">Alipay</span><span class="o">:</span> <span class="p">[</span><span class="nx">Circular</span> <span class="o">*</span><span class="mi">1</span><span class="p">],</span>
+  <span class="nx">Rsa</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">ref</span> <span class="o">*</span><span class="mi">2</span><span class="o">&gt;</span> <span class="p">[</span><span class="k">class</span> <span class="nx">Rsa</span><span class="p">]</span> <span class="p">{</span> <span class="k">default</span><span class="o">:</span> <span class="p">[</span><span class="nx">Circular</span> <span class="o">*</span><span class="mi">2</span><span class="p">]</span> <span class="p">},</span>
+  <span class="nx">Aes</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">ref</span> <span class="o">*</span><span class="mi">3</span><span class="o">&gt;</span> <span class="p">[</span><span class="k">class</span> <span class="nx">Aes</span><span class="p">]</span> <span class="p">{</span>
+    <span class="k">default</span><span class="o">:</span> <span class="p">[</span><span class="nx">Circular</span> <span class="o">*</span><span class="mi">3</span><span class="p">],</span>
+    <span class="nx">AesCbc</span><span class="o">:</span> <span class="p">[</span><span class="k">class</span> <span class="nx">AesCbc</span> <span class="k">extends</span> <span class="nx">Aes</span><span class="p">]</span>
+  <span class="p">},</span>
+  <span class="nx">AesCbc</span><span class="o">:</span> <span class="p">[</span><span class="k">class</span> <span class="nx">AesCbc</span> <span class="k">extends</span> <span class="nx">Aes</span><span class="p">],</span>
+  <span class="nx">Formatter</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">ref</span> <span class="o">*</span><span class="mi">4</span><span class="o">&gt;</span> <span class="p">[</span><span class="k">class</span> <span class="nx">Formatter</span><span class="p">]</span> <span class="p">{</span> <span class="k">default</span><span class="o">:</span> <span class="p">[</span><span class="nx">Circular</span> <span class="o">*</span><span class="mi">4</span><span class="p">]</span> <span class="p">},</span>
+  <span class="nx">Decorator</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">ref</span> <span class="o">*</span><span class="mi">5</span><span class="o">&gt;</span> <span class="p">[</span><span class="k">class</span> <span class="nx">Decorator</span><span class="p">]</span> <span class="p">{</span>
+    <span class="k">default</span><span class="o">:</span> <span class="p">[</span><span class="nx">Circular</span> <span class="o">*</span><span class="mi">5</span><span class="p">],</span>
+    <span class="p">[</span><span class="nx">Symbol</span><span class="p">(</span><span class="nx">PRIVATE_KEY</span><span class="p">)]</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Buffer</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">42</span> <span class="mi">45</span> <span class="mi">47</span> <span class="mi">49</span> <span class="mi">4</span><span class="nx">e</span> <span class="mi">20</span> <span class="mi">50</span> <span class="mi">52</span> <span class="mi">49</span> <span class="mi">56</span> <span class="mi">41</span> <span class="mi">54</span> <span class="mi">45</span> <span class="mi">20</span> <span class="mi">4</span><span class="nx">b</span> <span class="mi">45</span> <span class="mi">59</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">0</span><span class="nx">a</span> <span class="mi">4</span><span class="nx">d</span> <span class="mi">49</span> <span class="mi">49</span> <span class="mi">45</span> <span class="mi">76</span> <span class="mi">67</span> <span class="mi">49</span> <span class="mi">42</span> <span class="mi">41</span> <span class="mi">44</span> <span class="mi">41</span> <span class="mi">4</span><span class="nx">e</span> <span class="mi">42</span> <span class="mi">67</span> <span class="mi">6</span><span class="nx">b</span> <span class="mi">71</span> <span class="mi">68</span> <span class="mi">6</span><span class="nx">b</span> <span class="mi">69</span> <span class="mi">47</span> <span class="mi">39</span> <span class="mi">77</span> <span class="p">...</span> <span class="mi">1653</span> <span class="nx">more</span> <span class="nx">bytes</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="p">[</span><span class="nx">Symbol</span><span class="p">(</span><span class="nx">PUBLIC_CERT</span><span class="p">)]</span><span class="o">:</span> <span class="o">&lt;</span><span class="nx">Buffer</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">42</span> <span class="mi">45</span> <span class="mi">47</span> <span class="mi">49</span> <span class="mi">4</span><span class="nx">e</span> <span class="mi">20</span> <span class="mi">50</span> <span class="mi">55</span> <span class="mi">42</span> <span class="mi">4</span><span class="nx">c</span> <span class="mi">49</span> <span class="mi">43</span> <span class="mi">20</span> <span class="mi">4</span><span class="nx">b</span> <span class="mi">45</span> <span class="mi">59</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">2</span><span class="nx">d</span> <span class="mi">0</span><span class="nx">a</span> <span class="mi">4</span><span class="nx">d</span> <span class="mi">49</span> <span class="mi">49</span> <span class="mi">42</span> <span class="mi">49</span> <span class="mi">6</span><span class="nx">a</span> <span class="mi">41</span> <span class="mi">4</span><span class="nx">e</span> <span class="mi">42</span> <span class="mi">67</span> <span class="mi">6</span><span class="nx">b</span> <span class="mi">71</span> <span class="mi">68</span> <span class="mi">6</span><span class="nx">b</span> <span class="mi">69</span> <span class="mi">47</span> <span class="mi">39</span> <span class="mi">77</span> <span class="mi">30</span> <span class="mi">42</span> <span class="mi">41</span> <span class="mi">51</span> <span class="mi">45</span> <span class="p">...</span> <span class="mi">400</span> <span class="nx">more</span> <span class="nx">bytes</span><span class="o">&gt;</span><span class="p">,</span>
+    <span class="p">[</span><span class="nx">Symbol</span><span class="p">(</span><span class="nx">CLIENT</span><span class="p">)]</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">wrap</span><span class="p">]</span> <span class="p">{</span>
+      <span class="nx">request</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">wrap</span><span class="p">],</span>
+      <span class="nx">getUri</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">wrap</span><span class="p">],</span>
+      <span class="k">delete</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">wrap</span><span class="p">],</span>
+      <span class="nx">get</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">wrap</span><span class="p">],</span>
+      <span class="nx">head</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">wrap</span><span class="p">],</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">wrap</span><span class="p">],</span>
+      <span class="nx">post</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">wrap</span><span class="p">],</span>
+      <span class="nx">put</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">wrap</span><span class="p">],</span>
+      <span class="nx">patch</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">wrap</span><span class="p">],</span>
+      <span class="nx">defaults</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span>
+        <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">common</span><span class="o">:</span> <span class="p">{</span> <span class="nx">Accept</span><span class="o">:</span> <span class="s1">&#39;application/json, text/plain, */*&#39;</span> <span class="p">},</span>
+          <span class="k">delete</span><span class="o">:</span> <span class="p">{},</span>
+          <span class="nx">get</span><span class="o">:</span> <span class="p">{},</span>
+          <span class="nx">head</span><span class="o">:</span> <span class="p">{},</span>
+          <span class="nx">post</span><span class="o">:</span> <span class="p">{</span> <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;application/x-www-form-urlencoded&#39;</span> <span class="p">},</span>
+          <span class="nx">put</span><span class="o">:</span> <span class="p">{</span> <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;application/x-www-form-urlencoded&#39;</span> <span class="p">},</span>
+          <span class="nx">patch</span><span class="o">:</span> <span class="p">{</span> <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;application/x-www-form-urlencoded&#39;</span> <span class="p">},</span>
+          <span class="s1">&#39;User-Agent&#39;</span><span class="o">:</span> <span class="s1">&#39;WhatsAlipay/0.0.1 Node/14.5.0 darwin/x64&#39;</span>
+        <span class="p">},</span>
+        <span class="nx">params</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">app_id</span><span class="o">:</span> <span class="s1">&#39;2014072300007148&#39;</span><span class="p">,</span>
+          <span class="nx">format</span><span class="o">:</span> <span class="s1">&#39;JSON&#39;</span><span class="p">,</span>
+          <span class="nx">charset</span><span class="o">:</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
+          <span class="nx">sign_type</span><span class="o">:</span> <span class="s1">&#39;RSA2&#39;</span><span class="p">,</span>
+          <span class="nx">version</span><span class="o">:</span> <span class="s1">&#39;1.0&#39;</span>
+        <span class="p">},</span>
+        <span class="nx">baseURL</span><span class="o">:</span> <span class="s1">&#39;https://openapi.alipay.com/gateway.do&#39;</span><span class="p">,</span>
+        <span class="nx">transformRequest</span><span class="o">:</span> <span class="p">[</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">transformRequest</span><span class="p">]</span> <span class="p">],</span>
+        <span class="nx">transformResponse</span><span class="o">:</span> <span class="p">[</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">verifier</span><span class="p">],</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">transformResponse</span><span class="p">]</span> <span class="p">],</span>
+        <span class="nx">timeout</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="nx">adapter</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">httpAdapter</span><span class="p">],</span>
+        <span class="nx">xsrfCookieName</span><span class="o">:</span> <span class="s1">&#39;XSRF-TOKEN&#39;</span><span class="p">,</span>
+        <span class="nx">xsrfHeaderName</span><span class="o">:</span> <span class="s1">&#39;X-XSRF-TOKEN&#39;</span><span class="p">,</span>
+        <span class="nx">maxContentLength</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="nx">maxBodyLength</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+        <span class="nx">validateStatus</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">validateStatus</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nx">interceptors</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">request</span><span class="o">:</span> <span class="nx">InterceptorManager</span> <span class="p">{</span>
+          <span class="nx">handlers</span><span class="o">:</span> <span class="p">[</span> <span class="p">{</span> <span class="nx">fulfilled</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="nx">signer</span><span class="p">],</span> <span class="nx">rejected</span><span class="o">:</span> <span class="kc">undefined</span> <span class="p">}</span> <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="nx">response</span><span class="o">:</span> <span class="nx">InterceptorManager</span> <span class="p">{</span> <span class="nx">handlers</span><span class="o">:</span> <span class="p">[]</span> <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="项目源码">项目源码</h2>
+
+<p>地址在 <a href="https://badgen.net/npm/dm/whats-alipay">npmjs</a> <a href="https://github.com/TheNorthMemory/whats-alipay">github</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-09-26
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/from-json-like-regular-expression-in-nodejs-env/">
+            <span class="next-text nav-default">Using RegExp to parse the text(JSON like) in Nodejs Env</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

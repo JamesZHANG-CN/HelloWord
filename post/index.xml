@@ -6,10 +6,19 @@
     <description>Recent content in Posts on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Tue, 22 Sep 2020 12:21:06 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 26 Sep 2020 15:57:51 +0800</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Yet Another Alipay OpenAPI Smart Development Kit</title>
+      <link>/post/yet-another-alipay-openapi-smart-development-kit-in-nodejs-env/</link>
+      <pubDate>Sat, 26 Sep 2020 15:57:51 +0800</pubDate>
+      
+      <guid>/post/yet-another-alipay-openapi-smart-development-kit-in-nodejs-env/</guid>
+      <description>OOP风格化的，可弹性扩容的，支付宝OpenAPI SDK，使用Axios作为底层HTTP驱动，通过构建请求注射器、返回拦截器，自动加数据签名及返回验签。</description>
+    </item>
     
     <item>
       <title>Using RegExp to parse the text(JSON like) in Nodejs Env</title>
