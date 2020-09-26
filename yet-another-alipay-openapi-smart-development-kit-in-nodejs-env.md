@@ -349,4 +349,4 @@ console.info(Alipay)
 
 ## 项目源码
 
-地址在 [npmjs](https://badgen.net/npm/dm/whats-alipay) [github](https://github.com/TheNorthMemory/whats-alipay)
+地址在 [npmjs](https://www.npmjs.com/package/whats-alipay) [github](https://github.com/TheNorthMemory/whats-alipay)
