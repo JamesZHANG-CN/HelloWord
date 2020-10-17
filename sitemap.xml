@@ -3,19 +3,32 @@
   
   <url>
     <loc>https://thenorthmemory.github.io/categories/</loc>
-    <lastmod>2020-09-26T15:57:51+08:00</lastmod>
+    <lastmod>2020-10-17T14:26:34+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
+    <loc>https://thenorthmemory.github.io/post/less-dependency-of-the-rfc2388-multipart-form-data-kit-in-nodejs-env/</loc>
+    <lastmod>2020-10-17T14:26:34+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://thenorthmemory.github.io/post/</loc>
-    <lastmod>2020-09-26T15:57:51+08:00</lastmod>
+    <lastmod>2020-10-17T14:26:34+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://thenorthmemory.github.io/</loc>
-    <lastmod>2020-09-26T15:57:51+08:00</lastmod>
+    <lastmod>2020-10-17T14:26:34+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/categories/javascript/</loc>
+    <lastmod>2020-10-17T14:26:34+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -24,12 +37,6 @@
     <lastmod>2020-09-26T15:57:51+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://thenorthmemory.github.io/categories/javascript/</loc>
-    <lastmod>2020-09-26T15:57:51+08:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>

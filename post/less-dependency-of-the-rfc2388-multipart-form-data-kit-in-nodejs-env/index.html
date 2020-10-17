@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Less Dependency of the Rfc2388 Multipart FormData ES2015 class - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="受微信支付官方技术助手伙伴在某次问答亲测有效代码启发，以下ES2015代码为微信支付APIv3上传文件文档补充实现而做，供其他开发语言参考实现。" /><meta name="keywords" content="RFC2388 multipart/form-data ES2015 file uploader pure javascript" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/less-dependency-of-the-rfc2388-multipart-form-data-kit-in-nodejs-env/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="Less Dependency of the Rfc2388 Multipart FormData ES2015 class" />
+<meta property="og:description" content="受微信支付官方技术助手伙伴在某次问答亲测有效代码启发，以下ES2015代码为微信支付APIv3上传文件文档补充实现而做，供其他开发语言参考实现。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/less-dependency-of-the-rfc2388-multipart-form-data-kit-in-nodejs-env/" />
+<meta property="article:published_time" content="2020-10-17T14:26:34&#43;08:00"/>
+<meta property="article:modified_time" content="2020-10-17T14:26:34&#43;08:00"/>
+
+<meta itemprop="name" content="Less Dependency of the Rfc2388 Multipart FormData ES2015 class">
+<meta itemprop="description" content="受微信支付官方技术助手伙伴在某次问答亲测有效代码启发，以下ES2015代码为微信支付APIv3上传文件文档补充实现而做，供其他开发语言参考实现。">
+
+
+<meta itemprop="datePublished" content="2020-10-17T14:26:34&#43;08:00" />
+<meta itemprop="dateModified" content="2020-10-17T14:26:34&#43;08:00" />
+<meta itemprop="wordCount" content="1907">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Less Dependency of the Rfc2388 Multipart FormData ES2015 class"/>
+<meta name="twitter:description" content="受微信支付官方技术助手伙伴在某次问答亲测有效代码启发，以下ES2015代码为微信支付APIv3上传文件文档补充实现而做，供其他开发语言参考实现。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Less Dependency of the Rfc2388 Multipart FormData ES2015 class</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-10-17 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+    <div class="post-content">
+      <p>上传媒体文件API的是基于 <a href="https://www.ietf.org/rfc/rfc2388.html">RFC2388</a> 协议，圈定的范围是，有大小限制的图片(2M)或者视频(5M)类型单文件，按API接口标准，需要对文件的meta{filename,sha256}信息做数据签名，并且这个meta还须随请求载核一同发送给服务端，难就难在这里了，唉嘘～</p>
+
+<p>官方文档小分队犯了一个错误，就是试图用文本语言来表达非字符内容，整得一众开发者迷途了，社区反馈波澜滔滔。这支小分队应该每人扣一个长鹅抱宠，捐给像俺这样努力帮扶开发者的贡献者（😄）。其实rfc2388标准上有写，这个协议就是扩展HTTP文本协议，用来传输非字符内容的，引述如下：</p>
+
+<blockquote>
+<p>multipart/form-data can be used for forms that are presented using representations other than HTML (spreadsheets, Portable Document Format, etc), and for transport using other means than electronic mail or HTTP. This document defines the representation of form values independently of the application for which it is used.</p>
+</blockquote>
+
+<p>上述引述内容，提到3种文件，HTML文件还算是字符型文件，表格及PDF文件就已经算是二进制文件了，文件内容人类得借助专用软件翻译，才能转成可被识别内容（肉眼能直接识别的是大牛，不再此列）。受官方技术助手伙伴在某次问答亲测有效代码截图启示，特意又研读了几遍RFC协议，国庆档给抽出成无依赖ES2015版本，已内置于另一款著名支付产品SDK包中，亲测可用，以下版本是微信支付社区特供，单文件、无依赖，适合云开发集成使用。</p>
+
+<p>废话说了一箩筐，还是上代码吧:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="p">{</span><span class="nx">extname</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
+<span class="cm">/**
+</span><span class="cm"> * Simple and lite of `multipart/form-data` implementation, most similar to `form-data`
+</span><span class="cm"> *
+</span><span class="cm"> * ```js
+</span><span class="cm"> * (new Form)
+</span><span class="cm"> *   .append(&#39;a&#39;, 1)
+</span><span class="cm"> *   .append(&#39;b&#39;, &#39;2&#39;)
+</span><span class="cm"> *   .append(&#39;c&#39;, Buffer.from(&#39;31&#39;))
+</span><span class="cm"> *   .append(&#39;d&#39;, JSON.stringify({}), &#39;any.json&#39;)
+</span><span class="cm"> *   .append(&#39;e&#39;, require(&#39;fs&#39;).readFileSync(&#39;/path/your/file.jpg&#39;), &#39;file.jpg&#39;)
+</span><span class="cm"> *   .getBuffer()
+</span><span class="cm"> * ```
+</span><span class="cm"> */</span>
+<span class="k">class</span> <span class="nx">Form</span> <span class="p">{</span>
+  <span class="cm">/**
+</span><span class="cm">   * Create a `multipart/form-data` buffer container for the file uploading.
+</span><span class="cm">   *
+</span><span class="cm">   * @constructor
+</span><span class="cm">   */</span>
+  <span class="nx">constructor</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperties</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{</span>
+      <span class="cm">/**
+</span><span class="cm">       * built-in mime-type mapping
+</span><span class="cm">       * @type {Object&lt;string,string&gt;}
+</span><span class="cm">       */</span>
+      <span class="nx">mimeTypes</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="p">{</span>
+          <span class="nx">bmp</span><span class="o">:</span> <span class="sb">`image/bmp`</span><span class="p">,</span>
+          <span class="nx">gif</span><span class="o">:</span> <span class="sb">`image/gif`</span><span class="p">,</span>
+          <span class="nx">png</span><span class="o">:</span> <span class="sb">`image/png`</span><span class="p">,</span>
+          <span class="nx">jpg</span><span class="o">:</span> <span class="sb">`image/jpeg`</span><span class="p">,</span>
+          <span class="nx">jpe</span><span class="o">:</span> <span class="sb">`image/jpeg`</span><span class="p">,</span>
+          <span class="nx">jpeg</span><span class="o">:</span> <span class="sb">`image/jpeg`</span><span class="p">,</span>
+          <span class="nx">mp4</span><span class="o">:</span> <span class="sb">`video/mp4`</span><span class="p">,</span>
+          <span class="nx">mpeg</span><span class="o">:</span> <span class="sb">`video/mpeg`</span><span class="p">,</span>
+          <span class="nx">json</span><span class="o">:</span> <span class="sb">`application/json`</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">writable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="p">},</span>
+
+      <span class="cm">/**
+</span><span class="cm">       * @type {Buffer}
+</span><span class="cm">       */</span>
+      <span class="nx">dashDash</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="sb">`--`</span><span class="p">),</span>
+        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">writable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="p">},</span>
+
+      <span class="cm">/**
+</span><span class="cm">       * @type {Buffer}
+</span><span class="cm">       */</span>
+      <span class="nx">boundary</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="sb">`-`</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="mi">26</span><span class="p">)</span><span class="si">}${</span><span class="sb">`0`</span><span class="p">.</span><span class="nx">repeat</span><span class="p">(</span><span class="mi">24</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/0/g</span><span class="p">,</span> <span class="p">()</span> <span class="p">=&gt;</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()</span><span class="o">*</span><span class="mi">10</span><span class="o">|</span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="sb">`</span><span class="p">),</span>
+        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">writable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="p">},</span>
+
+      <span class="cm">/**
+</span><span class="cm">       * @type {Buffer}
+</span><span class="cm">       */</span>
+      <span class="nx">CRLF</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="sb">`</span><span class="err">\</span><span class="sb">r</span><span class="err">\</span><span class="sb">n`</span><span class="p">),</span>
+        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">writable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+      <span class="p">},</span>
+
+      <span class="cm">/**
+</span><span class="cm">       * The Form&#39;s data storage
+</span><span class="cm">       * @type {array&lt;Buffer&gt;}
+</span><span class="cm">       */</span>
+      <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="p">[],</span>
+        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">writable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="p">},</span>
+
+      <span class="cm">/**
+</span><span class="cm">       * The entities&#39; value indices whose were in `this.data`
+</span><span class="cm">       * @type {Object&lt;string, number&gt;}
+</span><span class="cm">       */</span>
+      <span class="nx">indices</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">value</span><span class="o">:</span> <span class="p">{},</span>
+        <span class="nx">configurable</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+        <span class="nx">enumerable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+        <span class="nx">writable</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+      <span class="p">},</span>
+    <span class="p">})</span>
+  <span class="p">}</span>
+
+  <span class="cm">/**
+</span><span class="cm">   * To retrieve the `data` buffer
+</span><span class="cm">   *
+</span><span class="cm">   * @return {Buffer} - The payload buffer
+</span><span class="cm">   */</span>
+  <span class="nx">getBuffer</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">([</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">dashDash</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">boundary</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">CRLF</span><span class="p">,</span>
+      <span class="p">...</span><span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">),</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">boundary</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">dashDash</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">CRLF</span><span class="p">,</span>
+    <span class="p">])</span>
+  <span class="p">}</span>
+
+  <span class="cm">/**
+</span><span class="cm">   * To retrieve the `Content-Type` multipart/form-data header
+</span><span class="cm">   *
+</span><span class="cm">   * @return {Object&lt;string, string&gt;} - The `Content-Type` header With `this.boundary`
+</span><span class="cm">   */</span>
+  <span class="nx">getHeaders</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+      <span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="sb">`multipart/form-data; boundary=</span><span class="si">${</span><span class="k">this</span><span class="p">.</span><span class="nx">boundary</span><span class="si">}</span><span class="sb">`</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="cm">/**
+</span><span class="cm">   * Append a customized mime-type(s)
+</span><span class="cm">   *
+</span><span class="cm">   * @param {Object&lt;string,string&gt;} things - The mime-type
+</span><span class="cm">   *
+</span><span class="cm">   * @return {Form} - The `Form` class instance self
+</span><span class="cm">   */</span>
+  <span class="nx">appendMimeTypes</span><span class="p">(</span><span class="nx">things</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">Object</span><span class="p">.</span><span class="nx">assign</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">mimeTypes</span><span class="p">,</span> <span class="nx">things</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="k">this</span>
+  <span class="p">}</span>
+
+  <span class="cm">/**
+</span><span class="cm">   * Append data wrapped by `boundary`
+</span><span class="cm">   *
+</span><span class="cm">   * @param  {string} field - The field
+</span><span class="cm">   * @param  {string|Buffer} value - The value
+</span><span class="cm">   * @param  {String} [filename] - Optional filename, when provided, then append the `Content-Type` after of the `Content-Disposition`
+</span><span class="cm">   *
+</span><span class="cm">   * @return {Form} - The `Form` class instance self
+</span><span class="cm">   */</span>
+  <span class="nx">append</span><span class="p">(</span><span class="nx">field</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">filename</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="p">{</span><span class="nx">data</span><span class="p">,</span> <span class="nx">dashDash</span><span class="p">,</span> <span class="nx">boundary</span><span class="p">,</span> <span class="nx">CRLF</span><span class="p">,</span> <span class="nx">mimeTypes</span><span class="p">,</span> <span class="nx">indices</span><span class="p">}</span> <span class="o">=</span> <span class="k">this</span>
+
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="sb">`Content-Disposition: form-data; name=&#34;</span><span class="si">${</span><span class="nx">field</span><span class="si">}</span><span class="sb">&#34;</span><span class="si">${</span><span class="nx">filename</span> <span class="o">&amp;&amp;</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">isBuffer</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">?</span> <span class="sb">`; filename=&#34;</span><span class="si">${</span><span class="nx">filename</span><span class="si">}</span><span class="sb">&#34;`</span> <span class="o">:</span> <span class="sb">``</span><span class="si">}</span><span class="sb">`</span><span class="p">))</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">CRLF</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">filename</span> <span class="o">||</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">isBuffer</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="p">{</span>
+      <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="sb">`Content-Type: </span><span class="si">${</span><span class="nx">mimeTypes</span><span class="p">[</span><span class="nx">extname</span><span class="p">(</span><span class="nx">filename</span><span class="p">).</span><span class="nx">substring</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">toLowerCase</span><span class="p">()]</span> <span class="o">||</span> <span class="sb">`application/octet-stream`</span><span class="si">}</span><span class="sb">`</span><span class="p">))</span>
+      <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">CRLF</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">CRLF</span><span class="p">)</span>
+    <span class="nx">indices</span><span class="p">[</span><span class="nx">field</span><span class="p">]</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">isBuffer</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">?</span> <span class="nx">value</span> <span class="o">:</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="nx">value</span><span class="p">)))</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">CRLF</span><span class="p">)</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">dashDash</span><span class="p">)</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">boundary</span><span class="p">)</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">CRLF</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="k">this</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Form</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">.</span><span class="k">default</span> <span class="o">=</span> <span class="nx">Form</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>测试用例如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">lib/form
+  ✓ should be class `Form`
+  new Form
+    ✓ should instanceOf Form and have properties `data` and `indices`
+    ✓ The `mimeTypes` property should be there and only allowed append(cannot deleted)
+    ✓ The `dashDash` Buffer property should be there and cannot be deleted/modified
+    ✓ The `boundary` Buffer property should be there and cannot be deleted/modified
+    ✓ The `CRLF` Buffer property should be there and cannot be deleted/modified
+    ✓ The `data` property should be instanceOf Array and cannot deleted
+    ✓ The `indices` property should be instanceOf Object and cannot deleted
+    ✓ Method `getBuffer()` should returns a Buffer instance and had fixed length(108) default
+    ✓ Method `getHeaders()` should returns a Object[`Content-type`] with `multipart/form-data; boundary=`
+    ✓ Method `appendMimeTypes()` should returns the Form instance
+    ✓ Method `appendMimeTypes({any: &#39;mock&#39;})` should returns the Form instance, and affected `form.data` property
+    ✓ Method `append()` should returns the Form instance, and affected `form.data` property
+    ✓ Method `append()` should append name=&#34;undefined&#34; disposition onto the `form.data` property
+    ✓ Method `append({}, 1)` should append name=&#34;[object Object]&#34; disposition onto the `form.data` property
+    ✓ Method `append(&#39;meta&#39;, JSON.stringify({}), &#39;meta.json&#39;)` should append a `Content-Type: application/json` onto the `form.data` property
+    ✓ Method `append(&#39;image_content&#39;, Buffer.from(&#39;R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==&#39;, &#39;base64&#39;), &#39;demo.gif&#39;)` should append a `Content-Type: image/gif` onto the `form.data` property</pre></td></tr></table>
+</div>
+</div>
+<p>API文档如下</p>
+
+<p>Simple and lite of <code>multipart/form-data</code> implementation, most similar to <code>form-data</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="p">(</span><span class="k">new</span> <span class="nx">Form</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="s1">&#39;31&#39;</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({}),</span> <span class="s1">&#39;any.json&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">).</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/path/your/file.jpg&#39;</span><span class="p">),</span> <span class="s1">&#39;file.jpg&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">getBuffer</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<ul>
+<li><p><a href="#Form">Form</a></p>
+
+<ul>
+<li><a href="#new_Form_new">new Form()</a></li>
+<li><a href="#Form+getBuffer">.getBuffer()</a> ⇒ <code>Buffer</code></li>
+<li><a href="#Form+getHeaders">.getHeaders()</a> ⇒ <code>Object.&lt;string, string&gt;</code></li>
+<li><a href="#Form+appendMimeTypes">.appendMimeTypes(things)</a> ⇒ <code>Form</code></li>
+<li><a href="#Form+append">.append(field, value, [filename])</a> ⇒ <code>Form</code></li>
+</ul></li>
+
+<li><p>new Form()</p>
+
+<ul>
+<li>Create a <code>multipart/form-data</code> buffer container for the file uploading.</li>
+</ul></li>
+
+<li><p>form.getBuffer() ⇒ <code>Buffer</code></p>
+
+<ul>
+<li>To retrieve the <code>data</code> buffer</li>
+<li><strong>Kind</strong>: instance method of <a href="#Form"><code>Form</code></a></li>
+<li><strong>Returns</strong>: <code>Buffer</code> - - The payload buffer</li>
+</ul></li>
+
+<li><p>form.getHeaders() ⇒ <code>Object.&lt;string, string&gt;</code></p>
+
+<ul>
+<li>To retrieve the <code>Content-Type</code> multipart/form-data header</li>
+<li><strong>Kind</strong>: instance method of <a href="#Form"><code>Form</code></a></li>
+<li><strong>Returns</strong>: <code>Object.&lt;string, string&gt;</code> - - The <code>Content-Type</code> header With <code>this.boundary</code></li>
+</ul></li>
+
+<li><p>form.appendMimeTypes(things) ⇒ <a href="#Form"><code>Form</code></a></p>
+
+<ul>
+<li>Append a customized mime-type(s)</li>
+<li><strong>Kind</strong>: instance method of <a href="#Form"><code>Form</code></a></li>
+<li><strong>Returns</strong>: <a href="#Form"><code>Form</code></a> - - The <code>Form</code> class instance self</li>
+<li>Param: things</li>
+<li>Type: <code>Object.&lt;string, string&gt;</code></li>
+<li>Description: The mime-type</li>
+</ul></li>
+
+<li><p>form.append(field, value, [filename]) ⇒ <a href="#Form"><code>Form</code></a></p>
+
+<ul>
+<li>Append data wrapped by <code>boundary</code></li>
+<li><strong>Kind</strong>: instance method of <a href="#Form"><code>Form</code></a></li>
+<li><strong>Returns</strong>: <a href="#Form"><code>Form</code></a> - - The <code>Form</code> class instance self</li>
+<li>Param: field</li>
+<li>Type: <code>string</code></li>
+<li>Description: The field</li>
+<li>Param: value</li>
+<li>Type: <code>string</code> | <code>Buffer</code></li>
+<li>Description: The value</li>
+<li>Param: [filename]</li>
+<li>Type: <code>string</code> | <code>Buffer</code></li>
+<li>Description: Optional filename, when provided, then append the <code>Content-Type</code> after of the <code>Content-Disposition</code></li>
+</ul></li>
+
+<li><p>mimeTypes : <code>Object.&lt;string, string&gt;</code></p>
+
+<ul>
+<li>built-in mime-type mapping</li>
+<li><strong>Kind</strong>: global variable</li>
+</ul></li>
+
+<li><p>dashDash : <code>Buffer</code></p>
+
+<ul>
+<li><strong>Kind</strong>: global variable</li>
+</ul></li>
+
+<li><p>boundary : <code>Buffer</code></p>
+
+<ul>
+<li><strong>Kind</strong>: global variable</li>
+</ul></li>
+
+<li><p>CRLF : <code>Buffer</code></p>
+
+<ul>
+<li><strong>Kind</strong>: global variable</li>
+</ul></li>
+
+<li><p>data : <code>array.&lt;Buffer&gt;</code></p>
+
+<ul>
+<li>The Form&rsquo;s data storage</li>
+<li><strong>Kind</strong>: global variable</li>
+</ul></li>
+
+<li><p>indices : <code>Object.&lt;string, number&gt;</code></p>
+
+<ul>
+<li>The entities&rsquo; value indices whose were in <code>this.data</code></li>
+</ul></li>
+</ul>
+
+<p>此类内置常用的几种文件类型（<code>append</code>第三入参以文件名后缀比对），已经够用了，视频仅内置了两种，对于 官方接口支持的<code>avi</code>, <code>wmv</code>, <code>mov</code>, <code>mkv</code>, <code>flv</code>, <code>f4v</code>, <code>m4v</code>, <code>rmvb</code>，开发者可用透过 <code>appendMimeTypes</code> 方法，自行扩展以符合 RFC2388 规范。</p>
+
+<p>图片上传接口，用法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="nx">form</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Form</span>
+<span class="nx">form</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span>
+  <span class="s1">&#39;file&#39;</span><span class="p">,</span>
+  <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">).</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/path/your/file.jpg&#39;</span><span class="p">),</span> <span class="s1">&#39;file.jpg&#39;</span>
+  <span class="p">)</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span>
+    <span class="nx">filename</span><span class="o">:</span><span class="s1">&#39;file.jpg&#39;</span><span class="p">,</span>
+    <span class="nx">sha256</span><span class="o">:</span><span class="s1">&#39;779a563f99f824975b3651bfd8597555e69fb135925e460dae3996d47c415fb0&#39;</span>
+  <span class="p">}),</span> <span class="s1">&#39;meta.json&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>整个需要发送的表单体就准备妥当了，然后按照v3开发规范，该数据签名的签名，想用什么<code>client</code>提交就用什么<code>client</code>，然后就没然后了。。。</p>
+
+<p>以我习惯用的 <code>axios</code> 为例，数据提交类似如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="nx">axios</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;axios&#39;</span><span class="p">)</span>
+
+<span class="c1">//伪代码, baseURL 要按实际接口地址赋值, Authorization 要按v3规范赋值
+</span><span class="c1"></span><span class="nx">axios</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span><span class="nx">baseURL</span><span class="p">}).</span><span class="nx">post</span><span class="p">(</span>
+  <span class="nx">form</span><span class="p">.</span><span class="nx">getBuffer</span><span class="p">(),</span>
+  <span class="p">{</span><span class="nx">headers</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">Authorization</span><span class="o">:</span> <span class="s1">&#39;WECHATPAY2-SHA256-RSA2048 &#39;</span><span class="p">,</span>
+      <span class="nx">Accept</span><span class="o">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+      <span class="p">...</span><span class="nx">form</span><span class="p">.</span><span class="nx">getHeaders</span><span class="p">(),</span>
+  <span class="p">}}</span>
+<span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">headers</span><span class="p">,</span> <span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="p">({</span><span class="nx">headers</span><span class="p">,</span> <span class="nx">data</span><span class="p">}))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">headers</span><span class="p">,</span> <span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="p">({</span><span class="nx">headers</span><span class="p">,</span> <span class="nx">data</span><span class="p">}))</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>写到最后</p>
+
+<p>Form类文件以MIT开源，文章转载请注明出处「<a href="https://developers.weixin.qq.com/community/develop/article/doc/000c24f0390ff8b5d91b2489059413">来自微信开发者社区</a>」。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-10-17
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/yet-another-alipay-openapi-smart-development-kit-in-nodejs-env/">
+            <span class="next-text nav-default">Yet Another Alipay OpenAPI Smart Development Kit</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

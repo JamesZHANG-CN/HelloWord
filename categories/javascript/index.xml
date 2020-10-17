@@ -6,10 +6,19 @@
     <description>Recent content in javascript on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Sat, 26 Sep 2020 15:57:51 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 17 Oct 2020 14:26:34 +0800</lastBuildDate>
     
 	<atom:link href="/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Less Dependency of the Rfc2388 Multipart FormData ES2015 class</title>
+      <link>/post/less-dependency-of-the-rfc2388-multipart-form-data-kit-in-nodejs-env/</link>
+      <pubDate>Sat, 17 Oct 2020 14:26:34 +0800</pubDate>
+      
+      <guid>/post/less-dependency-of-the-rfc2388-multipart-form-data-kit-in-nodejs-env/</guid>
+      <description>上传媒体文件API的是基于RFC2388协议，圈定的范围是，有大小限制的图片(2M)或者视频(5M)类型单文件，受微信支付官方技术助手伙伴在某次问答亲测有效代码启发，以下ES2015代码为微信支付APIv3图片、视频上传类接口文档补充nodejs纯语言无依赖版参考实现。</description>
+    </item>
     
     <item>
       <title>Yet Another Alipay OpenAPI Smart Development Kit</title>
