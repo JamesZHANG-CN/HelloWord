@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="James" /><meta name="description" content="Pure Simple Date Formatter With Locale in Nodejs Env" />
+<meta name="author" content="James" /><meta name="description" content="在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用内置 Date 及 Intl，尝试对不同时区的时间标准化输出，低依赖。" />
 
 
 
@@ -41,26 +41,26 @@
 <style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
 
 <meta property="og:title" content="Pure Simple DateTime Formatter With Locale in Nodejs Env" />
-<meta property="og:description" content="Pure Simple Date Formatter With Locale in Nodejs Env" />
+<meta property="og:description" content="在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用内置 Date 及 Intl，尝试对不同时区的时间标准化输出，低依赖。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/pure-simple-date-formatter-with-locale-in-nodejs-env/" />
 <meta property="article:published_time" content="2020-09-20T12:29:04&#43;08:00"/>
-<meta property="article:modified_time" content="2020-09-20T12:29:04&#43;08:00"/>
+<meta property="article:modified_time" content="2020-10-17T15:54:06&#43;08:00"/>
 
 <meta itemprop="name" content="Pure Simple DateTime Formatter With Locale in Nodejs Env">
-<meta itemprop="description" content="Pure Simple Date Formatter With Locale in Nodejs Env">
+<meta itemprop="description" content="在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用内置 Date 及 Intl，尝试对不同时区的时间标准化输出，低依赖。">
 
 
 <meta itemprop="datePublished" content="2020-09-20T12:29:04&#43;08:00" />
-<meta itemprop="dateModified" content="2020-09-20T12:29:04&#43;08:00" />
-<meta itemprop="wordCount" content="353">
+<meta itemprop="dateModified" content="2020-10-17T15:54:06&#43;08:00" />
+<meta itemprop="wordCount" content="533">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Pure Simple DateTime Formatter With Locale in Nodejs Env"/>
-<meta name="twitter:description" content="Pure Simple Date Formatter With Locale in Nodejs Env"/>
+<meta name="twitter:description" content="在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用内置 Date 及 Intl，尝试对不同时区的时间标准化输出，低依赖。"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -145,7 +145,7 @@
 
 <p>Generally, the <code>en-GB</code> locale which was <code>dd/MM/yyyy, HH:mm:ss</code> format and it&rsquo;s similar to <code>yyyy-MM-dd HH:mm:ss</code>. Here&rsquo;s just need put the <code>source</code> in that particular order. Codes below:</p>
 
-<p>v1</p>
+<p>v1 版</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
@@ -175,7 +175,7 @@
 </code></pre></td></tr></table>
 </div>
 </div>
-<p>v2</p>
+<p>v2 版</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
@@ -207,7 +207,7 @@
 </div>
 <p>As of the <code>ES2018</code> RegExp named capture groups(since nodejs v10.8.0) available, the codes should more readable with v3:</p>
 
-<p>v3</p>
+<p>v3 版</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
@@ -237,7 +237,7 @@
 </code></pre></td></tr></table>
 </div>
 </div>
-<p>v4 finally</p>
+<p>v4 版</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
@@ -266,6 +266,82 @@
     <span class="sr">/^(?&lt;dd&gt;\d{2})\/(?&lt;MM&gt;\d{2})\/(?&lt;yyyy&gt;\d{4}),\s(?&lt;HH&gt;\d{2}):(?&lt;mm&gt;\d{2}):(?&lt;ss&gt;\d{2})$/</span><span class="p">,</span>
     <span class="s1">&#39;$&lt;yyyy&gt;-$&lt;MM&gt;-$&lt;dd&gt; $&lt;HH&gt;:$&lt;mm&gt;:$&lt;ss&gt;&#39;</span>
 <span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>v5 版本</p>
+
+<p><em>Notes</em>: NodeJS v10.15.3,v12.18.0,v14.5.0 had strange behavior on <code>Intl.DateTimeFormat</code>, see <code>hourCycle:h23</code> comments below:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">localeDateTime</span> <span class="o">=</span> <span class="p">(</span><span class="nx">when</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">(),</span> <span class="nx">timeZone</span> <span class="o">=</span> <span class="s1">&#39;Asia/Shanghai&#39;</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="c1">// short `when` like `Aug 9, 1995` is dependend on the `TZ` env
+</span><span class="c1"></span>    <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TZ</span> <span class="o">=</span> <span class="nx">timeZone</span>
+
+    <span class="kd">let</span> <span class="nx">data</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Intl</span><span class="p">.</span><span class="nx">DateTimeFormat</span><span class="p">(</span>
+      <span class="s1">&#39;en&#39;</span><span class="p">,</span>
+      <span class="p">{</span>
+        <span class="nx">calendar</span><span class="o">:</span> <span class="s1">&#39;gregory&#39;</span><span class="p">,</span> <span class="nx">hourCycle</span><span class="o">:</span> <span class="s1">&#39;h11&#39;</span><span class="p">,</span>
+        <span class="nx">year</span><span class="o">:</span> <span class="s1">&#39;numeric&#39;</span><span class="p">,</span> <span class="nx">month</span><span class="o">:</span> <span class="s1">&#39;2-digit&#39;</span><span class="p">,</span> <span class="nx">day</span><span class="o">:</span> <span class="s1">&#39;2-digit&#39;</span><span class="p">,</span>
+        <span class="nx">hour</span><span class="o">:</span> <span class="s1">&#39;numeric&#39;</span><span class="p">,</span> <span class="nx">minute</span><span class="o">:</span> <span class="s1">&#39;2-digit&#39;</span><span class="p">,</span> <span class="nx">second</span><span class="o">:</span> <span class="s1">&#39;2-digit&#39;</span><span class="p">,</span>
+        <span class="nx">timeZone</span><span class="p">,</span>
+      <span class="p">}</span>
+    <span class="p">).</span><span class="nx">formatToParts</span><span class="p">(</span>
+      <span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="nx">when</span><span class="p">)</span>
+    <span class="p">).</span><span class="nx">filter</span><span class="p">(({</span><span class="nx">type</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">type</span> <span class="o">!=</span> <span class="s1">&#39;literal&#39;</span><span class="p">).</span><span class="nx">reduce</span><span class="p">(</span>
+      <span class="p">(</span><span class="nx">des</span><span class="p">,</span> <span class="p">{</span><span class="nx">type</span><span class="p">,</span> <span class="nx">value</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="nx">des</span><span class="p">[</span><span class="nx">type</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">(),</span> <span class="nx">des</span><span class="p">),</span>
+      <span class="p">{}</span>
+    <span class="p">)</span>
+
+    <span class="c1">// hourCycle:h23 fix(12 AM to 0, 12 PM to 0)
+</span><span class="c1"></span>    <span class="nx">data</span><span class="p">.</span><span class="nx">hour</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">hour</span> <span class="o">==</span> <span class="s1">&#39;12&#39;</span> <span class="o">?</span> <span class="sb">`0`</span> <span class="o">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">hour</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">dayperiod</span> <span class="o">==</span> <span class="s1">&#39;PM&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// hourCycle:h23 add(1 PM to 13)
+</span><span class="c1"></span>      <span class="nx">data</span><span class="p">.</span><span class="nx">hour</span> <span class="o">=</span> <span class="sb">`</span><span class="si">${</span><span class="mi">12</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">hour</span> <span class="o">*</span> <span class="mi">1</span><span class="si">}</span><span class="sb">`</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">dayperiod</span> <span class="o">==</span> <span class="s1">&#39;AM&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="c1">// hourCycle:h23 fix(2-digit)
+</span><span class="c1"></span>      <span class="nx">data</span><span class="p">.</span><span class="nx">hour</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">hour</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">?</span> <span class="nx">data</span><span class="p">.</span><span class="nx">hour</span> <span class="o">:</span> <span class="sb">`0</span><span class="si">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">hour</span><span class="si">}</span><span class="sb">`</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="sb">`</span><span class="si">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">year</span><span class="si">}</span><span class="sb">-</span><span class="si">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">month</span><span class="si">}</span><span class="sb">-</span><span class="si">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">day</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">hour</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">minute</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">data</span><span class="p">.</span><span class="nx">second</span><span class="si">}</span><span class="sb">`</span>
+  <span class="p">}</span>
 </code></pre></td></tr></table>
 </div>
 </div>
@@ -403,7 +479,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2020-09-20
+        2020-10-17
         
     </span>
   </p>

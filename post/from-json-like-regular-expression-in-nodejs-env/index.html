@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="James" /><meta name="description" content="Using RegExp to parse the text(JSON like) to standard JSON in Nodejs Env" /><meta name="keywords" content="fromJsonLike, RegExp" />
+<meta name="author" content="James" /><meta name="description" content="不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。" /><meta name="keywords" content="fromJsonLike, RegExp" />
 
 
 
@@ -41,26 +41,26 @@
 <style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
 
 <meta property="og:title" content="Using RegExp to parse the text(JSON like) in Nodejs Env" />
-<meta property="og:description" content="Using RegExp to parse the text(JSON like) to standard JSON in Nodejs Env" />
+<meta property="og:description" content="不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/from-json-like-regular-expression-in-nodejs-env/" />
 <meta property="article:published_time" content="2020-09-22T12:21:06&#43;08:00"/>
-<meta property="article:modified_time" content="2020-09-22T12:21:06&#43;08:00"/>
+<meta property="article:modified_time" content="2020-10-17T15:45:06&#43;08:00"/>
 
 <meta itemprop="name" content="Using RegExp to parse the text(JSON like) in Nodejs Env">
-<meta itemprop="description" content="Using RegExp to parse the text(JSON like) to standard JSON in Nodejs Env">
+<meta itemprop="description" content="不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。">
 
 
 <meta itemprop="datePublished" content="2020-09-22T12:21:06&#43;08:00" />
-<meta itemprop="dateModified" content="2020-09-22T12:21:06&#43;08:00" />
-<meta itemprop="wordCount" content="891">
+<meta itemprop="dateModified" content="2020-10-17T15:45:06&#43;08:00" />
+<meta itemprop="wordCount" content="1325">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Using RegExp to parse the text(JSON like) in Nodejs Env"/>
-<meta name="twitter:description" content="Using RegExp to parse the text(JSON like) to standard JSON in Nodejs Env"/>
+<meta name="twitter:description" content="不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -137,7 +137,7 @@
   </div>
 </div>
     <div class="post-content">
-      <p>A castor to parse the text (JSON like) to standard JSON.</p>
+      <p>支付宝OpenAPI返回的是JSON字符串，不同开发语言对unicode及slash等处理上会存在差异。nodejs在处理这个JSON时，用<code>JSON.stringify(JSON.parese(data))​</code>方法可能奏效，不过优解方案是对源字符串做处理获取， 使用正则表达式，按JSON部分规范来抽取所用载核，对于pretty格式化美化后的JSON，同样奏效。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
@@ -167,7 +167,7 @@
 </code></pre></td></tr></table>
 </div>
 </div>
-<p>Case 1 input: JSON TEXT with escaped dash(/)</p>
+<p>Case 1 input: JSON 编码器，对URL的slash(/)做了转译 \/，测试样本数据如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
@@ -176,7 +176,9 @@
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="s1">&#39;{&#34;alipay_offline_material_image_upload_response&#34;:{&#34;code&#34;:&#34;10000&#34;,&#34;msg&#34;:&#34;Success&#34;,&#34;image_id&#34;:&#34;Zp1Nm6FDTZaEuSSniGd5awAAACMAAQED&#34;,&#34;image_url&#34;:&#34;http:\\/\\/oalipay-dl-django.alicdn.com\\/rest\\/1.0\\/image?fileIds=Zp1Nm6FDTZaEuSSniGd5awAAACMAAQED&amp;zoom=original&#34;},&#34;sign&#34;:&#34;P8xrBWqZCUv11UrEBjhQ4Sk3hyj4607qehO2VbKIS0hWa4U+NeLlOftqTyhGv+x1lzfqN590Y/8CaNIzEEg06FiNWJlUFM/uEFJLzSKGse4MjHbblpiSzI3eCV5RzxH26wZbEd9wyVYYi0pHFBf35UrBva47g7b5EuKCHfoVA95/zin9fAyb3xhhiHhmfGaWIDV/1LmE2vtqtOHQnISbY/deC71U614ySZ3YB97ws8npCcCJ+tgZvhHPkMRGvmyYPCRDB/aIN/sKDSLtfPp0u8DxE8pHLvCHm3wR84MQxqNbKgpd8NTKNvH+obELsbCrqPhjW7qI48634qx6enDupw==&#34;}&#39;</span>
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div>
+<p>调用函数：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
 </span></code></pre></td>
@@ -184,7 +186,9 @@
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">fromJsonLike</span><span class="p">(</span><span class="nx">test</span><span class="p">))</span>
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div>
+<p>输出如下，可见，对转译的slash未做更新变化，而 <code>JSON.stringify(JSON.parese(data))​</code> 会抹掉这个转译。</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
 </span><span class="lnt">2
@@ -201,7 +205,7 @@
 </code></pre></td></tr></table>
 </div>
 </div>
-<p>Case 2 input: JSONLike TEXT with escaped dash(/) and spaces(seprate manually)</p>
+<p>Case 2 input: pretty格式化美化后的JSON字符串，测试样本如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
@@ -216,7 +220,9 @@
 </span><span class="sb">  &#34;sign&#34;    :    &#34;PAb3IueJzGe/pU/fRAPjwIs543Kc/A6D0rz03AMejwr8h8rDc6FhDJDnz3fGLDdQP7ctjtQwwJW3pmdZZcGmp4lb/5YYgtoK6McjnRr4ER/raJLYn1IbpzkowhGow2esA/XeDblIAYUbZjU6ts0IqNncrZrCknDWHpaZXwGuaU7CUBk74xBeMeja7rEEkFlm9MRtiQNYnum/cGVtcDv/aQ8KkPyAD58oJiAzoXv0R6jFhlZtAWv+M0SaOlhTpZh1K6wlP+1Umiqdvqbc1oWdfpv75a+lGTkGHMy8K7/bnAGm20IRsisSv1B5rpJyeGfrVf6tb4MZ7vG4w0rS0c2hfA==&#34;}`</span><span class="p">;</span>
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div>
+<p>调用函数：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
 </span></code></pre></td>
@@ -224,7 +230,9 @@
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">fromJsonLike</span><span class="p">(</span><span class="nx">test</span><span class="p">))</span>
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div>
+<p>输出同样奏效</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
 </span><span class="lnt">2
@@ -241,7 +249,7 @@
 </code></pre></td></tr></table>
 </div>
 </div>
-<p>Case 3 input: JSONLike TEXT with escaped dash(/) and CRLF(seprate manually)</p>
+<p>Case 3 input: 手工拼接的JSON串，对 <code>sign</code> 做了断行处理，样本如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
@@ -252,7 +260,9 @@
 </span><span class="sb">  &#34;sign&#34;:&#34;PAb3IueJzGe/pU/fRAPjwIs543Kc/A6D0rz03AMejwr8h8rDc6FhDJDnz3fGLDdQP7ctjtQwwJW3pmdZZcGmp4lb/5YYgtoK6McjnRr4ER/raJLYn1IbpzkowhGow2esA/XeDblIAYUbZjU6ts0IqNncrZrCknDWHpaZXwGuaU7CUBk74xBeMeja7rEEkFlm9MRtiQNYnum/cGVtcDv/aQ8KkPyAD58oJiAzoXv0R6jFhlZtAWv+M0SaOlhTpZh1K6wlP+1Umiqdvqbc1oWdfpv75a+lGTkGHMy8K7/bnAGm20IRsisSv1B5rpJyeGfrVf6tb4MZ7vG4w0rS0c2hfA==&#34;}`</span><span class="p">;</span>
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div>
+<p>调用函数：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
 </span></code></pre></td>
@@ -260,7 +270,9 @@
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">fromJsonLike</span><span class="p">(</span><span class="nx">test</span><span class="p">))</span>
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div>
+<p>输出同样奏效</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
 </span><span class="lnt">2
@@ -277,7 +289,7 @@
 </code></pre></td></tr></table>
 </div>
 </div>
-<p>Case 4 input: invalid JSON TEXT</p>
+<p>Case 4 input: 手工拼接的，类JSON字符串，末尾多了逗号(,)</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
@@ -286,7 +298,9 @@
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="sb">`{&#34;error_response&#34;:{&#34;code&#34;:&#34;40002&#34;,&#34;msg&#34;:&#34;Invalid Arguments&#34;,&#34;sub_code&#34;:&#34;isv.code-invalid&#34;,&#34;sub_msg&#34;:&#34;授权码code无效&#34;},}`</span>
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div>
+<p>调用函数：</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
 </span></code></pre></td>
@@ -294,7 +308,9 @@
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">fromJsonLike</span><span class="p">(</span><span class="nx">test</span><span class="p">))</span>
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div>
+<p>输出同样奏效</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
 </span><span class="lnt">2
@@ -311,7 +327,7 @@
 </code></pre></td></tr></table>
 </div>
 </div>
-<p>Case 5 input: invalid JSON TEXT with CRLF(seprate manually)</p>
+<p>Case 5 input: 手工拼接的，类JSON字符串，末尾多了逗号(,)并且有回车断行</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
@@ -349,7 +365,7 @@
 </code></pre></td></tr></table>
 </div>
 </div>
-<p>Case 6 input: JSON TEXT</p>
+<p>Case 6 input: 标准JSON对象</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
@@ -383,7 +399,7 @@
 </code></pre></td></tr></table>
 </div>
 </div>
-<p>Case 7 input: JSON value as BASE64-CIPHER-TEXT</p>
+<p>Case 7 input: 标准JSON对象，返回的内容是aes加密后的base64密文</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
@@ -400,7 +416,9 @@
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">fromJsonLike</span><span class="p">(</span><span class="nx">test</span><span class="p">))</span>
 </code></pre></td></tr></table>
 </div>
-</div><div class="highlight"><div class="chroma">
+</div>
+<p>仅取到密文部分，不包括前、后双引号</p>
+<div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt">1
 </span><span class="lnt">2
@@ -427,7 +445,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2020-09-22
+        2020-10-17
         
     </span>
   </p>

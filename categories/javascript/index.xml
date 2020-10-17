@@ -35,7 +35,7 @@
       <pubDate>Tue, 22 Sep 2020 12:21:06 +0800</pubDate>
       
       <guid>/post/from-json-like-regular-expression-in-nodejs-env/</guid>
-      <description>Practice of parse the text(JSON like) to standard JSON.</description>
+      <description>不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。</description>
     </item>
     
     <item>
@@ -44,7 +44,7 @@
       <pubDate>Sun, 20 Sep 2020 12:29:04 +0800</pubDate>
       
       <guid>/post/pure-simple-date-formatter-with-locale-in-nodejs-env/</guid>
-      <description>Practice of the &lt;code&gt;Date&lt;/code&gt; and &lt;code&gt;Intl.DateTimeFormat&lt;/code&gt; usage regarding by BCP47 and rfc3339, Formatting the datetime in &lt;code&gt;yyyy-MM-dd HH:mm:ss&lt;/code&gt; style.</description>
+      <description>在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用nodejs内置的Date及Intl类，来实现对不同时区的时间格式化处理。</description>
     </item>
     
   </channel>

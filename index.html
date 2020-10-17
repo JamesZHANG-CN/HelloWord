@@ -166,7 +166,7 @@
   
   <div class="post-content">
     <div class="post-summary">
-      Practice of parse the text(JSON like) to standard JSON.
+      不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。
     </div>
     <div class="read-more">
       <a href="/post/from-json-like-regular-expression-in-nodejs-env/" class="read-more-link">阅读更多</a>
@@ -187,7 +187,7 @@
   
   <div class="post-content">
     <div class="post-summary">
-      Practice of the <code>Date</code> and <code>Intl.DateTimeFormat</code> usage regarding by BCP47 and rfc3339, Formatting the datetime in <code>yyyy-MM-dd HH:mm:ss</code> style.
+      在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用nodejs内置的Date及Intl类，来实现对不同时区的时间格式化处理。
     </div>
     <div class="read-more">
       <a href="/post/pure-simple-date-formatter-with-locale-in-nodejs-env/" class="read-more-link">阅读更多</a>
