@@ -1,12 +1,13 @@
 ---
 title: "Pure Simple DateTime Formatter With Locale in Nodejs Env"
 date: 2020-09-20T12:29:04+08:00
+lastmod: 2020-10-17T15:54:06+08:00
 keywords: []
-description: "Pure Simple Date Formatter With Locale in Nodejs Env"
+description: "在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用内置 Date 及 Intl，尝试对不同时区的时间标准化输出，低依赖。"
 tags: []
 categories: ["javascript"]
 author: "James"
-summary: "Practice of the `Date` and `Intl.DateTimeFormat` usage regarding by BCP47 and rfc3339, Formatting the datetime in `yyyy-MM-dd HH:mm:ss` style."
+summary: "在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用nodejs内置的Date及Intl类，来实现对不同时区的时间格式化处理。"
 ---
 
 As of a special project, there were mentioned that the `Date` should always as `yyyy-MM-dd HH:mm:ss` format. But there should have a `timezone` potential risk while the program were running on the place globally. Especially under the `BaaS` or `FaaS` AKA `Serverless` environment.
@@ -17,7 +18,7 @@ As of the `Moment.js` was under LTS situation, here's a pure simple way to do th
 
 Generally, the `en-GB` locale which was `dd/MM/yyyy, HH:mm:ss` format and it's similar to `yyyy-MM-dd HH:mm:ss`. Here's just need put the `source` in that particular order. Codes below:
 
-v1
+v1 版
 
 ```javascript
 var localeDateTime = thing => new Intl.DateTimeFormat(
@@ -33,7 +34,7 @@ var localeDateTime = thing => new Intl.DateTimeFormat(
 )
 ```
 
-v2
+v2 版
 
 ```javascript
 var localeDateTime = thing => new Intl.DateTimeFormat(
@@ -51,7 +52,7 @@ var localeDateTime = thing => new Intl.DateTimeFormat(
 
 As of the `ES2018` RegExp named capture groups(since nodejs v10.8.0) available, the codes should more readable with v3:
 
-v3
+v3 版
 
 ```javascript
 var localeDateTime = (thing, timeZone = 'Asia/Shanghai') => new Intl.DateTimeFormat(
@@ -67,7 +68,7 @@ var localeDateTime = (thing, timeZone = 'Asia/Shanghai') => new Intl.DateTimeFor
 )
 ```
 
-v4 finally
+v4 版
 
 ```javascript
 var localeDateTime = (thing = Date.now(), timeZone = 'Asia/Shanghai') => Intl.DateTimeFormat.call(
@@ -82,6 +83,46 @@ var localeDateTime = (thing = Date.now(), timeZone = 'Asia/Shanghai') => Intl.Da
     /^(?<dd>\d{2})\/(?<MM>\d{2})\/(?<yyyy>\d{4}),\s(?<HH>\d{2}):(?<mm>\d{2}):(?<ss>\d{2})$/,
     '$<yyyy>-$<MM>-$<dd> $<HH>:$<mm>:$<ss>'
 )
+```
+
+v5 版本
+
+*Notes*: NodeJS v10.15.3,v12.18.0,v14.5.0 had strange behavior on `Intl.DateTimeFormat`, see `hourCycle:h23` comments below:
+
+```javascript
+var localeDateTime = (when = Date.now(), timeZone = 'Asia/Shanghai') {
+
+    // short `when` like `Aug 9, 1995` is dependend on the `TZ` env
+    process.env.TZ = timeZone
+
+    let data = new Intl.DateTimeFormat(
+      'en',
+      {
+        calendar: 'gregory', hourCycle: 'h11',
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: 'numeric', minute: '2-digit', second: '2-digit',
+        timeZone,
+      }
+    ).formatToParts(
+      new Date(when)
+    ).filter(({type}) => type != 'literal').reduce(
+      (des, {type, value}) => (des[type.toLowerCase()] = value.toUpperCase(), des),
+      {}
+    )
+
+    // hourCycle:h23 fix(12 AM to 0, 12 PM to 0)
+    data.hour = data.hour == '12' ? `0` : data.hour
+
+    if (data.dayperiod == 'PM') {
+      // hourCycle:h23 add(1 PM to 13)
+      data.hour = `${12 + data.hour * 1}`
+    } else if (data.dayperiod == 'AM') {
+      // hourCycle:h23 fix(2-digit)
+      data.hour = data.hour.length > 1 ? data.hour : `0${data.hour}`
+    }
+
+    return `${data.year}-${data.month}-${data.day} ${data.hour}:${data.minute}:${data.second}`
+  }
 ```
 
 Usage samples:
