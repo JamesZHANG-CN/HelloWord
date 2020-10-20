@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Play the Alipay OpenAPI Requests Over Command Line - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="Play the Alipay OpenAPI Requests Over Command Line，以命令行方式与OpenAPI网关交互——花式快速体验支付开放能力" /><meta name="keywords" content="alipay openapi cli 支付宝开放平台接口CLI工具" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/play-the-alipay-openapi-requests-over-command-line/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="Play the Alipay OpenAPI Requests Over Command Line" />
+<meta property="og:description" content="Play the Alipay OpenAPI Requests Over Command Line，以命令行方式与OpenAPI网关交互——花式快速体验支付开放能力" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/play-the-alipay-openapi-requests-over-command-line/" />
+<meta property="article:published_time" content="2020-10-20T15:21:06&#43;08:00"/>
+<meta property="article:modified_time" content="2020-10-20T15:21:06&#43;08:00"/>
+
+<meta itemprop="name" content="Play the Alipay OpenAPI Requests Over Command Line">
+<meta itemprop="description" content="Play the Alipay OpenAPI Requests Over Command Line，以命令行方式与OpenAPI网关交互——花式快速体验支付开放能力">
+
+
+<meta itemprop="datePublished" content="2020-10-20T15:21:06&#43;08:00" />
+<meta itemprop="dateModified" content="2020-10-20T15:21:06&#43;08:00" />
+<meta itemprop="wordCount" content="665">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Play the Alipay OpenAPI Requests Over Command Line"/>
+<meta name="twitter:description" content="Play the Alipay OpenAPI Requests Over Command Line，以命令行方式与OpenAPI网关交互——花式快速体验支付开放能力"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Play the Alipay OpenAPI Requests Over Command Line</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-10-20 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+    <div class="post-content">
+      <p>以命令行方式与OpenAPI网关交互——花式快速体验支付开放能力</p>
+
+<p>这其实是此款[nodejs SDK]()的用法展示，同时一并补充官方「在线调试」用法，让输入输出JSON更加直观，加速官方开放能力体验。</p>
+
+<p>安装包</p>
+
+<p><code>npm install whats-alipay</code></p>
+
+<p>执行命令查看帮助信息</p>
+
+<p><code>./node_modules/.bin/whatsCli -h</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">Usage: cli.js [options]
+Options:
+  -k, --privateKey  The privateKey pem file path                                                              [required]
+  -p, --publicCert  The publicCert pem file path                                                              [required]
+  -m, --method      The method, eg: alipay.trade.query                                                        [required]
+  -s, --search      The search parameters, eg: search.app_id=2088                                             [required]
+  -b, --biz         The biz_content, eg: biz.out_trade_no=abcd1234                                            [required]
+  -d, --log         Turn on the request trace log                                                              [boolean]
+  -u, --baseURL     The OpenAPI gateway, eg: https://openapi.alipaydev.com/gateway.do
+  -h, --help        Show help                                                                                  [boolean]
+  -V, --version     Show version number                                                                        [boolean]
+Examples:
+  cli.js -k merchant.key -p alipay.pub -m alipay.trade.pay      The Face2Face barCode scenario
+  -s.app_id=2088 -b.subject=HelloKitty
+  -b.out_trade_no=Kitty0001 -b.scene=bar_code
+  -b.total_amount=0.01 -b.auth_code=
+  cli.js -k merchant.key -p alipay.pub -m alipay.trade.refund   The trade refund scenario
+  -s.app_id=2088 -b.refund_amount=0.01 -b.refund_currency=CNY
+  -b.out_trade_no=Kitty0001
+  cli.js -d -u https://openapi.alipaydev.com/gateway.do -k      The trade query scenario over the sandbox environment
+  merchant.key -p alipay.pub -m alipay.trade.query              with trace logging
+  -s.app_id=2088 -b.out_trade_no=Kitty0001</pre></td></tr></table>
+</div>
+</div>
+<p>快速体验</p>
+
+<p>面对面支付产品能力</p>
+
+<p><code>
+./node_modules/.bin/whatsCli -k merchant.key -p alipay.pub -m alipay.trade.pay -s.app_id=2088 -b.subject=HelloKitty -b.out_trade_no=Kitty0001 -b.scene=bar_code -b.total_amount=0.01 -b.auth_code=
+</code></p>
+
+<p>配合扫描枪，可以让如上auth_code从手动切换成快速输入并提交，体验更佳。</p>
+
+<p>通用退款能力</p>
+
+<p><code>./node_modules/.bin/whatsCli -k merchant.key -p alipay.pub -m alipay.trade.refund -s.app_id=2088 -b.refund_amount=0.01 -b.refund_currency=CNY -b.out_trade_no=Kitty0001</code></p>
+
+<p>付款单查询能力</p>
+
+<p><code>./node_modules/.bin/whatsCli -k merchant.key -p alipay.pub -m alipay.trade.query -s.app_id=2088 -b.out_trade_no=Kitty0001</code></p>
+
+<p>沙箱环境</p>
+
+<p><code>./node_modules/.bin/whatsCli -u https://openapi.alipaydev.com/gateway.do -k merchant.key -p alipay.pub -m alipay.trade.query -s.app_id=2088 -b.out_trade_no=Kitty0001</code></p>
+
+<p>开启查询交互日志</p>
+
+<p><code>./node_modules/.bin/whatsCli --log -u https://openapi.alipaydev.com/gateway.do -k merchant.key -p alipay.pub -m alipay.trade.query -s.app_id=2088 -b.out_trade_no=Kitty0001</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="p">[</span>
+  <span class="s1">&#39;https://openapi.alipaydev.com/gateway.do&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;post&#39;</span><span class="p">,</span>
+  <span class="p">{</span> <span class="nx">out_trade_no</span><span class="o">:</span> <span class="s1">&#39;Kitty0001&#39;</span> <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">format</span><span class="o">:</span> <span class="s1">&#39;JSON&#39;</span><span class="p">,</span>
+    <span class="nx">charset</span><span class="o">:</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">,</span>
+    <span class="nx">sign_type</span><span class="o">:</span> <span class="s1">&#39;RSA2&#39;</span><span class="p">,</span>
+    <span class="nx">version</span><span class="o">:</span> <span class="s1">&#39;1.0&#39;</span><span class="p">,</span>
+    <span class="nx">app_id</span><span class="o">:</span> <span class="mi">2088</span><span class="p">,</span>
+    <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;alipay.trade.query&#39;</span>
+  <span class="p">}</span>
+<span class="p">]</span>
+<span class="nx">biz_content</span><span class="o">=%</span><span class="mi">7</span><span class="nx">B</span><span class="o">%</span><span class="mi">22</span><span class="nx">out_trade_no</span><span class="o">%</span><span class="mi">22</span><span class="o">%</span><span class="mi">3</span><span class="nx">A</span><span class="o">%</span><span class="mi">22</span><span class="nx">Kitty0001</span><span class="o">%</span><span class="mi">22</span><span class="o">%</span><span class="mi">7</span><span class="nx">D</span><span class="o">&amp;</span><span class="nx">sign</span><span class="o">=</span><span class="nx">emhZqmbUNkGWoCwxcalzr9gF9ZQ6IjqdbStC32S4DnJw4Z15omMDghCs58LF</span><span class="o">%</span><span class="mi">2</span><span class="nx">Bb1alNeOKrS5YIH2ISx23ZuD50GeCIWy3nXUaaouwdIih38dtFKb6jqkBfhiiFs1V1</span><span class="o">%</span><span class="mi">2</span><span class="nx">FGg91gjc83PboBQB3thmmll2zILkWuPYQoz964wnR</span><span class="o">%</span><span class="mi">2</span><span class="nx">FJ04Wx</span><span class="o">%</span><span class="mi">2</span><span class="nx">FBsIHlzD0Tr2bhur</span><span class="o">%</span><span class="mi">2</span><span class="nx">B5lE0Ldg2EzYm</span><span class="o">%</span><span class="mi">2</span><span class="nx">FyLN7yKUaIAHmjpHMbWwQ2EQrEsic6qpRNqjHJ7Tmp9k6kGfndkT06r1Mpe2WxSh6fabDi</span><span class="o">%</span><span class="mi">2</span><span class="nx">Beh1CX</span><span class="o">%</span><span class="mi">2</span><span class="nx">BXnS8KX4Umeg</span><span class="o">%</span><span class="mi">2</span><span class="nx">F0swfaAEb9GbnKgeLgp43eUj9S0KbtG8wvFSA</span><span class="o">%</span><span class="mi">2</span><span class="nx">FqUkhWfXoh8Cicw</span><span class="o">%</span><span class="mi">3</span><span class="nx">D</span><span class="o">%</span><span class="mi">3</span><span class="nx">D</span>
+<span class="p">{</span><span class="s2">&#34;alipay_trade_query_response&#34;</span><span class="o">:</span><span class="p">{</span><span class="s2">&#34;code&#34;</span><span class="o">:</span><span class="s2">&#34;40002&#34;</span><span class="p">,</span><span class="s2">&#34;msg&#34;</span><span class="o">:</span><span class="s2">&#34;Invalid Arguments&#34;</span><span class="p">,</span><span class="s2">&#34;sub_code&#34;</span><span class="o">:</span><span class="s2">&#34;isv.invalid-app-id&#34;</span><span class="p">,</span><span class="s2">&#34;sub_msg&#34;</span><span class="o">:</span><span class="s2">&#34;无效的AppID参数&#34;</span><span class="p">}}</span>
+<span class="p">{</span>
+  <span class="nx">alipay_trade_query_response</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">code</span><span class="o">:</span> <span class="s1">&#39;40002&#39;</span><span class="p">,</span>
+    <span class="nx">msg</span><span class="o">:</span> <span class="s1">&#39;Invalid Arguments&#39;</span><span class="p">,</span>
+    <span class="nx">sub_code</span><span class="o">:</span> <span class="s1">&#39;isv.invalid-app-id&#39;</span><span class="p">,</span>
+    <span class="nx">sub_msg</span><span class="o">:</span> <span class="s1">&#39;无效的AppID参数&#39;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>以上体验，已随 whats-aliapy nodejs sdk v0.0.11 发布，cli核心代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="k">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">)</span>
+<span class="k">const</span> <span class="p">{</span><span class="nx">Alipay</span><span class="p">,</span> <span class="nx">Decorator</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="k">const</span> <span class="nx">whats</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Alipay</span><span class="p">({</span>
+  <span class="nx">privateKey</span><span class="o">:</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">),</span>
+  <span class="nx">publicCert</span><span class="o">:</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">publicCert</span><span class="p">),</span>
+<span class="p">})</span>
+
+<span class="nx">argv</span><span class="p">.</span><span class="nx">method</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">).</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">f</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="nx">f</span><span class="p">[</span><span class="nx">i</span><span class="p">],</span> <span class="nx">whats</span><span class="p">)(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">biz</span><span class="p">,</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">search</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>欢迎体验，欢迎Star, 项目地址 <a href="https://github.com/TheNorthMemory/whats-alipay">https://github.com/TheNorthMemory/whats-alipay</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-10-20
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/less-dependency-of-the-rfc2388-multipart-form-data-kit-in-nodejs-env/">
+            <span class="next-text nav-default">Less Dependency of the Rfc2388 Multipart FormData ES2015 class</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
