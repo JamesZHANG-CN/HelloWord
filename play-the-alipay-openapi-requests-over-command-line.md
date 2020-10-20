@@ -11,7 +11,7 @@ summary: "以命令行方式与OpenAPI网关交互——花式快速体验支付
 
 以命令行方式与OpenAPI网关交互——花式快速体验支付开放能力
 
-这其实是此款[nodejs SDK]()的用法展示，同时一并补充官方「在线调试」用法，让输入输出JSON更加直观，加速官方开放能力体验。
+这其实是此款[nodejs SDK](https://github.com/TheNorthMemory/whats-alipay)的用法展示，同时一并补充官方「在线调试」用法，让输入输出JSON更加直观，加速官方开放能力体验。
 
 
 安装包
