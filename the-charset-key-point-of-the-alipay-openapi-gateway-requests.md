@@ -11,9 +11,9 @@ summary: "调用OpenAPI page类网关接口应该注意charset参数位置以及
 
 以测试用例覆盖来看，调用OpenAPI page类网关接口应该注意charset参数位置以及官方可改进增强的点
 
-是的，你没看错，这个仍旧是 [nodejs SDK](https://forum.alipay.com/mini-app/post/15501011) 的一篇展开文章，page类的测试用例源码可见[openapi/alipay.trade.wap.pay.test.js](https://github.com/TheNorthMemory/whats-alipay/blob/master/tests/openapi/alipay.trade.wap.pay.test.js)。
+是的，你没看错，这个仍旧是 [nodejs SDK](/posts/yet-another-alipay-openapi-smart-development-kit-in-nodejs-env/) 的一篇展开文章，page类的测试用例源码可见[alipay.trade.wap.pay.test.js](https://github.com/TheNorthMemory/whats-alipay/blob/master/tests/openapi/alipay.trade.wap.pay.test.js)。
 
-在做这个用例覆盖的时候，一开始以为这是官方的一个BUG，后来翻腾了好几遍文档，最后从[这里](https://opensupport.alipay.com/support/helpcenter/192/201602472810) 翻到一句话如下：
+在做这个用例覆盖的时候，一开始以为这是官方的一个BUG，后来翻腾了好几遍文档，最后从 [这里](https://opensupport.alipay.com/support/helpcenter/192/201602472810) 翻到一句话如下：
 
 > 请确认charset参数放在了URL查询字符串中且各参数值使用charset参数指示的字符集编码
 
