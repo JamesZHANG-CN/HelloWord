@@ -3,7 +3,32 @@
   
   <url>
     <loc>https://thenorthmemory.github.io/categories/</loc>
-    <lastmod>2020-10-20T15:21:06+08:00</lastmod>
+    <lastmod>2020-10-22T08:21:26+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/post/</loc>
+    <lastmod>2020-10-22T08:21:26+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/post/the-charset-key-point-of-the-alipay-openapi-gateway-requests/</loc>
+    <lastmod>2020-10-22T08:21:26+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/</loc>
+    <lastmod>2020-10-22T08:21:26+08:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/categories/javascript/</loc>
+    <lastmod>2020-10-22T08:21:26+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -12,24 +37,6 @@
     <lastmod>2020-10-20T15:21:06+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://thenorthmemory.github.io/post/</loc>
-    <lastmod>2020-10-20T15:21:06+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://thenorthmemory.github.io/</loc>
-    <lastmod>2020-10-20T15:21:06+08:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://thenorthmemory.github.io/categories/javascript/</loc>
-    <lastmod>2020-10-20T15:21:06+08:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>

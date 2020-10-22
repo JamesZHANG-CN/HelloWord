@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>The Charset Key Point of the Alipay&#39;s OpenAPI Gateway Requests - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="The Charset Key Point of the Alipay&#39;s OpenAPI Gateway Requests, 调用OpenAPI page类网关接口应该注意charset参数位置" /><meta name="keywords" content="charset alipay openapi cli page类网关接口应该注意charset参数位置" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/the-charset-key-point-of-the-alipay-openapi-gateway-requests/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="The Charset Key Point of the Alipay&#39;s OpenAPI Gateway Requests" />
+<meta property="og:description" content="The Charset Key Point of the Alipay&#39;s OpenAPI Gateway Requests, 调用OpenAPI page类网关接口应该注意charset参数位置" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/the-charset-key-point-of-the-alipay-openapi-gateway-requests/" />
+<meta property="article:published_time" content="2020-10-22T08:21:26&#43;08:00"/>
+<meta property="article:modified_time" content="2020-10-22T08:21:26&#43;08:00"/>
+
+<meta itemprop="name" content="The Charset Key Point of the Alipay&#39;s OpenAPI Gateway Requests">
+<meta itemprop="description" content="The Charset Key Point of the Alipay&#39;s OpenAPI Gateway Requests, 调用OpenAPI page类网关接口应该注意charset参数位置">
+
+
+<meta itemprop="datePublished" content="2020-10-22T08:21:26&#43;08:00" />
+<meta itemprop="dateModified" content="2020-10-22T08:21:26&#43;08:00" />
+<meta itemprop="wordCount" content="1981">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="The Charset Key Point of the Alipay&#39;s OpenAPI Gateway Requests"/>
+<meta name="twitter:description" content="The Charset Key Point of the Alipay&#39;s OpenAPI Gateway Requests, 调用OpenAPI page类网关接口应该注意charset参数位置"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">The Charset Key Point of the Alipay&#39;s OpenAPI Gateway Requests</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-10-22 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    
+  </div>
+</div>
+    <div class="post-content">
+      <p>以测试用例覆盖来看，调用OpenAPI page类网关接口应该注意charset参数位置以及官方可改进增强的点</p>
+
+<p>是的，你没看错，这个仍旧是 <a href="https://forum.alipay.com/mini-app/post/15501011">nodejs SDK</a> 的一篇展开文章，page类的测试用例源码可见<a href="https://github.com/TheNorthMemory/whats-alipay/blob/master/tests/openapi/alipay.trade.wap.pay.test.js">openapi/alipay.trade.wap.pay.test.js</a>。</p>
+
+<p>在做这个用例覆盖的时候，一开始以为这是官方的一个BUG，后来翻腾了好几遍文档，最后从<a href="https://opensupport.alipay.com/support/helpcenter/192/201602472810">这里</a> 翻到一句话如下：</p>
+
+<blockquote>
+<p>请确认charset参数放在了URL查询字符串中且各参数值使用charset参数指示的字符集编码</p>
+</blockquote>
+
+<p>豁然明白，官方同学是知道有这么个问题的，只是我的这个用例展开不是验签出错，而是在支付确认页，中文subject显示成了&rdquo;昆金铐&rdquo;——编码错乱的标志。</p>
+
+<p>我们来看下此用例发生条件及过程：</p>
+
+<ol>
+<li>网关地址是: <code>https://openapi.alipay.com/gateway.do</code>；</li>
+<li>接口数据以表单形式以 <code>POST</code> + <code>utf-8</code> 编码提交；</li>
+<li>网关 <code>302</code> 至 <code>https://mclient.alipay.com/cashier/mobilepay.htm</code> 承接页；</li>
+<li>承接页 做唤醒支付宝APP尝试，不成功自动转入 <code>/h5Continue.htm</code> 登录状态校验页；</li>
+<li><code>h5Continue</code> 页做完校验后，已登录则转入支付确认页；</li>
+</ol>
+
+<p>这个时候，在第五步的时候，即出现了著名的&rdquo;昆金铐&rdquo;，原则上来说，如果是眼浅出错，则在第三步的时候，即转入 <code>40002:invalid-signature</code> 页面，不会进入 承接页及登录校验页，说明这个时候，其实服务端验签按<code>utf-8</code>已经是验签通过了，然而在第四转第五步时，却出现了编码错乱，这个一方面是因为官方默认的编码是gbk，另一方面我们不妨深挖一下这个转入支付确认页逻辑。</p>
+
+<p>我们通过此 nodejs SDK，以命令行的形式，来提交这个page类表单看看，承接页的源码(片段)是个什么样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="s1">&#39;&lt;div class=&#34;am-content&#34;&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;    &lt;input type=&#34;hidden&#34; name=&#34;params&#34; value=&#34;{&amp;quot;server_param&amp;quot;:&amp;quot;emlkPTQ5O25kcHQ3ZmMwOTtjYz15&amp;quot;}&#34; /&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;    &lt;div class=&#34;result&#34;&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;        &lt;div class=&#34;result-logo&#34;&gt;&lt;/div&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;        &lt;div class=&#34;result-title&#34;&gt;正在尝试打开支付宝客户端&lt;/div&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;                  &lt;div class=&#34;result-tips&#34;&gt;1.如果未安装支付宝APP，请先 &lt;a class=&#34;J-h5Download&#34; href=&#34;#&#34;&gt;点这里下载支付宝APP&lt;/a&gt; 并完成安装，再点击「使用支付宝APP付款」；&lt;/div&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;          &lt;div class=&#34;result-tips&#34;&gt;2.如果无法打开支付宝APP，请点击「继续浏览器付款」；&lt;/div&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;          &lt;div class=&#34;result-tips&#34; style=&#34;margin-bottom: 40px;&#34;&gt;3.如果你已完成付款，请点击「已完成付款」；&lt;/div&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;          &lt;div class=&#34;result-botton&#34;&gt;&lt;a class=&#34;J-startapp am-button am-button-blue&#34; href=&#34;#&#34;&gt;使用支付宝APP付款&lt;/a&gt;&lt;/div&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;          &lt;div class=&#34;result-botton&#34;&gt;&lt;a class=&#34;J-h5pay am-button am-button-white&#34; href=&#34;#&#34;&gt;继续浏览器付款&lt;/a&gt;&lt;/div&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;                &lt;div class=&#34;result-botton&#34;&gt;&lt;a class=&#34;J-complete am-button am-button-white&#34; href=&#34;#&#34;&gt;已完成付款&lt;/a&gt;&lt;/div&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;    &lt;/div&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;&lt;/div&gt;\r\n&#39;</span> <span class="o">+</span>
+<span class="s2">&#34;    $(&#39;.J-h5pay&#39;).on(&#39;click&#39;, function(e){\r\n&#34;</span> <span class="o">+</span>
+<span class="s2">&#34;      var _url = &#39;/h5Continue.htm?h5_route_token=RZ52N4oP3VgS4pukmk2jPbXlflxVsXmobilecashierRZ54&amp;awid=RZ54RWrYV33dZbX9cIbtVw8KL6sUY3mobileclientgwRZ54&#39;;\r\n&#34;</span> <span class="o">+</span>
+<span class="s1">&#39;      if(window.json_ua){\r\n&#39;</span> <span class="o">+</span>
+<span class="s2">&#34;        _url += &#39;&amp;ua=&#39; + encodeURIComponent(window.json_ua + &#39;&#39;);\r\n&#34;</span> <span class="o">+</span>
+<span class="s1">&#39;      }\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;      window.location.href = _url\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;    })\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;            Zepto.ajax({\r\n&#39;</span> <span class="o">+</span>
+<span class="s2">&#34;                type: &#39;post&#39;,\r\n&#34;</span> <span class="o">+</span>
+<span class="s2">&#34;                url: &#39;/h5/h5RoutePayResultQuery.json?operateType=1&amp;h5_route_token=RZ52N4oP3VgS4pukmk2jPbXlflxVsXmobilecashierRZ54&#39;,\r\n&#34;</span> <span class="o">+</span>
+<span class="s1">&#39;                data:{\r\n&#39;</span> <span class="o">+</span>
+<span class="s2">&#34;                    &#39;_input_charset&#39;: &#39;utf-8&#39;,\r\n&#34;</span> <span class="o">+</span>
+<span class="s2">&#34;                    &#39;params&#39;: $(&#39;input[name=params]&#39;).val(),\r\n&#34;</span> <span class="o">+</span>
+<span class="s2">&#34;                    &#39;session&#39;: &#39;RZ52N4oP3VgS4pukmk2jPbXlflxVsXmobilecashierRZ54&#39;,\r\n&#34;</span> <span class="o">+</span>
+<span class="s2">&#34;                    &#39;r&#39;: Math.floor(Math.random()*1e13)\r\n&#34;</span> <span class="o">+</span>
+<span class="s1">&#39;                },\r\n&#39;</span> <span class="o">+</span>
+<span class="s1">&#39;                timeout: 30000,\r\n&#39;</span> <span class="o">+</span>
+<span class="s2">&#34;                dataType: &#39;json&#39;,\r\n&#34;</span> <span class="o">+</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>页面逻辑大致上是说，以<code>alipays://</code>, <code>alipay://</code> schema的形式如果唤醒了APP，这个页面即停在这个承接页上，页面每30秒做异步轮询查询付款状态；如果没唤醒或者6秒计时结束，则转入 <code>/h5Continue.htm</code> 页面。</p>
+
+<p>这里就有些值得细品的地方了，即，每30秒查询付款状态时，查询参数带入了 <code>_input_charset: 'utf-8'</code> 这么个参数，字面意思理解就是，输入编码格式是<code>utf-8</code>，拔特，转入 <code>/h5Continue.htm</code> 却没带上这个参数，以至于后续页面落入了 <code>gbk</code> 默认编码这个锅里。</p>
+
+<p>本人没有仔细分析为什么没有带入这个参数，还是回到一开始 「签名验签」常见问题上，官方应该已经注意到了这个问题，给予开发者的建议是，需要把 <code>charset</code> 带入至 <code>URL</code> 中，那。。。就这么办吧～</p>
+
+<p>所以，当你阅读至此，应该明白了： 在调用支付宝网关page类服务时，有一个参数是当前「必须」带入至URL上的，即<code>charset</code>，这个目前是解决编码错乱问题的不二法门。</p>
+
+<p>稍微展开了说，<code>mobilepay.htm</code>既然已经感知到了输入编码是<code>utf-8</code>了，就应该加强一下转入<code>/h5Continue.htm</code>及后续页面的编码一致性问题，这是嫩给官方的建议。同时为减少广大脑力劳动者脱发风险，请收下俺的膝盖 Orz&hellip;</p>
+
+<p><code>whats-aliapy</code> nodejs sdk 已发布至 v0.1.0，同时做了如下三项改进：</p>
+
+<ul>
+<li>调整 <code>同步应答验签</code> 逻辑，遵从本SDK约定，只要能从应答返回中解析出有效负载，即仅返回负载；</li>
+<li>新增 <code>异步通知消息</code> 验签文档示例函数；</li>
+<li>不再可选依赖 <code>form-data</code>，以内置 <code>Form</code> 类为主；</li>
+</ul>
+
+<p><code>cli</code> 及 <code>sdk</code> 本身，对网关返回的应用级异常JSON输出，数据感知能力变得更流畅。欢迎体验，欢迎 <strong>Star</strong> 项目地址 <a href="https://github.com/TheNorthMemory/whats-alipay">https://github.com/TheNorthMemory/whats-alipay</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-10-22
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/play-the-alipay-openapi-requests-over-command-line/">
+            <span class="next-text nav-default">Play the Alipay OpenAPI Requests Over Command Line</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
