@@ -3,13 +3,13 @@
   
   <url>
     <loc>https://thenorthmemory.github.io/categories/</loc>
-    <lastmod>2020-10-22T08:21:26+08:00</lastmod>
+    <lastmod>2020-10-23T15:37:06+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://thenorthmemory.github.io/post/</loc>
-    <lastmod>2020-10-22T08:21:26+08:00</lastmod>
+    <lastmod>2020-10-23T15:37:06+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -22,13 +22,13 @@
   
   <url>
     <loc>https://thenorthmemory.github.io/</loc>
-    <lastmod>2020-10-22T08:21:26+08:00</lastmod>
+    <lastmod>2020-10-23T15:37:06+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://thenorthmemory.github.io/categories/javascript/</loc>
-    <lastmod>2020-10-22T08:21:26+08:00</lastmod>
+    <lastmod>2020-10-23T15:37:06+08:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -55,7 +55,7 @@
   
   <url>
     <loc>https://thenorthmemory.github.io/post/from-json-like-regular-expression-in-nodejs-env/</loc>
-    <lastmod>2020-10-17T15:45:06+08:00</lastmod>
+    <lastmod>2020-10-23T15:37:06+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

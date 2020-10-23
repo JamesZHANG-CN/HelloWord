@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Using RegExp to parse the text(JSON like) in Nodejs Env - TheNorthMemory</title>
+  <title>Alipay OpenAPI同步/异步验签，请注意编程语言对JSON处理的差异性 - TheNorthMemory</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -40,26 +40,26 @@
 
 <style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
 
-<meta property="og:title" content="Using RegExp to parse the text(JSON like) in Nodejs Env" />
+<meta property="og:title" content="Alipay OpenAPI同步/异步验签，请注意编程语言对JSON处理的差异性" />
 <meta property="og:description" content="不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/from-json-like-regular-expression-in-nodejs-env/" />
 <meta property="article:published_time" content="2020-09-22T12:21:06&#43;08:00"/>
-<meta property="article:modified_time" content="2020-10-17T15:45:06&#43;08:00"/>
+<meta property="article:modified_time" content="2020-10-23T15:37:06&#43;08:00"/>
 
-<meta itemprop="name" content="Using RegExp to parse the text(JSON like) in Nodejs Env">
+<meta itemprop="name" content="Alipay OpenAPI同步/异步验签，请注意编程语言对JSON处理的差异性">
 <meta itemprop="description" content="不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。">
 
 
 <meta itemprop="datePublished" content="2020-09-22T12:21:06&#43;08:00" />
-<meta itemprop="dateModified" content="2020-10-17T15:45:06&#43;08:00" />
-<meta itemprop="wordCount" content="1325">
+<meta itemprop="dateModified" content="2020-10-23T15:37:06&#43;08:00" />
+<meta itemprop="wordCount" content="2153">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Using RegExp to parse the text(JSON like) in Nodejs Env"/>
+<meta name="twitter:title" content="Alipay OpenAPI同步/异步验签，请注意编程语言对JSON处理的差异性"/>
 <meta name="twitter:description" content="不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。"/>
 
 <!--[if lte IE 9]>
@@ -119,7 +119,7 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Using RegExp to parse the text(JSON like) in Nodejs Env</h1>
+      <h1 class="post-title">Alipay OpenAPI同步/异步验签，请注意编程语言对JSON处理的差异性</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2020-09-22 </span>
@@ -137,7 +137,11 @@
   </div>
 </div>
     <div class="post-content">
-      <p>支付宝OpenAPI返回的是JSON字符串，不同开发语言对unicode及slash等处理上会存在差异。nodejs在处理这个JSON时，用<code>JSON.stringify(JSON.parese(data))​</code>方法可能奏效，不过优解方案是对源字符串做处理获取， 使用正则表达式，按JSON部分规范来抽取所用载核，对于pretty格式化美化后的JSON，同样奏效。</p>
+      <p>支付宝OpenAPI返回的是JSON字符串，不同开发语言对unicode及slash等处理上会存在差异。按标准JSON规格文档来说，严格意义上对负载有歧义的字符是需要做转义，如斜杠(<code>/</code>)，不同编程语言对这个规格的处理上，有稍许差异，nodejs在处理这个JSON时，用<code>JSON.stringify(JSON.parese(data))​</code>方法可能奏效，不过优解方案是对源字符串做处理获取， 使用正则表达式，按JSON部分规范来抽取所用载核，对于pretty格式化美化后的JSON，同样奏效。例如从如下两个接口，返回的样本数据可从 <a href="https://github.com/TheNorthMemory/whats-alipay/blob/master/tests/fixtures/alipay.offline.material.image.upload.json">alipay.offline.material.image.upload.json</a> 及 <a href="https://github.com/TheNorthMemory/whats-alipay/blob/master/tests/fixtures/alipay.offline.market.shop.category.query.json">alipay.offline.market.shop.category.query.json</a> 来看，转义斜杠(<code>/</code>)是平台标准做法。</p>
+
+<p>这转义斜杠如果不注意呀，很容易造成验签失败，因为<code>javascript</code>对JSON负载内斜杠不转义。。。所以啊，得老老实实对返回的源字符串做截取有效负载及签名值处理！不能任性的对源字符串，做 <code>JSON.parse</code> 然后取值再用去验签，偶尔验签真就能过，那是运气好；验签不通过那是大概率事件。</p>
+
+<p>以正则表达式，对源返回字符串匹配获取，<a href="https://github.com/TheNorthMemory/whats-alipay/blob/master/lib/formatter.js#L77-L95">原版函数</a>带注释如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
@@ -151,9 +155,25 @@
 </span><span class="lnt"> 9
 </span><span class="lnt">10
 </span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">fromJsonLike</span> <span class="o">=</span> <span class="p">(</span><span class="nx">source</span><span class="p">,</span> <span class="nx">placeholder</span> <span class="o">=</span> <span class="s1">&#39;(?&lt;ident&gt;[a-z](?:[a-z_])+_response)&#39;</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="cm">/**
+</span><span class="cm"> * Parse the `source` with given `placeholder`.
+</span><span class="cm"> *
+</span><span class="cm"> * @param {string} source - The inputs string.
+</span><span class="cm"> * @param {string} [placeholder] - The payload pattern.
+</span><span class="cm"> *
+</span><span class="cm"> * @returns {object} - `{ident, payload, sign}` object
+</span><span class="cm"> */</span>
+<span class="kd">var</span> <span class="nx">fromJsonLike</span> <span class="o">=</span> <span class="p">(</span><span class="nx">source</span><span class="p">,</span> <span class="nx">placeholder</span> <span class="o">=</span> <span class="s1">&#39;(?&lt;ident&gt;[a-z](?:[a-z_])+_response)&#39;</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
   <span class="k">const</span> <span class="nx">maybe</span> <span class="o">=</span> <span class="sb">`(?:[\\r|\\n|\\s|\\t]*)`</span>
   <span class="k">const</span> <span class="nx">pattern</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span>
     <span class="sb">`^\\{</span><span class="si">${</span><span class="nx">maybe</span><span class="si">}</span><span class="sb">&#34;</span><span class="si">${</span><span class="nx">placeholder</span><span class="si">}</span><span class="sb">&#34;</span><span class="si">${</span><span class="nx">maybe</span><span class="si">}</span><span class="sb">:</span><span class="si">${</span><span class="nx">maybe</span><span class="si">}</span><span class="sb">&#34;?(?&lt;payload&gt;.*?)&#34;?</span><span class="si">${</span><span class="nx">maybe</span><span class="si">}</span><span class="sb">`</span> <span class="o">+</span>
@@ -167,6 +187,8 @@
 </code></pre></td></tr></table>
 </div>
 </div>
+<p>翻译下来就是，从 开头（允许有空格、换行、TAB等单个或多个字符存在），以有效负载标识规则 (<code>xxx_response</code>格式)，匹配至 <code>&quot;sign&quot;</code>位或者末位<code>}</code>，同时兼容负载是<code>aes</code>加密串的无感获取，正则规则中的 <code>(?&lt;Name&gt;x)</code> 是 <code>Named capturing group</code> 语法块，即对匹配到的内容做命名，以上函数包括型参<code>placeholder</code>默认值中的 <code>&lt;ident&gt;</code>，一共分组命名3个，即返回值对象，<code>payload</code>为有效负载，<code>sign</code>即验签串, 然后从这个函数里，拿这俩值去验签，<code>99.999%</code> 应该就没问题了(极小概率见如下<code>缺陷</code>)。</p>
+
 <p>Case 1 input: JSON 编码器，对URL的slash(/)做了转译 \/，测试样本数据如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -435,6 +457,12 @@
 </code></pre></td></tr></table>
 </div>
 </div>
+<p>测试用例覆盖也开见 <a href="https://github.com/TheNorthMemory/whats-alipay/blob/master/tests/lib/formatter.test.js#L92-L120">formatter.test.js#L92-L120</a>，重点覆盖了 <code>带转义斜杠的JSON</code>、<code>美化后JSON</code>，及 <code>非标准JSON</code>，应该没啥问题。</p>
+
+<p>这里有个缺陷，就是，当返回的字符串签名标识<code>sign</code>不是在有效负载之后，那么就会取不到了；不过从源码阅读官方<code>easysdk</code>上来看，这种情形基本上不会出现，因为官方包对返回的类JSON字符串处理逻辑也是按照 <code>方法标识符(x_response)</code> + <code>签名标识(sign)</code> 处理的，可以安全使用。</p>
+
+<p>最后，这个正则表达式，应该很容易翻译成其他开发语言版的，如果有同学翻译了，欢迎再此留个言，俺也就欣慰了。</p>
+
     </div>
 
     <div class="post-copyright">
@@ -445,7 +473,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2020-10-17
+        2020-10-23
         
     </span>
   </p>
