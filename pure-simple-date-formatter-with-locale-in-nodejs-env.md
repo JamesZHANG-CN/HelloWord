@@ -1,8 +1,8 @@
 ---
-title: "Pure Simple DateTime Formatter With Locale in Nodejs Env"
+title: "使用NodeJS内置Intl.DateTimeFormat方法，实现按时区格式化时间日期字符串"
 date: 2020-09-20T12:29:04+08:00
-lastmod: 2020-10-17T15:54:06+08:00
-keywords: []
+lastmod: 2021-02-28T16:54:06+08:00
+keywords: ["DateTimeFormat", "RegExp", "NodeJS", "yyyy-MM-dd HH:mm:ss"]
 description: "在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用内置 Date 及 Intl，尝试对不同时区的时间标准化输出，低依赖。"
 tags: []
 categories: ["javascript"]

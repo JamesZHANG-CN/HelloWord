@@ -1,6 +1,7 @@
 ---
-title: "Pkcs7 Padding Unpadding Research in Nodejs Env"
+title: "PKCS7/PADDING的NodeJS实现"
 date: 2020-09-17T18:24:20+08:00
+lastmod: 2021-02-28T16:54:06+08:00
 keywords: ["PKCS7", "rfc2315", "NodeJS"]
 description: "PKCS7/Padding implementation on ES2015+, just using the Native `Buffer` library to do the right things."
 tags: []

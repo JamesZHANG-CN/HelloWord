@@ -1,6 +1,7 @@
 ---
-title: "Less Dependency of the Rfc2388 Multipart FormData ES2015 class"
+title: "rfc2388表单上传文件NodeJS无依赖版本实现"
 date: 2020-10-17T14:26:34+08:00
+lastmod: 2021-02-28T16:54:06+08:00
 keywords: [RFC2388 multipart/form-data ES2015 file uploader pure javascript]
 description: "受微信支付官方技术助手伙伴在某次问答亲测有效代码启发，以下ES2015代码为微信支付APIv3上传文件文档补充实现而做，供其他开发语言参考实现。"
 tags: []
