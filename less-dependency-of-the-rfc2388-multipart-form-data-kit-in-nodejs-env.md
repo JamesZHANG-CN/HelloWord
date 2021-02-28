@@ -5,7 +5,6 @@ lastmod: 2021-02-28T16:54:06+08:00
 keywords: [RFC2388 multipart/form-data ES2015 file uploader pure javascript]
 description: "受微信支付官方技术助手伙伴在某次问答亲测有效代码启发，以下ES2015代码为微信支付APIv3上传文件文档补充实现而做，供其他开发语言参考实现。"
 tags: []
-categories: []
 categories: ["javascript"]
 author: "James"
 summary: "上传媒体文件API的是基于RFC2388协议，圈定的范围是，有大小限制的图片(2M)或者视频(5M)类型单文件，受微信支付官方技术助手伙伴在某次问答亲测有效代码启发，以下ES2015代码为微信支付APIv3图片、视频上传类接口文档补充nodejs纯语言无依赖版参考实现。"
