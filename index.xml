@@ -6,13 +6,22 @@
     <description>Recent content on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Thu, 22 Oct 2020 08:21:26 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 28 Feb 2021 17:30:37 +0800</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>The Charset Key Point of the Alipay&#39;s OpenAPI Gateway Requests</title>
+      <title>链式动态参数化的微信支付APIv2&amp;v3&#39; Smart Develop Kit</title>
+      <link>/post/chain-the-wechatpay-openapi-pathname-as-dynamic-properties-with-http-verbs-method/</link>
+      <pubDate>Sun, 28 Feb 2021 17:30:37 +0800</pubDate>
+      
+      <guid>/post/chain-the-wechatpay-openapi-pathname-as-dynamic-properties-with-http-verbs-method/</guid>
+      <description>由一个issue引起的重构，使用相同语法糖(method chain)请求微信支付接口。</description>
+    </item>
+    
+    <item>
+      <title>支付宝page类网关调用，不得不注意的charset参数赋值位置</title>
       <link>/post/the-charset-key-point-of-the-alipay-openapi-gateway-requests/</link>
       <pubDate>Thu, 22 Oct 2020 08:21:26 +0800</pubDate>
       
@@ -21,7 +30,7 @@
     </item>
     
     <item>
-      <title>Play the Alipay OpenAPI Requests Over Command Line</title>
+      <title>命令行方式与支付宝OpenAPI网关交互</title>
       <link>/post/play-the-alipay-openapi-requests-over-command-line/</link>
       <pubDate>Tue, 20 Oct 2020 15:21:06 +0800</pubDate>
       
@@ -30,7 +39,7 @@
     </item>
     
     <item>
-      <title>Less Dependency of the Rfc2388 Multipart FormData ES2015 class</title>
+      <title>rfc2388表单上传文件NodeJS无依赖版本实现</title>
       <link>/post/less-dependency-of-the-rfc2388-multipart-form-data-kit-in-nodejs-env/</link>
       <pubDate>Sat, 17 Oct 2020 14:26:34 +0800</pubDate>
       
@@ -57,7 +66,7 @@
     </item>
     
     <item>
-      <title>Pure Simple DateTime Formatter With Locale in Nodejs Env</title>
+      <title>使用NodeJS内置Intl.DateTimeFormat方法，实现按时区格式化时间日期字符串</title>
       <link>/post/pure-simple-date-formatter-with-locale-in-nodejs-env/</link>
       <pubDate>Sun, 20 Sep 2020 12:29:04 +0800</pubDate>
       
@@ -66,7 +75,7 @@
     </item>
     
     <item>
-      <title>Pkcs7 Padding Unpadding Research in Nodejs Env</title>
+      <title>PKCS7/PADDING的NodeJS实现</title>
       <link>/post/pkcs7-padding-unpadding-research-in-nodejs-env/</link>
       <pubDate>Thu, 17 Sep 2020 18:24:20 +0800</pubDate>
       

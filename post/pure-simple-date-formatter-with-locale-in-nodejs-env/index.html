@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Pure Simple DateTime Formatter With Locale in Nodejs Env - TheNorthMemory</title>
+  <title>使用NodeJS内置Intl.DateTimeFormat方法，实现按时区格式化时间日期字符串 - TheNorthMemory</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="James" /><meta name="description" content="在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用内置 Date 及 Intl，尝试对不同时区的时间标准化输出，低依赖。" />
+<meta name="author" content="James" /><meta name="description" content="在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用内置 Date 及 Intl，尝试对不同时区的时间标准化输出，低依赖。" /><meta name="keywords" content="DateTimeFormat, RegExp, NodeJS, yyyy-MM-dd HH:mm:ss" />
 
 
 
@@ -40,26 +40,26 @@
 
 <style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
 
-<meta property="og:title" content="Pure Simple DateTime Formatter With Locale in Nodejs Env" />
+<meta property="og:title" content="使用NodeJS内置Intl.DateTimeFormat方法，实现按时区格式化时间日期字符串" />
 <meta property="og:description" content="在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用内置 Date 及 Intl，尝试对不同时区的时间标准化输出，低依赖。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/pure-simple-date-formatter-with-locale-in-nodejs-env/" />
 <meta property="article:published_time" content="2020-09-20T12:29:04&#43;08:00"/>
-<meta property="article:modified_time" content="2020-10-17T15:54:06&#43;08:00"/>
+<meta property="article:modified_time" content="2021-02-28T16:54:06&#43;08:00"/>
 
-<meta itemprop="name" content="Pure Simple DateTime Formatter With Locale in Nodejs Env">
+<meta itemprop="name" content="使用NodeJS内置Intl.DateTimeFormat方法，实现按时区格式化时间日期字符串">
 <meta itemprop="description" content="在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用内置 Date 及 Intl，尝试对不同时区的时间标准化输出，低依赖。">
 
 
 <meta itemprop="datePublished" content="2020-09-20T12:29:04&#43;08:00" />
-<meta itemprop="dateModified" content="2020-10-17T15:54:06&#43;08:00" />
+<meta itemprop="dateModified" content="2021-02-28T16:54:06&#43;08:00" />
 <meta itemprop="wordCount" content="533">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Pure Simple DateTime Formatter With Locale in Nodejs Env"/>
+<meta name="twitter:title" content="使用NodeJS内置Intl.DateTimeFormat方法，实现按时区格式化时间日期字符串"/>
 <meta name="twitter:description" content="在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用内置 Date 及 Intl，尝试对不同时区的时间标准化输出，低依赖。"/>
 
 <!--[if lte IE 9]>
@@ -119,7 +119,7 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">Pure Simple DateTime Formatter With Locale in Nodejs Env</h1>
+      <h1 class="post-title">使用NodeJS内置Intl.DateTimeFormat方法，实现按时区格式化时间日期字符串</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2020-09-20 </span>
@@ -479,7 +479,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2020-10-17
+        2021-02-28
         
     </span>
   </p>
@@ -495,7 +495,7 @@
             <span class="prev-text nav-mobile">上一篇</span>
           </a>
         <a class="next" href="/post/pkcs7-padding-unpadding-research-in-nodejs-env/">
-            <span class="next-text nav-default">Pkcs7 Padding Unpadding Research in Nodejs Env</span>
+            <span class="next-text nav-default">PKCS7/PADDING的NodeJS实现</span>
             <span class="next-text nav-mobile">下一篇</span>
             <i class="iconfont icon-right"></i>
           </a>
@@ -532,7 +532,7 @@
   <span class="copyright-year">
     &copy; 
     2019 - 
-    2020
+    2021
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>

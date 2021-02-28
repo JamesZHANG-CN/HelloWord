@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>链式动态参数化的微信支付APIv2&amp;v3&#39; Smart Develop Kit - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="由一个issue引起的重构，使用相同语法糖(method chain)请求微信支付接口" /><meta name="keywords" content="WeChatPay APIv2 APIv3 微信支付SDK" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/chain-the-wechatpay-openapi-pathname-as-dynamic-properties-with-http-verbs-method/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="链式动态参数化的微信支付APIv2&amp;v3&#39; Smart Develop Kit" />
+<meta property="og:description" content="由一个issue引起的重构，使用相同语法糖(method chain)请求微信支付接口" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/chain-the-wechatpay-openapi-pathname-as-dynamic-properties-with-http-verbs-method/" />
+<meta property="article:published_time" content="2021-02-28T17:30:37&#43;08:00"/>
+<meta property="article:modified_time" content="2021-02-28T17:30:37&#43;08:00"/>
+
+<meta itemprop="name" content="链式动态参数化的微信支付APIv2&amp;v3&#39; Smart Develop Kit">
+<meta itemprop="description" content="由一个issue引起的重构，使用相同语法糖(method chain)请求微信支付接口">
+
+
+<meta itemprop="datePublished" content="2021-02-28T17:30:37&#43;08:00" />
+<meta itemprop="dateModified" content="2021-02-28T17:30:37&#43;08:00" />
+<meta itemprop="wordCount" content="1779">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="链式动态参数化的微信支付APIv2&amp;v3&#39; Smart Develop Kit"/>
+<meta name="twitter:description" content="由一个issue引起的重构，使用相同语法糖(method chain)请求微信支付接口"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">链式动态参数化的微信支付APIv2&amp;v3&#39; Smart Develop Kit</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-02-28 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<p>好久没有写博客了，这两天刚把 <a href="https://github.com/TheNorthMemory/wechatpay-axios-plugin">wechatpay-axios-plugin</a> 做了一遍更新，记录一下“暴力”重构过程。</p>
+
+<p>上一版本的SDK，集合了XML交换介质的APIv2接口，对v2的接口调用，存在诸多不便，一直想优化来着，懒病缠身。。。一直没啥动力；近期有小伙伴给提了个 <a href="https://github.com/TheNorthMemory/wechatpay-axios-plugin/issues/10">#10 在进行订单查询的时候，订单号不能更新</a> 问题，为了解决这个链式调用动态参数赋值污染问题，顺手就给把APIv2也给完美地链了:</p>
+
+<p>目标接口<code>pathname</code>映射成资源树如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">v2
+├── mmpaymkttransfers
+│   └── sendredpack
+├── pay
+│   ├── micropay
+│   └── refundquery
+├── secapi
+│   ├── mch
+│   │   └── querysubdevconfig
+│   └── pay
+│       └── refund
+v3
+├── certificates
+├── bill
+│   └── tradebill
+├── ecommerce
+│   ├── fund
+│   │   └── withdraw
+│   └── profitsharing
+│       └── orders
+└── marketing
+    └── busifavor
+        └── users
+            └── {openid}
+                └── coupons
+                    └── {coupon_code}
+                        └── appids
+                            └── {appid}</pre></td></tr></table>
+</div>
+</div>
+<p>比较上一版的SDK，这一版本去除了 <code>entities</code> 及 <code>withEntities</code> 对象，直接使用 <code>Functon.name</code> 作为存贮并延展资源树节点的上下级标识，这个<code>Function</code>同时默认为<code>HTTP POST</code>方法对象，并且隐式绑定了<code>HTTP DELETE/GET/POST/PUT/PATCH</code> 方法，使实例化的资源树结构更简洁（洁癖），去除调试信息上的 <code>[Function: ]</code> label 之后，几乎就和上述资源树一模一样了！</p>
+
+<p><strong>console.info(wxpay)</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span><span class="lnt">82
+</span><span class="lnt">83
+</span><span class="lnt">84
+</span><span class="lnt">85
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="p">[</span><span class="nb">Function</span> <span class="p">(</span><span class="nx">anonymous</span><span class="p">)]</span> <span class="p">{</span>
+  <span class="nx">v2</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v2] {</span>
+    <span class="nx">pay</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v2/pay] { micropay: [Function: /v2/pay/micropay] },</span>
+    <span class="nx">secapi</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v2/secapi] {</span>
+      <span class="nx">pay</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v2/secapi/pay] {</span>
+        <span class="nx">refund</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v2/secapi/pay/refund]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">mmpaymkttransfers</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v2/mmpaymkttransfers] {</span>
+      <span class="nx">sendredpack</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v2/mmpaymkttransfers/sendredpack],</span>
+      <span class="nx">promotion</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v2/mmpaymkttransfers/promotion] {</span>
+        <span class="nx">transfers</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v2/mmpaymkttransfers/promotion/transfers]</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="nx">v3</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3] {</span>
+    <span class="nx">pay</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/pay] {</span>
+      <span class="nx">transactions</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/pay/transactions] {</span>
+        <span class="kr">native</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/pay/transactions/native],</span>
+        <span class="nx">id</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/pay/transactions/id] {</span>
+          <span class="s1">&#39;{transaction_id}&#39;</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/pay/transactions/id/{transaction_id}]</span>
+        <span class="p">},</span>
+        <span class="nx">outTradeNo</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/pay/transactions/out-trade-no] {</span>
+          <span class="s1">&#39;1217752501201407033233368018&#39;</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/pay/transactions/out-trade-no/1217752501201407033233368018]</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nx">partner</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/pay/partner] {</span>
+        <span class="nx">transactions</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/pay/partner/transactions] {</span>
+          <span class="kr">native</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/pay/partner/transactions/native]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">marketing</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing] {</span>
+      <span class="nx">busifavor</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/busifavor] {</span>
+        <span class="nx">stocks</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/busifavor/stocks],</span>
+        <span class="nx">users</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/busifavor/users] {</span>
+          <span class="s1">&#39;$openid$&#39;</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/busifavor/users/{openid}] {</span>
+            <span class="nx">coupons</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/busifavor/users/{openid}/coupons] {</span>
+              <span class="s1">&#39;{coupon_code}&#39;</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/busifavor/users/{openid}/coupons/{coupon_code}] {</span>
+                <span class="nx">appids</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/busifavor/users/{openid}/coupons/{coupon_code}/appids] {</span>
+                  <span class="nx">wx233544546545989</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/busifavor/users/{openid}/coupons/{coupon_code}/appids/wx233544546545989]</span>
+                <span class="p">}</span>
+              <span class="p">}</span>
+            <span class="p">}</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nx">favor</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/favor] {</span>
+        <span class="nx">media</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/favor/media] {</span>
+          <span class="nx">imageUpload</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/favor/media/image-upload]</span>
+        <span class="p">},</span>
+        <span class="nx">stocks</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/favor/stocks] {</span>
+          <span class="s1">&#39;$stock_id$&#39;</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/favor/stocks/{stock_id}] {</span>
+            <span class="nx">useFlow</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/favor/stocks/{stock_id}/use-flow]</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">},</span>
+      <span class="nx">partnerships</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/partnerships] {</span>
+        <span class="nx">build</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/marketing/partnerships/build]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">combineTransactions</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/combine-transactions] {</span>
+      <span class="nx">jsapi</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/combine-transactions/jsapi]</span>
+    <span class="p">},</span>
+    <span class="nx">bill</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/bill] { tradebill: [Function: /v3/bill/tradebill] },</span>
+    <span class="nx">billdownload</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/billdownload] {</span>
+      <span class="nx">file</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/billdownload/file]</span>
+    <span class="p">},</span>
+    <span class="nx">smartguide</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/smartguide] {</span>
+      <span class="nx">guides</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/smartguide/guides] {</span>
+        <span class="s1">&#39;$guide_id$&#39;</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/smartguide/guides/{guide_id}] {</span>
+          <span class="nx">assign</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/smartguide/guides/{guide_id}/assign]</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">merchantService</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/merchant-service] {</span>
+      <span class="nx">complaints</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/merchant-service/complaints]</span>
+    <span class="p">},</span>
+    <span class="nx">merchant</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/merchant] {</span>
+      <span class="nx">media</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/merchant/media] {</span>
+        <span class="nx">video_upload</span><span class="o">:</span> <span class="p">[</span><span class="nb">Function</span><span class="o">:</span> <span class="err">/v3/merchant/media/video_upload]</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>编码书写方式有如下约定：</p>
+
+<ol>
+<li>请求 <code>URI</code> 作为级联对象，可以轻松构建请求对象，例如 <code>/v3/pay/transactions/native</code> 即自然翻译成 <code>v3.pay.transactions.native</code>;</li>
+<li>每个 <code>URI</code> 所支持的 <code>HTTP METHOD</code>，即作为 请求对象的末尾执行方法，例如: <code>v3.pay.transactions.native.post({})</code>;</li>
+<li>每个 <code>URI</code> 有中线(dash)分隔符的，可以使用驼峰<code>camelCase</code>风格书写，例如: <code>merchant-service</code>可写成 <code>merchantService</code>，或者属性风格，例如 <code>v3['merchant-service']</code>;</li>
+<li>每个 <code>URI</code>.pathname 中，若有动态参数，例如 <code>business_code/{business_code}</code> 可写成 <code>business_code.$business_code$</code> 或者属性风格书写，例如 <code>business_code['{business_code}']</code>，抑或直接按属性风格，直接写参数值也可以，例如 <code>business_code['2000001234567890']</code>;</li>
+<li>建议 <code>URI</code> 按照 <code>PascalCase</code> 风格书写, <code>TS Definition</code> 已在路上(还有若干问题没解决)，将是这种风格，代码提示将会很自然;</li>
+<li>SDK内置的 <code>/v2</code> 对象，其特殊标识为APIv2级联对象，之后串接切分后的<code>pathname</code>，如 <code>/v2/pay/micropay</code> 即以XML形式请求远端接口；</li>
+<li>每个级联对象默认为HTTP<code>POST</code>函数，其同时隐式内置<code>GET/POST/PUT/PATCH/DELETE</code> 操作方法链，支持全大写及全小写(未来有可能会删除)两种编码方式，说明见<code>变更历史</code>;</li>
+</ol>
+
+<h3 id="初始化">初始化</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span><span class="nx">Wechatpay</span><span class="p">,</span> <span class="nx">Formatter</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;wechatpay-axios-plugin&#39;</span><span class="p">)</span>
+<span class="k">const</span> <span class="nx">wxpay</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wechatpay</span><span class="p">({</span>
+  <span class="nx">mchid</span><span class="o">:</span> <span class="s1">&#39;your_merchant_id&#39;</span><span class="p">,</span>
+  <span class="nx">serial</span><span class="o">:</span> <span class="s1">&#39;serial_number_of_your_merchant_public_cert&#39;</span><span class="p">,</span>
+  <span class="nx">privateKey</span><span class="o">:</span> <span class="s1">&#39;-----BEGIN PRIVATE KEY-----&#39;</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="s1">&#39;-----END PRIVATE KEY-----&#39;</span><span class="p">,</span>
+  <span class="nx">certs</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s1">&#39;serial_number&#39;</span><span class="o">:</span> <span class="s1">&#39;-----BEGIN CERTIFICATE-----&#39;</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="s1">&#39;-----END CERTIFICATE-----&#39;</span><span class="p">,</span>
+  <span class="p">},</span>
+  <span class="c1">// APIv2参数 &gt;= 0.4.0 开始支持
+</span><span class="c1"></span>  <span class="nx">secret</span><span class="o">:</span> <span class="s1">&#39;your_merchant_secret_key_string&#39;</span><span class="p">,</span>
+  <span class="c1">// 注： 如果不涉及资金变动，如仅收款，merchant参数可选，仅需 `secret` 一个参数，注意其为v2版的。
+</span><span class="c1"></span>  <span class="nx">merchant</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">cert</span><span class="o">:</span> <span class="s1">&#39;-----BEGIN CERTIFICATE-----&#39;</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="s1">&#39;-----END CERTIFICATE-----&#39;</span><span class="p">,</span>
+    <span class="nx">key</span><span class="o">:</span> <span class="s1">&#39;-----BEGIN PRIVATE KEY-----&#39;</span> <span class="o">+</span> <span class="s1">&#39;...&#39;</span> <span class="o">+</span> <span class="s1">&#39;-----END PRIVATE KEY-----&#39;</span><span class="p">,</span>
+    <span class="c1">// or
+</span><span class="c1"></span>    <span class="c1">// passphrase: &#39;your_merchant_id&#39;,
+</span><span class="c1"></span>    <span class="c1">// pfx: fs.readFileSync(&#39;/your/merchant/cert/apiclient_cert.p12&#39;),
+</span><span class="c1"></span>  <span class="p">},</span>
+<span class="p">})</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="付款码-刷卡-支付">付款码(刷卡)支付</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">micropay</span><span class="p">({</span>
+  <span class="nx">appid</span><span class="o">:</span> <span class="s1">&#39;wx8888888888888888&#39;</span><span class="p">,</span>
+  <span class="nx">mch_id</span><span class="o">:</span> <span class="s1">&#39;1900000109&#39;</span><span class="p">,</span>
+  <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+  <span class="nx">sign_type</span><span class="o">:</span> <span class="s1">&#39;HMAC-SHA256&#39;</span><span class="p">,</span>
+  <span class="nx">body</span><span class="o">:</span> <span class="s1">&#39;image形象店-深圳腾大-QQ公仔&#39;</span><span class="p">,</span>
+  <span class="nx">out_trade_no</span><span class="o">:</span> <span class="s1">&#39;1217752501201407033233368018&#39;</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="o">:</span> <span class="mi">888</span><span class="p">,</span>
+  <span class="nx">fee_type</span><span class="o">:</span> <span class="s1">&#39;CNY&#39;</span><span class="p">,</span>
+  <span class="nx">spbill_create_ip</span><span class="o">:</span> <span class="s1">&#39;8.8.8.8&#39;</span><span class="p">,</span>
+  <span class="nx">auth_code</span><span class="o">:</span> <span class="s1">&#39;120061098828009406&#39;</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">res</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">data</span><span class="p">))</span>
+<span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="关单api">关单API</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">wxpay</span><span class="p">.</span><span class="nx">v3</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">transactions</span><span class="p">.</span><span class="nx">outTradeNo</span><span class="p">.</span><span class="nx">$out_trade_no$</span>
+  <span class="p">.</span><span class="nx">post</span><span class="p">({</span><span class="nx">mchid</span><span class="o">:</span> <span class="s1">&#39;1230000109&#39;</span><span class="p">},</span> <span class="p">{</span><span class="nx">out_trade_no</span><span class="o">:</span> <span class="s1">&#39;1217752501201407033233368018&#39;</span><span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">))</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(({</span><span class="nx">response</span><span class="o">:</span> <span class="p">{</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">status</span><span class="p">,</span> <span class="nx">statusText</span><span class="p">,</span> <span class="nx">data</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>核心构造类去掉注释，也就几十行代码如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="nx">Decorator</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./decorator&#39;</span><span class="p">)</span>
+
+<span class="k">const</span> <span class="nx">CLIENT</span> <span class="o">=</span> <span class="nx">Symbol</span><span class="p">(</span><span class="s1">&#39;CLIENT&#39;</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nx">Wechatpay</span> <span class="p">{</span>
+  <span class="kr">static</span> <span class="nx">get</span> <span class="nx">client</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="p">[</span><span class="nx">CLIENT</span><span class="p">]</span> <span class="p">}</span>
+
+  <span class="kr">static</span> <span class="nx">normalize</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nx">str</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^[A-Z]/</span><span class="p">,</span> <span class="nx">w</span> <span class="p">=&gt;</span> <span class="nx">w</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">())</span>
+      <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/[A-Z]/g</span><span class="p">,</span> <span class="nx">w</span> <span class="p">=&gt;</span> <span class="sb">`-</span><span class="si">${</span><span class="nx">w</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span><span class="si">}</span><span class="sb">`</span><span class="p">)</span>
+      <span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/^\$(.*)\$$/</span><span class="p">,</span> <span class="sb">`{$1}`</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kr">static</span> <span class="nx">compose</span><span class="p">(</span><span class="nx">prefix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">suffix</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="nx">name</span> <span class="o">=</span> <span class="p">(</span><span class="nx">prefix</span> <span class="o">||</span> <span class="nx">suffix</span><span class="p">)</span> <span class="o">?</span> <span class="sb">`</span><span class="si">${</span><span class="nx">prefix</span><span class="si">}</span><span class="sb">/</span><span class="si">${</span><span class="nx">suffix</span><span class="si">}</span><span class="sb">`</span> <span class="o">:</span> <span class="sb">`</span><span class="si">${</span><span class="nx">suffix</span><span class="si">}</span><span class="sb">`</span>
+
+    <span class="k">return</span> <span class="k">new</span> <span class="nb">Proxy</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">chain</span><span class="p">(</span><span class="nx">name</span><span class="p">),</span> <span class="k">this</span><span class="p">.</span><span class="nx">handler</span><span class="p">)</span>
+  <span class="p">}</span>
+
+  <span class="kr">static</span> <span class="nx">chain</span><span class="p">(</span><span class="nx">pathname</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">this</span><span class="p">[</span><span class="nx">CLIENT</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;PATCH&#39;</span><span class="p">,</span> <span class="cm">/*alias*/</span><span class="s1">&#39;post&#39;</span><span class="p">,</span> <span class="s1">&#39;put&#39;</span><span class="p">,</span> <span class="s1">&#39;patch&#39;</span><span class="p">].</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">resource</span><span class="p">,</span> <span class="nx">method</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nx">resource</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="p">{[</span><span class="nx">method</span><span class="p">](</span><span class="nx">data</span><span class="p">,</span> <span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">client</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">pathname</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">config</span><span class="p">)</span>
+      <span class="p">}}[</span><span class="nx">method</span><span class="p">]})</span>
+    <span class="p">},</span> <span class="p">[</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="cm">/*alias*/</span><span class="s1">&#39;delete&#39;</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">].</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">resource</span><span class="p">,</span> <span class="nx">method</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="nx">resource</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="p">{[</span><span class="nx">method</span><span class="p">](</span><span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">client</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">pathname</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="nx">config</span><span class="p">)</span>
+      <span class="p">}}[</span><span class="nx">method</span><span class="p">]})</span>
+    <span class="p">},</span> <span class="p">{[</span><span class="nx">pathname</span><span class="p">](</span><span class="nx">data</span><span class="p">,</span> <span class="nx">config</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">return</span> <span class="nx">client</span><span class="p">.</span><span class="nx">request</span><span class="p">(</span><span class="nx">pathname</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">config</span><span class="p">)</span>
+    <span class="p">}}[</span><span class="nx">pathname</span><span class="p">]))</span>
+  <span class="p">}</span>
+
+  <span class="kr">static</span> <span class="nx">get</span> <span class="nx">handler</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+      <span class="nx">get</span><span class="o">:</span> <span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">property</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">property</span> <span class="o">===</span> <span class="sb">`symbol`</span> <span class="o">||</span> <span class="nx">property</span> <span class="o">===</span> <span class="sb">`inspect`</span><span class="p">)</span> <span class="p">{</span>
+          <span class="k">return</span> <span class="nx">target</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">property</span><span class="p">))</span> <span class="p">{</span>
+          <span class="nx">target</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">compose</span><span class="p">(</span><span class="nx">target</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">normalize</span><span class="p">(</span><span class="nx">property</span><span class="p">))</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="nx">target</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span>
+      <span class="p">},</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="nx">constructor</span><span class="p">(</span><span class="nx">config</span> <span class="o">=</span> <span class="p">{})</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">defineProperty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">constructor</span><span class="p">,</span> <span class="nx">CLIENT</span><span class="p">,</span> <span class="p">{</span><span class="nx">value</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Decorator</span><span class="p">(</span><span class="nx">config</span><span class="p">)}).</span><span class="nx">compose</span><span class="p">()</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>好吧，这可能是我所写的最“暴力”的代码了。。。打个记号～嘿嘿～</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-02-28
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/the-charset-key-point-of-the-alipay-openapi-gateway-requests/">
+            <span class="next-text nav-default">支付宝page类网关调用，不得不注意的charset参数赋值位置</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
