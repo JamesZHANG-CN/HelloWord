@@ -5,7 +5,7 @@ keywords: [WeChatPay APIv2 APIv3 微信支付SDK]
 description: "由一个issue引起的重构，使用相同语法糖(method chain)请求微信支付接口"
 tags: []
 toc: false
-categories: ["javascript"]
+categories: [javascript, wechat]
 author: "James"
 summary: "由一个issue引起的重构，使用相同语法糖(method chain)请求微信支付接口。"
 ---

@@ -5,7 +5,7 @@ lastmod: 2020-10-23T15:37:06+08:00
 keywords: ["fromJsonLike", "RegExp"]
 description: "不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。"
 tags: []
-categories: ["javascript"]
+categories: [javascript, alipay]
 author: "James"
 summary: "不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。"
 ---

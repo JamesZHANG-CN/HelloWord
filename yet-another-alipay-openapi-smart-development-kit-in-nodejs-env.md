@@ -4,7 +4,7 @@ date: 2020-09-26T15:57:51+08:00
 keywords: [Alipay OpenAPI SDK OOP风格化的 可弹性扩容的 支付宝OpenAPI]
 description: "Alipay OpenAPI Smart Development Kit, OOP风格化的，可弹性扩容的，支付宝OpenAPI SDK"
 tags: []
-categories: ["javascript"]
+categories: [javascript, alipay]
 author: "James"
 summary: "OOP风格化的，可弹性扩容的，支付宝OpenAPI SDK，使用Axios作为底层HTTP驱动，通过构建请求注射器、返回拦截器，自动加数据签名及返回验签。"
 ---

@@ -4,7 +4,7 @@ date: 2020-10-20T15:21:06+08:00
 keywords: [alipay openapi cli 支付宝开放平台接口CLI工具]
 description: "Play the Alipay OpenAPI Requests Over Command Line，以命令行方式与OpenAPI网关交互——花式快速体验支付开放能力"
 tags: []
-categories: [javascript]
+categories: [javascript, alipay]
 author: "James"
 summary: "以命令行方式与OpenAPI网关交互——花式快速体验支付宝开放能力"
 ---

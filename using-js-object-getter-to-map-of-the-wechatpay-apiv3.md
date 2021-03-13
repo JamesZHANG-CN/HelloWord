@@ -4,7 +4,7 @@ date: 2020-07-08T22:40:12+08:00
 keywords: ["微信支付V3", "Wechatpay APIv3 SDK", "Axios Plugin", "wechatpay-axios-plugin npm"]
 description: "使用Object Getter方法，构建可动态弹性扩容的微信支付APIv3 SDK"
 tags: []
-categories: ["wechat"]
+categories: [javascript, wechat]
 summary: "按照HTTP协议，从暴露出的URL根级开始，客户端均可对URI发起 `GET` `POST` `PATCH` `DELETE` 等请求。这里按照以斜线拆分 `URL.pathname` 的串型javascript实体对象模型，对微信支付APIv3，使用Object Getter方法，构建可动态弹性扩容的SDK"
 author: "James"
 ---

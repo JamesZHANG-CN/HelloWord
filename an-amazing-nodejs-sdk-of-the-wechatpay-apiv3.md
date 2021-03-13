@@ -5,7 +5,7 @@ keywords: ["Wechatpay APIv3", "wechatpay-axios-plugin"]
 description: "以树形构型方式实现微信支付APIv3的Nodejs版SDK，支持API弹性扩容，让v3开发简单高效。"
 tags: []
 toc: false
-categories: ["wechat"]
+categories: [javascript, wechat]
 summary: "以树形构型方式实现微信支付APIv3的Nodejs版SDK，支持API弹性扩容，让v3开发简单高效。"
 author: "James"
 ---

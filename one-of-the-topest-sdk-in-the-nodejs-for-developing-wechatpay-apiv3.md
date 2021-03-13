@@ -4,7 +4,7 @@ date: 2020-06-19T11:05:37+08:00
 keywords: ["微信支付V3", "Wechatpay APIv3 SDK", "Axios Plugin"]
 description: "Most probably one of the topest SDK in the NodeJS for developing Wechatpay APIv3. 使用NodeJS原生方法完整实现了微信支付APIv3的请求应答工作，HTTP客户端采用成熟的Axios，通过向Axios注册拦截器完整实现微信支付APIv3上行数据签名，下行数据验签。包括收单、媒体文件上传、发核券以及账单下载解析功能，同时提供官方应答证书命令行下载工具。"
 tags: []
-categories: ["wechat"]
+categories: [javascript, wechat]
 summary: "微信支付APIv3使用了许多成熟且牛逼的接口设计（RESTful API with JSON over HTTP），数据交换使用非对称（RSA）加/解密方案，上行数据采用（RSA）私钥证书签名，下行数据采用（RSA）公钥证书验签。本开发包使用NodeJS原生方法完整实现了微信支付APIv3的请求应答工作，HTTP客户端采用成熟的Axios，通过向Axios注册拦截器完整实现微信支付APIv3上行数据签名，下行数据验签。包括收单、媒体文件上传、发核券以及账单下载解析功能，同时提供官方应答证书命令行下载工具。"
 author: "James"
 ---

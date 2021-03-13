@@ -5,7 +5,7 @@ lastmod: 2021-02-28T16:54:06+08:00
 keywords: ["PKCS7", "rfc2315", "NodeJS"]
 description: "PKCS7/Padding implementation on ES2015+, just using the Native `Buffer` library to do the right things."
 tags: []
-categories: ["wechat"]
+categories: [javascript, wechat]
 author: "James"
 summary: "Pure javascript codes to implement the `PKCS7/Padding` specification, regarding by rfc2315. It just using the Native `Buffer` library to do the right things."
 ---
