@@ -6,10 +6,19 @@
     <description>Recent content in javascript on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Sun, 28 Feb 2021 17:30:37 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 13 Mar 2021 21:14:44 +0800</lastBuildDate>
     
 	<atom:link href="/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>AES-GCM在Node10解密消息时崩溃问题研究及解决办法</title>
+      <link>/post/invalid-aes-gcm-decipher-auth_tag-makes-crash-on-node10/</link>
+      <pubDate>Sat, 13 Mar 2021 21:14:44 +0800</pubDate>
+      
+      <guid>/post/invalid-aes-gcm-decipher-auth_tag-makes-crash-on-node10/</guid>
+      <description>AES-GCM在Node10解密消息时有可能崩溃，使用云开发环境的同学需要进来看一下</description>
+    </item>
     
     <item>
       <title>链式动态参数化的微信支付APIv2&amp;v3&#39; Smart Develop Kit</title>
@@ -72,6 +81,51 @@
       
       <guid>/post/pure-simple-date-formatter-with-locale-in-nodejs-env/</guid>
       <description>在手写支付宝OpenAPI SDK的时候，其timestamp要求是yyyy-MM-dd HH:mm:ss 格式，以下函数仅使用nodejs内置的Date及Intl类，来实现对不同时区的时间格式化处理。</description>
+    </item>
+    
+    <item>
+      <title>PKCS7/PADDING的NodeJS实现</title>
+      <link>/post/pkcs7-padding-unpadding-research-in-nodejs-env/</link>
+      <pubDate>Thu, 17 Sep 2020 18:24:20 +0800</pubDate>
+      
+      <guid>/post/pkcs7-padding-unpadding-research-in-nodejs-env/</guid>
+      <description>Pure javascript codes to implement the &lt;code&gt;PKCS7/Padding&lt;/code&gt; specification, regarding by rfc2315. It just using the Native &lt;code&gt;Buffer&lt;/code&gt; library to do the right things.</description>
+    </item>
+    
+    <item>
+      <title>再造一遍微信支付v2版的nodejs版SDK</title>
+      <link>/post/yet-another-wechatpay-apiv2-sdk/</link>
+      <pubDate>Sat, 12 Sep 2020 15:31:43 +0800</pubDate>
+      
+      <guid>/post/yet-another-wechatpay-apiv2-sdk/</guid>
+      <description>在2020这个时间节点，之所以还要再造一遍微信支付v2(相对于APIv3来说)的SDK轮子，实属是无奈之举，线下交易场景常见的付款码支付及退款功能，官方当下还没有开放出来v3版的，只能借助v2接口来处理； wechatpay-axios-plugin 从一开始目标就是为云原生而设计，遂再造一遍轮子，也抽出一些共生方法，为v3而用。</description>
+    </item>
+    
+    <item>
+      <title>微信支付APIv3的Nodejs版SDK，让开发变得简单不再繁琐</title>
+      <link>/post/an-amazing-nodejs-sdk-of-the-wechatpay-apiv3/</link>
+      <pubDate>Thu, 09 Jul 2020 13:33:33 +0800</pubDate>
+      
+      <guid>/post/an-amazing-nodejs-sdk-of-the-wechatpay-apiv3/</guid>
+      <description>以树形构型方式实现微信支付APIv3的Nodejs版SDK，支持API弹性扩容，让v3开发简单高效。</description>
+    </item>
+    
+    <item>
+      <title>使用Getter构建基于HTTP传输协议的面向对象编程模式SDK</title>
+      <link>/post/using-js-object-getter-to-map-of-the-wechatpay-apiv3/</link>
+      <pubDate>Wed, 08 Jul 2020 22:40:12 +0800</pubDate>
+      
+      <guid>/post/using-js-object-getter-to-map-of-the-wechatpay-apiv3/</guid>
+      <description>按照HTTP协议，从暴露出的URL根级开始，客户端均可对URI发起 &lt;code&gt;GET&lt;/code&gt; &lt;code&gt;POST&lt;/code&gt; &lt;code&gt;PATCH&lt;/code&gt; &lt;code&gt;DELETE&lt;/code&gt; 等请求。这里按照以斜线拆分 &lt;code&gt;URL.pathname&lt;/code&gt; 的串型javascript实体对象模型，对微信支付APIv3，使用Object Getter方法，构建可动态弹性扩容的SDK</description>
+    </item>
+    
+    <item>
+      <title>这很可能是NodeJS中用来开发微信支付APIv3的顶级SDK之一</title>
+      <link>/post/one-of-the-topest-sdk-in-the-nodejs-for-developing-wechatpay-apiv3/</link>
+      <pubDate>Fri, 19 Jun 2020 11:05:37 +0800</pubDate>
+      
+      <guid>/post/one-of-the-topest-sdk-in-the-nodejs-for-developing-wechatpay-apiv3/</guid>
+      <description>微信支付APIv3使用了许多成熟且牛逼的接口设计（RESTful API with JSON over HTTP），数据交换使用非对称（RSA）加/解密方案，上行数据采用（RSA）私钥证书签名，下行数据采用（RSA）公钥证书验签。本开发包使用NodeJS原生方法完整实现了微信支付APIv3的请求应答工作，HTTP客户端采用成熟的Axios，通过向Axios注册拦截器完整实现微信支付APIv3上行数据签名，下行数据验签。包括收单、媒体文件上传、发核券以及账单下载解析功能，同时提供官方应答证书命令行下载工具。</description>
     </item>
     
   </channel>

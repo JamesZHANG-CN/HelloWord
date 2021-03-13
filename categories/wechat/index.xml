@@ -6,10 +6,37 @@
     <description>Recent content in wechat on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Thu, 17 Sep 2020 18:24:20 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 13 Mar 2021 21:14:44 +0800</lastBuildDate>
     
 	<atom:link href="/categories/wechat/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>AES-GCM在Node10解密消息时崩溃问题研究及解决办法</title>
+      <link>/post/invalid-aes-gcm-decipher-auth_tag-makes-crash-on-node10/</link>
+      <pubDate>Sat, 13 Mar 2021 21:14:44 +0800</pubDate>
+      
+      <guid>/post/invalid-aes-gcm-decipher-auth_tag-makes-crash-on-node10/</guid>
+      <description>AES-GCM在Node10解密消息时有可能崩溃，使用云开发环境的同学需要进来看一下</description>
+    </item>
+    
+    <item>
+      <title>链式动态参数化的微信支付APIv2&amp;v3&#39; Smart Develop Kit</title>
+      <link>/post/chain-the-wechatpay-openapi-pathname-as-dynamic-properties-with-http-verbs-method/</link>
+      <pubDate>Sun, 28 Feb 2021 17:30:37 +0800</pubDate>
+      
+      <guid>/post/chain-the-wechatpay-openapi-pathname-as-dynamic-properties-with-http-verbs-method/</guid>
+      <description>由一个issue引起的重构，使用相同语法糖(method chain)请求微信支付接口。</description>
+    </item>
+    
+    <item>
+      <title>rfc2388表单上传文件NodeJS无依赖版本实现</title>
+      <link>/post/less-dependency-of-the-rfc2388-multipart-form-data-kit-in-nodejs-env/</link>
+      <pubDate>Sat, 17 Oct 2020 14:26:34 +0800</pubDate>
+      
+      <guid>/post/less-dependency-of-the-rfc2388-multipart-form-data-kit-in-nodejs-env/</guid>
+      <description>上传媒体文件API的是基于RFC2388协议，圈定的范围是，有大小限制的图片(2M)或者视频(5M)类型单文件，受微信支付官方技术助手伙伴在某次问答亲测有效代码启发，以下ES2015代码为微信支付APIv3图片、视频上传类接口文档补充nodejs纯语言无依赖版参考实现。</description>
+    </item>
     
     <item>
       <title>PKCS7/PADDING的NodeJS实现</title>

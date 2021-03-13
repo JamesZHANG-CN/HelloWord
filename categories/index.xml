@@ -6,7 +6,7 @@
     <description>Recent content in Categories on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Sun, 28 Feb 2021 17:30:37 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 13 Mar 2021 21:14:44 +0800</lastBuildDate>
     
 	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>javascript</title>
       <link>/categories/javascript/</link>
-      <pubDate>Sun, 28 Feb 2021 17:30:37 +0800</pubDate>
+      <pubDate>Sat, 13 Mar 2021 21:14:44 +0800</pubDate>
       
       <guid>/categories/javascript/</guid>
       <description></description>
@@ -23,9 +23,18 @@
     <item>
       <title>wechat</title>
       <link>/categories/wechat/</link>
-      <pubDate>Thu, 17 Sep 2020 18:24:20 +0800</pubDate>
+      <pubDate>Sat, 13 Mar 2021 21:14:44 +0800</pubDate>
       
       <guid>/categories/wechat/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>alipay</title>
+      <link>/categories/alipay/</link>
+      <pubDate>Tue, 20 Oct 2020 15:21:06 +0800</pubDate>
+      
+      <guid>/categories/alipay/</guid>
       <description></description>
     </item>
     

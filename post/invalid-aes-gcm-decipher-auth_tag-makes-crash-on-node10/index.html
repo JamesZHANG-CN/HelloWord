@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>AES-GCM在Node10解密消息时崩溃问题研究及解决办法 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="AES-GCM在Node10解密消息时有可能崩溃 Invalid Aes Gcm Decipher auth_tag Makes Crash on Node10" /><meta name="keywords" content="wechatpay nodejs aes-256-gcm auth-tag" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/invalid-aes-gcm-decipher-auth_tag-makes-crash-on-node10/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="AES-GCM在Node10解密消息时崩溃问题研究及解决办法" />
+<meta property="og:description" content="AES-GCM在Node10解密消息时有可能崩溃 Invalid Aes Gcm Decipher auth_tag Makes Crash on Node10" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/invalid-aes-gcm-decipher-auth_tag-makes-crash-on-node10/" />
+<meta property="article:published_time" content="2021-03-13T21:14:44&#43;08:00"/>
+<meta property="article:modified_time" content="2021-03-13T21:14:44&#43;08:00"/>
+
+<meta itemprop="name" content="AES-GCM在Node10解密消息时崩溃问题研究及解决办法">
+<meta itemprop="description" content="AES-GCM在Node10解密消息时有可能崩溃 Invalid Aes Gcm Decipher auth_tag Makes Crash on Node10">
+
+
+<meta itemprop="datePublished" content="2021-03-13T21:14:44&#43;08:00" />
+<meta itemprop="dateModified" content="2021-03-13T21:14:44&#43;08:00" />
+<meta itemprop="wordCount" content="1415">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="AES-GCM在Node10解密消息时崩溃问题研究及解决办法"/>
+<meta name="twitter:description" content="AES-GCM在Node10解密消息时有可能崩溃 Invalid Aes Gcm Decipher auth_tag Makes Crash on Node10"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">AES-GCM在Node10解密消息时崩溃问题研究及解决办法</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-03-13 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#背景知识">背景知识</a></li>
+<li><a href="#测试代码">测试代码</a></li>
+<li><a href="#错误日志">错误日志</a></li>
+<li><a href="#产生条件">产生条件</a></li>
+<li><a href="#向前兼容方案">向前兼容方案</a></li>
+<li><a href="#可能的影响面">可能的影响面</a></li>
+<li><a href="#题外话">题外话</a></li>
+</ul></li>
+</ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      
+
+<h2 id="背景知识">背景知识</h2>
+
+<p><code>AES-GCM</code>是微信支付APIv3的加解密方案之一，定义可见<a href="https://tools.ietf.org/html/rfc5116">rfc5116</a>，v3使用的是<code>aead_aes_256_gcm</code>。稍微补充一个<code>aead</code>的的描述，<code>aead</code>加密方式与其他对称加密方式主要不同的地方就是：</p>
+
+<p><strong>它每一段密文必定有对应的校验码，通过核对校验码来判断密文是否完整</strong>。</p>
+
+<p><a href="https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay4_2.shtml">APIv3回调通知和平台证书下载</a>文档上有介绍<code>AES-GCM</code>的使用场景。nodejs原生<code>crypto</code>模块，在处理<code>GCM</code>模式解密时，从变更历史上看，<code>Node11</code>加入了强制校验<code>auth_tag</code>(authentication tag)长度规则，<code>Node10</code>目前全系列还没有合并这个向前兼容规则，详情可见 <a href="https://github.com/nodejs/node/pull/20039">https://github.com/nodejs/node/pull/20039</a> 。</p>
+
+<h2 id="测试代码">测试代码</h2>
+
+<p>先上一段测试用js代码，来复现 nodejs#20039 上连带反馈的问题：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="nx">crypto</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;crypto&#39;</span><span class="p">)</span>
+<span class="k">const</span> <span class="nx">decrypt</span> <span class="o">=</span> <span class="p">(</span><span class="nx">ciphertext</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">iv</span><span class="p">,</span> <span class="nx">aad</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="k">const</span> <span class="nx">buf</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nx">ciphertext</span><span class="p">,</span> <span class="s1">&#39;base64&#39;</span><span class="p">)</span>
+  <span class="k">const</span> <span class="nx">tag</span> <span class="o">=</span> <span class="nx">buf</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">16</span><span class="p">)</span>
+  <span class="k">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">buf</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">16</span><span class="p">)</span>
+
+  <span class="k">const</span> <span class="nx">decipher</span> <span class="o">=</span> <span class="nx">crypto</span><span class="p">.</span><span class="nx">createDecipheriv</span><span class="p">(</span>
+    <span class="s1">&#39;aes-256-gcm&#39;</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">iv</span>
+  <span class="p">).</span><span class="nx">setAuthTag</span><span class="p">(</span><span class="nx">tag</span><span class="p">).</span><span class="nx">setAAD</span><span class="p">(</span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nx">aad</span><span class="p">))</span>
+
+  <span class="k">return</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">concat</span><span class="p">([</span>
+    <span class="nx">decipher</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">payload</span><span class="p">,</span> <span class="s1">&#39;hex&#39;</span><span class="p">),</span>
+    <span class="nx">decipher</span><span class="p">.</span><span class="kr">final</span><span class="p">()</span>
+  <span class="p">]).</span><span class="nx">toString</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">const</span> <span class="nx">mockupIv</span> <span class="o">=</span> <span class="s1">&#39;abcdef0123456789&#39;</span>
+<span class="k">const</span> <span class="nx">mockupKey</span> <span class="o">=</span> <span class="s1">&#39;abcdef0123456789abcdef0123456789&#39;</span>
+
+<span class="k">try</span> <span class="p">{</span>
+  <span class="nx">decrypt</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">mockupKey</span><span class="p">,</span> <span class="nx">mockupIv</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">{}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>上述代码，在node10.15-10.24，均抛出如下不可捕获的错误(fatal error)，程序会直接挂掉，在12-15之间，可以正常运行。</p>
+
+<h2 id="错误日志">错误日志</h2>
+
+<p>类似如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">node[97219]: ../src/node_crypto.cc:3047:CipherBase::UpdateResult node::crypto::CipherBase::Update(const char *, int, unsigned char **, int *): Assertion `MaybePassAuthTagToOpenSSL()&#39; failed.
+ 1: 0x100d69661 node::Abort() (.cold.1) [/Users/james/.nvm/versions/node/v10.24.0/bin/node]
+ 2: 0x10003aeb4 node_module_register [/Users/james/.nvm/versions/node/v10.24.0/bin/node]
+ 3: 0x100039fb9 node::AddEnvironmentCleanupHook(v8::Isolate*, void (*)(void*), void*) [/Users/james/.nvm/versions/node/v10.24.0/bin/node]
+ 4: 0x100112fae node::StringBytes::InlineDecoder::Decode(node::Environment*, v8::Local&lt;v8::String&gt;, v8::Local&lt;v8::Value&gt;, node::encoding) [/Users/james/.nvm/versions/node/v10.24.0/bin/node]
+ 5: 0x1001119dc node::crypto::CipherBase::Update(v8::FunctionCallbackInfo&lt;v8::Value&gt; const&amp;) [/Users/james/.nvm/versions/node/v10.24.0/bin/node]
+ 6: 0x1002386c3 v8::internal::FunctionCallbackArguments::Call(v8::internal::CallHandlerInfo*) [/Users/james/.nvm/versions/node/v10.24.0/bin/node]
+ 7: 0x100237bae v8::internal::MaybeHandle&lt;v8::internal::Object&gt; v8::internal::(anonymous namespace)::HandleApiCallHelper&lt;false&gt;(v8::internal::Isolate*, v8::internal::Handle&lt;v8::internal::HeapObject&gt;, v8::internal::Handle&lt;v8::internal::HeapObject&gt;, v8::internal::Handle&lt;v8::internal::FunctionTemplateInfo&gt;, v8::internal::Handle&lt;v8::internal::Object&gt;, v8::internal::BuiltinArguments) [/Users/james/.nvm/versions/node/v10.24.0/bin/node]
+ 8: 0x10023728a v8::internal::Builtin_Impl_HandleApiCall(v8::internal::BuiltinArguments, v8::internal::Isolate*) [/Users/james/.nvm/versions/node/v10.24.0/bin/node]
+ 9: 0x37d3d8d5bf3d
+10: 0x37d3d8d118d5
+11: 0x37d3d8d0a5c3
+12: 0x37d3d8d118d5
+13: 0x37d3d8d0a5c3
+[1]    97218 abort      npm test</pre></td></tr></table>
+</div>
+</div>
+<p>上述错误日志，发生在我本地的<code>Node10</code>环境中。我花了几个小时，翻了好几遍github issues，最后找到了 nodejs#20039 pull requests，通读下来并反复测试了10.15-10.24版本，均无法正常捕获，这应该是上述pr没合并至<code>Node10</code>系列所致。</p>
+
+<h2 id="产生条件">产生条件</h2>
+
+<p>稍微分析一下，可能产生致命错误的条件：</p>
+
+<p><strong>密文为空字符串时，程序会崩</strong></p>
+
+<p>密文为 <code>Cg==</code>(base64空字符串) CLI会有 <strong>Warning DEP0090</strong> 弹出</p>
+
+<blockquote>
+<p>(node:987) [DEP0090] DeprecationWarning: Permitting authentication tag lengths of 1 bytes is deprecated. Valid GCM tag lengths are 4, 8, 12, 13, 14, 15, 16.</p>
+</blockquote>
+
+<p><a href="https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay4_2.shtml">微信支付官方文档在解密示例代码</a> 常量定义了这个<code>auth_tag</code>长度为128位16字节，匹配rfc5116规范并且取的是最大值。</p>
+
+<p>这下问题来了，万一无法正常获取到待解密字符串或者获取到的是空字符串，<code>GCM</code>模式校验码位又必须是16字节，业务逻辑又强依赖解密后字符串（<strong>验签证书是v3通讯强依赖</strong>）这崩掉了，着急上火的可真就是摊上事儿了！</p>
+
+<h2 id="向前兼容方案">向前兼容方案</h2>
+
+<p>找到问题关键点，那就打个业务逻辑补丁：<strong>应用端，对输入待解密字符串，做长度校验，长度为0的，不进入解密函数</strong>；或者可以采用如下<strong>向前兼容js patch补丁</strong>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-diff" data-lang="diff"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-diff" data-lang="diff"><span class="gd">-    ).setAuthTag(tag).setAAD(Buffer.from(aad))
+</span><span class="gd"></span><span class="gi">+    )
+</span><span class="gi">+
+</span><span class="gi">+    // Restrict valid GCM tag length, patches for Node &lt; 11.0.0
+</span><span class="gi">+    // more @see https://github.com/nodejs/node/pull/20039
+</span><span class="gi">+    const tagLen = tag.length
+</span><span class="gi">+    if (tagLen &gt; 16 || (tagLen &lt; 12 &amp;&amp; tagLen != 8 &amp;&amp; tagLen != 4)) {
+</span><span class="gi">+      let backport = new TypeError(`Invalid authentication tag length: ${tagLen}`)
+</span><span class="gi">+      backport.code = &#39;ERR_CRYPTO_INVALID_AUTH_TAG&#39;
+</span><span class="gi">+      throw backport
+</span><span class="gi">+    }
+</span><span class="gi">+    decipher.setAuthTag(tag).setAAD(Buffer.from(aad))
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>上述代码取自 <a href="https://github.com/TheNorthMemory/wechatpay-axios-plugin/commit/aa36a56d80dfb8f5eb0c45d91b352c0d30ae9852">wechatpay-axios-plugin@aa36a56</a>，也已随源码用例覆盖<code>Node10</code>-<code>Node15</code>版本，均达预期，可安全使用。</p>
+
+<h2 id="可能的影响面">可能的影响面</h2>
+
+<p>小程序云开发标配目前是<code>Node10</code>，不清楚云开发团队在处理<code>消息通知及关键信息解密</code>时，是否采用的是轻量化如nodejs原生<code>crypto</code>这样的解决方案，这个就需要云产品团队相关的同学进来看看，评估一下有无风险点了。</p>
+
+<p>对自主对接云开发的开发者来说，<strong>建议尽快给打下业务逻辑补丁或者程序解密补丁</strong>，避免不可预期的错误发生(<strong>虽然极小概率，但支付的事，可真不是小事儿</strong>)。</p>
+
+<h2 id="题外话">题外话</h2>
+
+<p>建议云开发平台，能够升级一下<code>Node10</code>至最新<code>lts</code>运行时，一并建议能同时支持<code>Node12</code>、<code>Node14</code>运行时。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-03-13
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/chain-the-wechatpay-openapi-pathname-as-dynamic-properties-with-http-verbs-method/">
+            <span class="next-text nav-default">链式动态参数化的微信支付APIv2&amp;v3&#39; Smart Develop Kit</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

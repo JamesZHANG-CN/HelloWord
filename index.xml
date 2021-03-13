@@ -6,10 +6,19 @@
     <description>Recent content on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Sun, 28 Feb 2021 17:30:37 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 13 Mar 2021 21:14:44 +0800</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>AES-GCM在Node10解密消息时崩溃问题研究及解决办法</title>
+      <link>/post/invalid-aes-gcm-decipher-auth_tag-makes-crash-on-node10/</link>
+      <pubDate>Sat, 13 Mar 2021 21:14:44 +0800</pubDate>
+      
+      <guid>/post/invalid-aes-gcm-decipher-auth_tag-makes-crash-on-node10/</guid>
+      <description>AES-GCM在Node10解密消息时有可能崩溃，使用云开发环境的同学需要进来看一下</description>
+    </item>
     
     <item>
       <title>链式动态参数化的微信支付APIv2&amp;v3&#39; Smart Develop Kit</title>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>alipay on TheNorthMemory</title>
+    <link>/categories/alipay/</link>
+    <description>Recent content in alipay on TheNorthMemory</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh_CN</language>
+    <lastBuildDate>Tue, 20 Oct 2020 15:21:06 +0800</lastBuildDate>
+    
+	<atom:link href="/categories/alipay/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>命令行方式与支付宝OpenAPI网关交互</title>
+      <link>/post/play-the-alipay-openapi-requests-over-command-line/</link>
+      <pubDate>Tue, 20 Oct 2020 15:21:06 +0800</pubDate>
+      
+      <guid>/post/play-the-alipay-openapi-requests-over-command-line/</guid>
+      <description>以命令行方式与OpenAPI网关交互——花式快速体验支付宝开放能力</description>
+    </item>
+    
+    <item>
+      <title>rfc2388表单上传文件NodeJS无依赖版本实现</title>
+      <link>/post/less-dependency-of-the-rfc2388-multipart-form-data-kit-in-nodejs-env/</link>
+      <pubDate>Sat, 17 Oct 2020 14:26:34 +0800</pubDate>
+      
+      <guid>/post/less-dependency-of-the-rfc2388-multipart-form-data-kit-in-nodejs-env/</guid>
+      <description>上传媒体文件API的是基于RFC2388协议，圈定的范围是，有大小限制的图片(2M)或者视频(5M)类型单文件，受微信支付官方技术助手伙伴在某次问答亲测有效代码启发，以下ES2015代码为微信支付APIv3图片、视频上传类接口文档补充nodejs纯语言无依赖版参考实现。</description>
+    </item>
+    
+    <item>
+      <title>Yet Another Alipay OpenAPI Smart Development Kit</title>
+      <link>/post/yet-another-alipay-openapi-smart-development-kit-in-nodejs-env/</link>
+      <pubDate>Sat, 26 Sep 2020 15:57:51 +0800</pubDate>
+      
+      <guid>/post/yet-another-alipay-openapi-smart-development-kit-in-nodejs-env/</guid>
+      <description>OOP风格化的，可弹性扩容的，支付宝OpenAPI SDK，使用Axios作为底层HTTP驱动，通过构建请求注射器、返回拦截器，自动加数据签名及返回验签。</description>
+    </item>
+    
+    <item>
+      <title>Alipay OpenAPI同步/异步验签，请注意编程语言对JSON处理的差异性</title>
+      <link>/post/from-json-like-regular-expression-in-nodejs-env/</link>
+      <pubDate>Tue, 22 Sep 2020 12:21:06 +0800</pubDate>
+      
+      <guid>/post/from-json-like-regular-expression-in-nodejs-env/</guid>
+      <description>不同开发语言对unicode及slash等JSON字符串处理上会存在差异，以下方法是使用正则表达式，按JSON部分规范来抽取所用载核，目前可完美兼容转译后到源数据。</description>
+    </item>
+    
+  </channel>
+</rss>
