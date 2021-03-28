@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>真香：一行命令即可体验「微信支付」全系接口能力 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="Play the WeChatPay OpenAPI Requests Over Command Line，以命令行方式与OpenAPI网关交互——花式快速体验支付开放能力" /><meta name="keywords" content="wechatpay openapi cli 微信支付接口CLI工具" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/play-the-wechatpay-openapi-requests-over-command-line/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="真香：一行命令即可体验「微信支付」全系接口能力" />
+<meta property="og:description" content="Play the WeChatPay OpenAPI Requests Over Command Line，以命令行方式与OpenAPI网关交互——花式快速体验支付开放能力" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/play-the-wechatpay-openapi-requests-over-command-line/" />
+<meta property="article:published_time" content="2021-03-28T19:59:13&#43;08:00"/>
+<meta property="article:modified_time" content="2021-03-28T19:59:13&#43;08:00"/>
+
+<meta itemprop="name" content="真香：一行命令即可体验「微信支付」全系接口能力">
+<meta itemprop="description" content="Play the WeChatPay OpenAPI Requests Over Command Line，以命令行方式与OpenAPI网关交互——花式快速体验支付开放能力">
+
+
+<meta itemprop="datePublished" content="2021-03-28T19:59:13&#43;08:00" />
+<meta itemprop="dateModified" content="2021-03-28T19:59:13&#43;08:00" />
+<meta itemprop="wordCount" content="1291">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="真香：一行命令即可体验「微信支付」全系接口能力"/>
+<meta name="twitter:description" content="Play the WeChatPay OpenAPI Requests Over Command Line，以命令行方式与OpenAPI网关交互——花式快速体验支付开放能力"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">真香：一行命令即可体验「微信支付」全系接口能力</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-03-28 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<p>你没看错，这款唯二的「Play the OpenAPI requests over command line」——「以命令行方式与微信支付接口交互」姗姗来了，旨在提供一种简洁高效的方式，让开发者可以快速对接，希望能对开发有所帮助。</p>
+
+<p>nodejs版的 <code>wechatpay-axios-plugin</code> 已经进入<code>v0.5</code>版，在这一版上，有如下改变：</p>
+
+<ul>
+<li>全部代码（包括265条测试用例）使用 <code>eslint-config-airbnb-base</code> 代码风格校验；</li>
+<li>使用 <code>yargs</code> 包替换了 <code>commander</code>，重构了「平台证书下载器」工具，使其降级为此命令行一个特殊方法；</li>
+<li>降级 <code>form-data</code> 及 <code>yargs</code> 包为 <code>peerDependencies</code>，没有这俩包，90%+ 的接口是可以正常工作的，缩减依赖；</li>
+<li>新增 <code>bin/cli.js</code>，开发可以仅用一条命令就能跑得欢实不要不要的了；</li>
+</ul>
+
+<h2 id="使用">使用</h2>
+
+<p>开始使用前，需要开发者自行安装<code>cli</code>模式依赖的npm包，即 <code>npm i yargs</code></p>
+
+<h3 id="帮助手册">帮助手册</h3>
+
+<p><code>./node_modules/.bin/wxpay --help</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">wxpay &lt;command&gt;
+
+Commands:
+  wxpay crt        The WeChatPay APIv3s Certificate Downloader
+  wxpay req &lt;uri&gt;  Play the OpenAPI requests over command line
+
+Options:
+      --version  Show version number  [boolean]
+      --help     Show help  [boolean]
+  -u, --baseURL  The baseURL  [string] [default: &#34;https://api.mch.weixin.qq.com/&#34;]
+
+for more information visit &#34;https://github.com/TheNorthMemory/wechatpay-axios-plugin&#34;</pre></td></tr></table>
+</div>
+</div>
+<p><code>./node_modules/.bin/wxpay crt --help</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">wxpay crt
+
+The WeChatPay APIv3s Certificate Downloader
+
+cert
+  -m, --mchid       The merchants ID.  [string] [required]
+  -s, --serialno    The serial number.  [string] [required]
+  -f, --privatekey  Path of the merchants private key certificate.  [string] [required]
+  -k, --key         The secret key string of the merchants APIv3.  [string] [required]
+  -o, --output      Path to output the platform certificate(s)  [string] [default: &#34;/tmp&#34;]
+
+Options:
+      --version  Show version number  [boolean]
+      --help     Show help  [boolean]
+  -u, --baseURL  The baseURL  [string] [default: &#34;https://api.mch.weixin.qq.com/&#34;]</pre></td></tr></table>
+</div>
+</div>
+<p><code>./node_modules/.bin/wxpay req --help</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">wxpay req &lt;uri&gt;
+
+Play the WeChatPay OpenAPI requests over command line
+
+request &lt;uri&gt;
+  -c, --config   The configuration  [required]
+  -b, --binary   Point out the response as `arraybuffer`  [boolean]
+  -m, --method   The request HTTP verb  [default: &#34;POST&#34;]
+  -h, --headers  Special request HTTP header(s)
+  -d, --data     The request HTTP body
+  -p, --params   The request HTTP query parameter(s)
+
+Options:
+      --version  Show version number  [boolean]
+      --help     Show help  [boolean]
+  -u, --baseURL  The baseURL  [string] [default: &#34;https://api.mch.weixin.qq.com/&#34;]</pre></td></tr></table>
+</div>
+</div>
+<h3 id="证书下载">证书下载</h3>
+
+<p><code>wxpay crt -m N -s S -f F.pem -k K -o .</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">The WeChatPay Platform Certificate#0
+  serial=HEXADECIAL
+  notBefore=Wed, 22 Apr 2020 01:43:19 GMT
+  notAfter=Mon, 21 Apr 2025 01:43:19 GMT
+  Saved to: wechatpay_HEXADECIAL.pem
+You may confirm the above infos again even if this library already did(by Rsa.verify):
+    openssl x509 -in wechatpay_HEXADECIAL.pem -noout -serial -dates</pre></td></tr></table>
+</div>
+</div>
+<h3 id="v3版native下单">v3版Native下单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">wxpay req v3/pay/transactions/native \
+  -c.mchid 1230000109 \
+  -c.serial HEXADECIAL \
+  -c.privateKey /path/your/merchant/mchid.key \
+  -c.certs.HEXADECIAL /path/the/platform/certificates/HEXADECIAL.pem \
+  -d.appid wxd678efh567hg6787 \
+  -d.mchid 1230000109 \
+  -d.description &#39;Image形象店-深圳腾大-QQ公仔&#39; \
+  -d.out_trade_no &#39;1217752501201407033233368018&#39; \
+  -d.notify_url &#39;https://www.weixin.qq.com/wxpay/pay.php&#39; \
+  -d.amount.total 100 \
+  -d.amount.currency CNY</pre></td></tr></table>
+</div>
+</div>
+<h3 id="v3版查询订单">v3版查询订单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">wxpay req v3/pay/transactions/id/1217752501201407033233368018 \
+  -c.mchid 1230000109 \
+  -c.serial HEXADECIAL \
+  -c.privateKey /path/your/merchant/mchid.key \
+  -c.certs.HEXADECIAL /path/the/platform/certificates/HEXADECIAL.pem \
+  -m get \
+  -p.mchid 1230000109</pre></td></tr></table>
+</div>
+</div>
+<h3 id="v3版关闭订单">v3版关闭订单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">wxpay req v3/pay/transactions/out-trade-no/1217752501201407033233368018 \
+  -c.mchid 1230000109 \
+  -c.serial HEXADECIAL \
+  -c.privateKey /path/your/merchant/mchid.key \
+  -c.certs.HEXADECIAL /path/the/platform/certificates/HEXADECIAL.pem \
+  -d.mchid 1230000109</pre></td></tr></table>
+</div>
+</div>
+<h3 id="v3版申请对账单">v3版申请对账单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">wxpay req v3/bill/tradebill \
+  -c.mchid 1230000109 \
+  -c.serial HEXADECIAL \
+  -c.privateKey /path/your/merchant/mchid.key \
+  -c.certs.HEXADECIAL /path/the/platform/certificates/HEXADECIAL.pem \
+  -m get \
+  -p.bill_date &#39;2021-02-12&#39; \
+  -p.bill_type &#39;ALL&#39;</pre></td></tr></table>
+</div>
+</div>
+<h3 id="v2版付款码付">v2版付款码付</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">wxpay req v2/pay/micropay \
+  -c.mchid 1230000109 \
+  -c.serial any \
+  -c.privateKey any \
+  -c.certs.any \
+  -c.secret your_merchant_secret_key_string \
+  -d.appid wxd678efh567hg6787 \
+  -d.mch_id 1230000109 \
+  -d.device_info 013467007045764 \
+  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS \
+  -d.detail &#39;Image形象店-深圳腾大-QQ公仔&#39; \
+  -d.spbill_create_ip 8.8.8.8 \
+  -d.out_trade_no &#39;1217752501201407033233368018&#39; \
+  -d.total_fee 100 \
+  -d.fee_type CNY \
+  -d.auth_code 120061098828009406</pre></td></tr></table>
+</div>
+</div>
+<p><code>auth_code</code> 输入配合扫码枪，体验就飞起来了～</p>
+
+<h3 id="v2版付款码查询openid">v2版付款码查询openid</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">wxpay req v2/tools/authcodetoopenid \
+  -c.mchid 1230000109 \
+  -c.serial any \
+  -c.privateKey any \
+  -c.certs.any \
+  -c.secret your_merchant_secret_key_string \
+  -d.appid wxd678efh567hg6787 \
+  -d.mch_id 1230000109 \
+  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS \
+  -d.auth_code 120061098828009406</pre></td></tr></table>
+</div>
+</div>
+<h2 id="设计">设计</h2>
+
+<p>主程序 <code>bin/cli.js</code> 上，加入了一个中间件，代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="p">.</span><span class="nx">middleware</span><span class="p">((</span><span class="nx">argv</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">c</span> <span class="o">&amp;&amp;</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">privateKey</span> <span class="o">&amp;&amp;</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">privateKey</span> <span class="o">!==</span> <span class="s1">&#39;any&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/* eslint-disable-next-line no-param-reassign */</span>
+    <span class="nx">argv</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">readFileSync</span><span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">privateKey</span><span class="p">);</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">c</span> <span class="o">&amp;&amp;</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">certs</span> <span class="o">&amp;&amp;</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">certs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!==</span> <span class="s1">&#39;any&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/* eslint-disable-next-line no-return-assign, no-param-reassign, no-sequences */</span>
+    <span class="nx">argv</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">certs</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">certs</span><span class="p">).</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">o</span><span class="p">,</span> <span class="p">[</span><span class="nx">k</span><span class="p">,</span> <span class="nx">v</span><span class="p">])</span> <span class="p">=&gt;</span> <span class="p">(</span><span class="nx">o</span><span class="p">[</span><span class="nx">k</span><span class="p">]</span> <span class="o">=</span> <span class="nx">readFileSync</span><span class="p">(</span><span class="nx">v</span><span class="p">),</span> <span class="nx">o</span><span class="p">),</span> <span class="p">{});</span>
+  <span class="p">}</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">c</span> <span class="o">&amp;&amp;</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">merchant</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">cert</span> <span class="o">&amp;&amp;</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">cert</span> <span class="o">!==</span> <span class="s1">&#39;any&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="cm">/* eslint-disable-next-line no-param-reassign */</span>
+      <span class="nx">argv</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">cert</span> <span class="o">=</span> <span class="nx">readFileSync</span><span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">cert</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">key</span> <span class="o">&amp;&amp;</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">key</span> <span class="o">!==</span> <span class="s1">&#39;any&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="cm">/* eslint-disable-next-line no-param-reassign */</span>
+      <span class="nx">argv</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">key</span> <span class="o">=</span> <span class="nx">readFileSync</span><span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">key</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">pfx</span> <span class="o">&amp;&amp;</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">pfx</span> <span class="o">!==</span> <span class="s1">&#39;any&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="cm">/* eslint-disable-next-line no-param-reassign */</span>
+      <span class="nx">argv</span><span class="p">.</span><span class="nx">config</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">pfx</span> <span class="o">=</span> <span class="nx">readFileSync</span><span class="p">(</span><span class="nx">argv</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">merchant</span><span class="p">.</span><span class="nx">pfx</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">},</span> <span class="kc">true</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>其作用就是，把sdk所需的证书，从文件形式自动加载，供后续 <code>cli/request.js</code>方法直接使用，<code>req</code>方法核心代码也就10来行！</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">handler</span><span class="p">(</span><span class="nx">argv</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">const</span> <span class="p">{</span>
+    <span class="nx">baseURL</span><span class="p">,</span> <span class="nx">uri</span><span class="p">,</span> <span class="nx">config</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">headers</span><span class="p">,</span>
+  <span class="p">}</span> <span class="o">=</span> <span class="nx">argv</span><span class="p">;</span>
+  <span class="k">const</span> <span class="nx">responseType</span> <span class="o">=</span> <span class="nx">argv</span><span class="p">.</span><span class="nx">binary</span> <span class="o">?</span> <span class="s1">&#39;arraybuffer&#39;</span> <span class="o">:</span> <span class="kc">undefined</span><span class="p">;</span>
+  <span class="k">const</span> <span class="nx">structure</span> <span class="o">=</span> <span class="p">[{</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">headers</span><span class="p">,</span> <span class="nx">responseType</span> <span class="p">}];</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="nx">structure</span><span class="p">.</span><span class="nx">unshift</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span> <span class="p">}</span>
+
+  <span class="p">(</span><span class="k">new</span> <span class="nx">Wechatpay</span><span class="p">({</span> <span class="nx">baseURL</span><span class="p">,</span> <span class="p">...</span><span class="nx">config</span> <span class="p">}))[</span><span class="nx">uri</span><span class="p">][</span><span class="nx">method</span><span class="p">](...</span><span class="nx">structure</span><span class="p">)</span>
+    <span class="cm">/* eslint-disable-next-line no-console */</span>
+    <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">).</span><span class="k">catch</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">);</span>
+<span class="p">},</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>代码以 MIT 开放源码公开在 <a href="https://github.com/TheNorthMemory/wechatpay-axios-plugin">https://github.com/TheNorthMemory/wechatpay-axios-plugin</a> ，如果喜欢，就来个 <strong>Star</strong> 。</p>
+
+<h2 id="后记">后记</h2>
+
+<p>Q: 哇！这么简单？</p>
+
+<p>A: 不就是为了简单么。。。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-03-28
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/invalid-aes-gcm-decipher-auth_tag-makes-crash-on-node10/">
+            <span class="next-text nav-default">AES-GCM在Node10解密消息时崩溃问题研究及解决办法</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

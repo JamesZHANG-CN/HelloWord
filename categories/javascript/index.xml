@@ -6,10 +6,19 @@
     <description>Recent content in javascript on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Sat, 13 Mar 2021 21:14:44 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 28 Mar 2021 19:59:13 +0800</lastBuildDate>
     
 	<atom:link href="/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>真香：一行命令即可体验「微信支付」全系接口能力</title>
+      <link>/post/play-the-wechatpay-openapi-requests-over-command-line/</link>
+      <pubDate>Sun, 28 Mar 2021 19:59:13 +0800</pubDate>
+      
+      <guid>/post/play-the-wechatpay-openapi-requests-over-command-line/</guid>
+      <description>以命令行方式与微信支付接口交互，旨在提供一种简洁高效的方式，让开发者可以快速对接，希望能对开发有所帮助。</description>
+    </item>
     
     <item>
       <title>AES-GCM在Node10解密消息时崩溃问题研究及解决办法</title>
