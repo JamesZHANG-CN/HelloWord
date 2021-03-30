@@ -5,7 +5,7 @@ keywords: [wechatpay-axios-plugin nodejs development]
 description: "如何起步 wechatpay-axios-plugin SDK开发包。Howto Use the Wechatpay Axios Plugin Npm Library"
 tags: []
 toc: false
-categories: [javascript wechat]
+categories: [javascript, wechat]
 summary: "nodejs及云开发环境，如何起步 wechatpay-axios-plugin SDK开发包。"
 author: "James"
 ---
