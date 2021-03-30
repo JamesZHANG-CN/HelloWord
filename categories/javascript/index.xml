@@ -6,10 +6,19 @@
     <description>Recent content in javascript on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Sun, 28 Mar 2021 19:59:13 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 30 Mar 2021 10:15:16 +0800</lastBuildDate>
     
 	<atom:link href="/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>wechatpay-axios-plugin 开发系列之「起步」</title>
+      <link>/post/howto-use-the-wechatpay-axios-plugin-npm-library/</link>
+      <pubDate>Tue, 30 Mar 2021 10:15:16 +0800</pubDate>
+      
+      <guid>/post/howto-use-the-wechatpay-axios-plugin-npm-library/</guid>
+      <description>nodejs及云开发环境，如何起步 wechatpay-axios-plugin SDK开发包。</description>
+    </item>
     
     <item>
       <title>真香：一行命令即可体验「微信支付」全系接口能力</title>
