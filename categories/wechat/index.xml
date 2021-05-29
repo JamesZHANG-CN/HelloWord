@@ -6,10 +6,55 @@
     <description>Recent content in wechat on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Tue, 30 Mar 2021 10:15:16 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 29 May 2021 14:34:09 +0800</lastBuildDate>
     
 	<atom:link href="/categories/wechat/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>加强版的微信支付APIv3媒体文件上传无依赖版NodeJS实现</title>
+      <link>/post/pure-and-fullfilled-the-multipart-formdata-composer/</link>
+      <pubDate>Sat, 29 May 2021 14:34:09 +0800</pubDate>
+      
+      <guid>/post/pure-and-fullfilled-the-multipart-formdata-composer/</guid>
+      <description>设计思路 没啥思路，纯体力活，就是用NodeJS来实现一把媒体文件上传的 rfc1867/rfc2388 协议。 NodeJS上可以搜罗到的 multipart 实现，大部分是解释器，装载器引用最</description>
+    </item>
+    
+    <item>
+      <title>简单bash组合CLI能力，练习接入/使用「微信支付v2」沙箱环境</title>
+      <link>/post/cli-mode-of-the-wechatpay-axios-plugin-practics/</link>
+      <pubDate>Fri, 30 Apr 2021 21:20:07 +0800</pubDate>
+      
+      <guid>/post/cli-mode-of-the-wechatpay-axios-plugin-practics/</guid>
+      <description>前两天有一开发者，一直在捣鼓签名的事儿，我建议其使用一下CLI工具，发现还是得再做个“教程”引导贴，遂就拿沙箱环境来练习吧。</description>
+    </item>
+    
+    <item>
+      <title>从安全角度审视，APIv3接口权限过大必须注意保管好证书文件</title>
+      <link>/post/think-about-the-wechatpay-apiv3s-architecture/</link>
+      <pubDate>Fri, 30 Apr 2021 18:24:13 +0800</pubDate>
+      
+      <guid>/post/think-about-the-wechatpay-apiv3s-architecture/</guid>
+      <description>对于微信支付官方新晋的赋能产品，有很多产品功能包，均是以APIv3形式提供，比如 消费者投诉接口，这项服务是微信生态内，健康的一个双向保障，对以服务为导向的行业来说，有此接口能力，是一个很好的体现服务质量的通道。强烈建议商户朋友们能够尽快接入。</description>
+    </item>
+    
+    <item>
+      <title>免充值产品测试验收用例的wechatpay-axios-plugin教学帖</title>
+      <link>/post/the-wechatpay-no_cash-coupon-feature-practics/</link>
+      <pubDate>Wed, 21 Apr 2021 21:13:20 +0800</pubDate>
+      
+      <guid>/post/the-wechatpay-no_cash-coupon-feature-practics/</guid>
+      <description>微信开发者社区内大佬们都有贡献 「免充值代金券」 的测试用例实现，这篇文章也来凑一下热闹，顺带帮你把一下为啥要做这个 「测试验收」 以及 「验收注意」 细节。</description>
+    </item>
+    
+    <item>
+      <title>悉数迄今为止功能最全的微信支付SDK基础开发包</title>
+      <link>/post/milestones-the-wechatpay-axios-plugin/</link>
+      <pubDate>Fri, 02 Apr 2021 21:01:41 +0800</pubDate>
+      
+      <guid>/post/milestones-the-wechatpay-axios-plugin/</guid>
+      <description>好玩的，有意义的，可以加速开发对接的，不被人抱怨的，适合云开发的，小巧的，低依赖的，符合规范的，面向对象模式，命令行模式，适用涵盖Windows、macOS、Linux的微信支付nodejs版SDK</description>
+    </item>
     
     <item>
       <title>wechatpay-axios-plugin 开发系列之「起步」</title>

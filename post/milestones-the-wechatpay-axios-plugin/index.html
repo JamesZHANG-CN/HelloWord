@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>悉数迄今为止功能最全的微信支付SDK基础开发包 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="好玩的，有意义的，可以加速开发对接的，不被人抱怨的，适合云开发的，小巧的，低依赖的，符合规范的，面向对象模式，命令行模式，适用涵盖Windows、macOS、Linux的微信支付nodejs版SDK" /><meta name="keywords" content="适合云开发, 小巧的, 低依赖的, 符合规范的, 面向对象模式, 微信支付nodejs版SDK" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/milestones-the-wechatpay-axios-plugin/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="悉数迄今为止功能最全的微信支付SDK基础开发包" />
+<meta property="og:description" content="好玩的，有意义的，可以加速开发对接的，不被人抱怨的，适合云开发的，小巧的，低依赖的，符合规范的，面向对象模式，命令行模式，适用涵盖Windows、macOS、Linux的微信支付nodejs版SDK" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/milestones-the-wechatpay-axios-plugin/" />
+<meta property="article:published_time" content="2021-04-02T21:01:41&#43;08:00"/>
+<meta property="article:modified_time" content="2021-05-10T16:54:06&#43;08:00"/>
+
+<meta itemprop="name" content="悉数迄今为止功能最全的微信支付SDK基础开发包">
+<meta itemprop="description" content="好玩的，有意义的，可以加速开发对接的，不被人抱怨的，适合云开发的，小巧的，低依赖的，符合规范的，面向对象模式，命令行模式，适用涵盖Windows、macOS、Linux的微信支付nodejs版SDK">
+
+
+<meta itemprop="datePublished" content="2021-04-02T21:01:41&#43;08:00" />
+<meta itemprop="dateModified" content="2021-05-10T16:54:06&#43;08:00" />
+<meta itemprop="wordCount" content="1742">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="悉数迄今为止功能最全的微信支付SDK基础开发包"/>
+<meta name="twitter:description" content="好玩的，有意义的，可以加速开发对接的，不被人抱怨的，适合云开发的，小巧的，低依赖的，符合规范的，面向对象模式，命令行模式，适用涵盖Windows、macOS、Linux的微信支付nodejs版SDK"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">悉数迄今为止功能最全的微信支付SDK基础开发包</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-02 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<p>20年中在对接商家券的时候，翻了官方PHP SDK的牌子，0.1系缺个媒体文件上传比较优雅的解决方案，于是顺手就为其提了PR。之后，我就在思考，动态编程语言讲究的快，是不是应该可以在做点儿<strong>好玩的，有意义的，可以加速开发对接的，不被人抱怨的</strong>开发包呢。索性，仗着多年的从业经验，尝试从底层开始写，不断迭代，于是就有了这么一款<strong>小巧，低依赖，符合规范，面向对象模式，命令行模式，适用涵盖Windows、macOS、Linux的微信支付nodejs版基础开发包</strong>。</p>
+
+<p>下面我以版本迭代时间线为过程，来讲讲这款SDK开发包的开发故事。</p>
+
+<h2 id="v0-0-1-初始版本">v0.0.1 初始版本</h2>
+
+<p>这个版本，发布于2020年6月26号，核心是<strong>3个类，4个文件共计11个方法</strong>，已经是完整实现了APIv3的技术规范：<code>AES-GCM</code>对称加解密，<code>RSA-OAEP</code>非对称加解密及验签规范。<code>RSA-OAEP</code>的原生公钥加密、私钥解密方法封装，是翻过无数遍nodejs的文档，最后精炼到各5行代码共计10行，这应该是<strong>nodejs中，<code>RSA-OAEP</code>加解密原生实现的最早封装</strong>。</p>
+
+<h2 id="v0-1-0-正式版本">v0.1.0 正式版本</h2>
+
+<p>这个系列，发布于2020年7月2号。在申城最热的一段时间，晚上睡不着就捋代码呗，哔哩啪啦猛敲代码（其实也没多少行代码，全被精简了），迭代了<strong>共计十个版本</strong>，于是就有了这么一个正式版。</p>
+
+<h2 id="v0-2-面向对象模式开发">v0.2 面向对象模式开发</h2>
+
+<p>这个系列，发布于2020年7月7号，止于2020年9月9号，四个版本。重要功能就是可以顺溜地使用动态对象来对接APIv3接口了，同时<strong>降低NodeJS版本兼容至10.15</strong>（这个是云开发的环境版本）。详细可阅读<a href="https://developers.weixin.qq.com/community/develop/article/doc/000cc48a370008b8ff9a64a3c51013">微信支付APIv3的Nodejs版SDK，让开发变得简单不再繁琐</a>。</p>
+
+<h2 id="v0-3-支持apiv2调用">v0.3 支持APIv2调用</h2>
+
+<p>这个系列，发布于2020年9月11号，止于2021年1月22号。是个被“逼”出来的系列。这个系列<strong>加入了APIv2版的接口驱动</strong>，重要功能就是对「付款码支付」及「退款」能力的支持。详细可阅读<a href="https://developers.weixin.qq.com/community/develop/article/doc/0008e6af4ecb604917fa17e8456c13">适合云开发的微信支付v2及v3版Nodejs SDK</a>，这就不展开了。在这一段时间里，有太多事情要跟进，所以一直没有太多时间写代码。展期了好久好久才进入了重要的下一重构时刻。</p>
+
+<h2 id="v0-4-同质化v2-v3-oop开发">v0.4 同质化v2&amp;v3 OOP开发</h2>
+
+<p>这个系列，发布于2021年2月28号，止于2021年3月25日，五个版本。这个系列的由来是因一位同学提的issue展开的，于是做了<strong>超量重构，不仅改写了入口程序，还加强了APIv2版的同质化调用</strong>，详细可阅读<a href="https://developers.weixin.qq.com/community/develop/article/doc/00068858794328120adbfbe425bc13">微信支付开发，可以简化到复制+粘贴这种地步</a> 及<a href="https://developers.weixin.qq.com/community/develop/article/doc/00042e35e908a89213dbcb6f856c13">纯属意外，还可以这么起底微信支付接口对接</a>。</p>
+
+<p>有那么一瞬间，我以为这个版本就会是终点了，可以进入LTS版仅需长期维护了。殊不知，CLI工具集还有一漏勺没有完善好，那好吧，那就再来一波加强重组呗。</p>
+
+<h2 id="v0-5-命令行工具集">v0.5 命令行工具集</h2>
+
+<p>这个系列，发布于2021年3月27号，加强了命令行工具集，请求微信支付官方接口，现在可以在命令行上跑起来了。英文slogan就是: <strong>Play the OpenAPI requests over command line</strong>。 这得解释解释，为啥用“Play”呢，而不是其他词儿呢？其实这个功能早在20年10月，chain支付宝OpenAPI接口时，脑阔开了个洞，想出来的。微信支付的CLI工具已经迟到好久了，现在好了，两款驰名的支付平台，都可以如丝质般顺溜，搞起CI了。这就是play的由来——<strong>为开发而生: commit to play for running</strong>。</p>
+
+<p>说说功能点，这个系列就加强了命令行方式与接口交互能力，同时降级了<strong>自0.0.4版</strong>就一直存在的 <strong>「平台证书」下载器</strong> 为工具集内一条特殊命令。详细玩法可阅读 <a href="https://developers.weixin.qq.com/community/develop/article/doc/0006486221c78076bbeb90c4951013">开发系列之「起步」</a> 及 <a href="https://developers.weixin.qq.com/community/develop/article/doc/000e264b100a88609bebe202856413">真香：一行命令即可体验「微信支付」全系接口能力</a>。</p>
+
+<p>另外，这个加强重构版的<strong>CLI交互工具</strong>，从设计一开始就<strong>支持扩展能力</strong>，有兴趣的同学完全可以基于<code>bin/cli/request.js</code>构建出更多子命令，不干扰纯应用，跑着欢实就好。</p>
+
+<h2 id="next">NEXT</h2>
+
+<p><strong>如果还有</strong>NEXT，那可能就是得把tsd文件翻新一下，<code>ProxyConstructor</code>那块是<code>TypeScript</code> 自4.0引入，动态属性类型签名的高级甚高级用法，还不太会，学习中，如果有娴熟的同学，可以提PR贡献一下。</p>
+
+<p>哦，对了，文章如果看着还不错，SDK用着还顺手，那就<strong>star</strong>一下repo吧 <a href="https://github.com/TheNorthMemory/wechatpay-axios-plugin">https://github.com/TheNorthMemory/wechatpay-axios-plugin</a> MIT开源，纯免费，随便用。做开源不易，况且还是为国民应用做底层基础开发包就更是难啊，平时又太忙，只能是按需来做，有空再续。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-05-10
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/the-wechatpay-no_cash-coupon-feature-practics/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">免充值产品测试验收用例的wechatpay-axios-plugin教学帖</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/howto-use-the-wechatpay-axios-plugin-npm-library/">
+            <span class="next-text nav-default">wechatpay-axios-plugin 开发系列之「起步」</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>从安全角度审视，APIv3接口权限过大必须注意保管好证书文件 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="对于微信支付官方新晋的赋能产品，有很多产品功能包，均是以APIv3形式提供，比如 消费者投诉接口，这项服务是微信生态内，健康的一个双向保障，对以服务为导向的行业来说，有此接口能力，是一个很好的体现服务质量的通道。强烈建议商户朋友们能够尽快接入。" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/think-about-the-wechatpay-apiv3s-architecture/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="从安全角度审视，APIv3接口权限过大必须注意保管好证书文件" />
+<meta property="og:description" content="对于微信支付官方新晋的赋能产品，有很多产品功能包，均是以APIv3形式提供，比如 消费者投诉接口，这项服务是微信生态内，健康的一个双向保障，对以服务为导向的行业来说，有此接口能力，是一个很好的体现服务质量的通道。强烈建议商户朋友们能够尽快接入。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/think-about-the-wechatpay-apiv3s-architecture/" />
+<meta property="article:published_time" content="2021-04-30T18:24:13&#43;08:00"/>
+<meta property="article:modified_time" content="2021-04-30T18:24:13&#43;08:00"/>
+
+<meta itemprop="name" content="从安全角度审视，APIv3接口权限过大必须注意保管好证书文件">
+<meta itemprop="description" content="对于微信支付官方新晋的赋能产品，有很多产品功能包，均是以APIv3形式提供，比如 消费者投诉接口，这项服务是微信生态内，健康的一个双向保障，对以服务为导向的行业来说，有此接口能力，是一个很好的体现服务质量的通道。强烈建议商户朋友们能够尽快接入。">
+
+
+<meta itemprop="datePublished" content="2021-04-30T18:24:13&#43;08:00" />
+<meta itemprop="dateModified" content="2021-04-30T18:24:13&#43;08:00" />
+<meta itemprop="wordCount" content="1965">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="从安全角度审视，APIv3接口权限过大必须注意保管好证书文件"/>
+<meta name="twitter:description" content="对于微信支付官方新晋的赋能产品，有很多产品功能包，均是以APIv3形式提供，比如 消费者投诉接口，这项服务是微信生态内，健康的一个双向保障，对以服务为导向的行业来说，有此接口能力，是一个很好的体现服务质量的通道。强烈建议商户朋友们能够尽快接入。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">从安全角度审视，APIv3接口权限过大必须注意保管好证书文件</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-30 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="运行环境">运行环境</h2>
+
+<p>微信支付运行时，依托强大的微信环境，国民级应用，安全性想说都没法说，杠杆滴；而接口服务，是一个后端服务，几乎看不到摸不着，这里我就简单的说一两句。</p>
+
+<h2 id="数据签名">数据签名</h2>
+
+<p>之所以有数据签名，也是基于安全考虑，在异步运行时环境里，变量因素太多，保证请求到数据没有被篡改、伪造，简单粗暴的方式就是对数据签名，引申出的就有如下的签名方案：</p>
+
+<h3 id="md5摘要-哈希-算法">MD5摘要(哈希)算法</h3>
+
+<p>这其实是个单向数据摘要方案，官方加密方案是把secret拼接到待摘要字符串末尾，进行摘要。MD5摘要的签名，目前公认不安全了（暴力强算可逆），不建议再使用了。</p>
+
+<h3 id="hmac-sha256摘要-哈希-算法">HMAC-SHA256摘要(哈希)算法</h3>
+
+<p>稍微比MD5数据签名安全一点的是HMAC-SHA256，这也是单向数据摘要方案。HMAC缩写的全称是Hash-based Message Authentication Code，摘要算法支持 sha256, sha512 等算法。</p>
+
+<p>在这不得不提一下APIv2上几个不洁癖的地方，就是在返回值验签上，有些接口验签默认值MD5，有些是HMAC-SHA256，有些接口xml只返回了sign字段，有一些还没有，迭代风格迥异。</p>
+
+<p>研发的同学可以按如下规律来判断，在有返回<code>sign</code>字段的时候，官方是采用的哪种签名方案，即：</p>
+
+<ul>
+<li>返回sign长度为32字节，平台方采用的是<code>MD5</code>数据摘要方案；</li>
+<li>返回的sign长度为64字节，官方采用的是<code>HMAC-SHA256</code>数据摘要方案；</li>
+</ul>
+
+<p>无sign字段的几个接口，属于特定领域使用的，估计官方也不会再迭代了，先将就着用吧。</p>
+
+<h3 id="aes-ecb加解密">AES-ECB加解密</h3>
+
+<p>Advanced Encryption Standard with ECB (Electronic Codebook 电码本) mode 模式是分组密码的一种最基本的工作模式。算法及模式可以百科一下，这里就不展开了，属于对称加密，安全强度相较于 MD5/HMAC-SHA256 要高许多，不过存在共享<code>密钥</code>问题。</p>
+
+<h3 id="rsa-oaep加解密">RSA-OAEP加解密</h3>
+
+<p>RSA加密属于非对称加密，公钥加密/私钥解密，公钥是系统间交互的，私钥是双方秘密保存的，解决了共享<code>密钥</code>问题，相对来说，安全级别高许多。</p>
+
+<h3 id="aes-gcm加解密">AES-GCM加解密</h3>
+
+<p>Advanced Encryption Standard with GCM (Galois/Counter Mode) 指的是该对称加密采用Counter模式，并带有GMAC消息认证码。属于对称加密，密文相较于AES-ECB解密难度要高，对应的安全等级也高一些，不过也存在共享<code>密钥</code>问题。</p>
+
+<h2 id="apiv2-适用业务形态">APIv2 适用业务形态</h2>
+
+<ul>
+<li>收单服务</li>
+<li>资金应用</li>
+<li>营销工具</li>
+<li>通关报关</li>
+</ul>
+
+<h2 id="apiv3-适用的业务形态">APIv3 适用的业务形态</h2>
+
+<ul>
+<li>收单服务</li>
+<li>资金应用</li>
+<li>支付分</li>
+<li>智慧零售
+
+<ul>
+<li>智慧商圈</li>
+<li>支付即服务</li>
+<li>支付即会员</li>
+<li>消费者服务</li>
+</ul></li>
+<li>营销工具</li>
+</ul>
+
+<h2 id="两个版本安全对比">两个版本安全对比</h2>
+
+<table>
+<thead>
+<tr>
+<th>业务形态</th>
+<th>APIv2密钥</th>
+<th>API证书</th>
+<th>APIv3密钥</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>收单服务</td>
+<td>需要</td>
+<td>无需</td>
+<td>需要</td>
+</tr>
+
+<tr>
+<td>资金应用</td>
+<td>需要</td>
+<td>需要</td>
+<td>需要</td>
+</tr>
+
+<tr>
+<td>营销工具</td>
+<td>需要</td>
+<td>需要</td>
+<td>需要</td>
+</tr>
+
+<tr>
+<td>通关报关</td>
+<td>需要</td>
+<td>需要</td>
+<td>-</td>
+</tr>
+
+<tr>
+<td>支付分</td>
+<td>-</td>
+<td>需要</td>
+<td>需要</td>
+</tr>
+
+<tr>
+<td>智慧零售</td>
+<td>-</td>
+<td>需要</td>
+<td>需要</td>
+</tr>
+</tbody>
+</table>
+
+<p>从上图表格以及技术方案来看，APIv3的数据安全等级高了许多，然而，所有的操作，均使用一套 <code>APIv3证书</code> 及 <code>APIv3密钥</code>，这对商户的安全等级考量是非常高的了，至少要达到 <code>安全合格</code> 检查的3类级别，通俗的讲就是要去商户，对关键信息具有较强的安全管控，以规避因误造成的损失。白话说一下风险点就是，只要掌握了商户的 <code>API证书</code>，那么商户的“底裤条纹及颜色”就曝露在光天化日之下了，这是对商户的一个考验。</p>
+
+<p>而APIv2，收单服务仅依赖密钥，在不暴露 <code>API证书</code>(或者根本没有申请)的情况下，仅存在理论上的“暴露短裤”风险，短裤和底裤比较起来，相对还好的吧。。。</p>
+
+<p>所以，在当下这个时间节点，在升级APIv3这件事情上，商户需要谨慎考虑并且需要做 <strong>等保合规</strong> 评估。</p>
+
+<p><strong>安全防护方面较弱的商户，我的建议是，能不提供 <code>API证书</code> 的绝不提供；能用APIv2的，绝不升APIv3；实在没法儿的业务，坚决要做到<code>API证书</code>管控，宁可不做，也不能存资金安全隐患。</strong></p>
+
+<h2 id="不得不用的场景">不得不用的场景</h2>
+
+<p>对于官方新晋的赋能产品，有很多产品功能包，均是以<code>APIv3</code>形式提供，比如 <a href="https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter10_2_11.shtml">消费者投诉接口</a> ，这项服务是微信生态内，健康的一个双向保障，对以服务为导向的行业来说，有此接口能力，是一个很好的体现服务质量的通道。<strong>强烈建议</strong>商户朋友们能够尽快接入。</p>
+
+<p>问题就来了，对不得不接入的功能，从实践上，有如下几个建议：</p>
+
+<ol>
+<li>建议<code>API证书</code>做安全等级管控，商户/服务商平台上，对于出资金可以设置白名单的地方，均设置上安全请求IP白名单(白名单目前只有5个名额，而且还不支持IP网段形式，且用且珍惜);</li>
+<li>建议使用独立的<code>签名服务</code>，把<code>API证书</code>圈定在有限的环境内，避免将<code>API证书</code>本身分发出去，特别地，对于APP对接微信支付，<strong>千万千万</strong> 不要把API证书内置了，APP本身就是分发机制，这证书要是分发出去，后果简直这太可怕了；</li>
+<li>建议独立的<code>签名服务</code>要对请求签名的<code>应用请求</code>进行身份认证鉴权；尤其是对于关键的 <strong>出资金</strong> 业务，不仅要验证<code>应用请求</code>和参与签名的路径，甚至请求报文的核心字段要做验证；</li>
+</ol>
+
+<p>远期上来看，APIv3肯定是趋势，何以“破解”API证书权限过大问题，待就等等官方的大智慧吧。</p>
+
+<h2 id="附注链接">附注链接</h2>
+
+<ul>
+<li><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_3">APIv2 安全规范-签名算法</a></li>
+<li><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_18&amp;index=7">APIv2 SHA1数据签名</a></li>
+<li><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_16&amp;index=10">APIv2 退款结果通知-数据加解密</a></li>
+<li><a href="https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay3_3.shtml">APIv3 数据签名</a></li>
+<li><a href="https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay4_3.shtml">APIv3 敏感信息加解密</a></li>
+<li><a href="https://pay.weixin.qq.com/wiki/doc/apiv3/apis/chapter3_1_8.shtml">APIv3 账单下载SHA1数据签名</a></li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-04-30
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/cli-mode-of-the-wechatpay-axios-plugin-practics/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">简单bash组合CLI能力，练习接入/使用「微信支付v2」沙箱环境</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/the-wechatpay-no_cash-coupon-feature-practics/">
+            <span class="next-text nav-default">免充值产品测试验收用例的wechatpay-axios-plugin教学帖</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

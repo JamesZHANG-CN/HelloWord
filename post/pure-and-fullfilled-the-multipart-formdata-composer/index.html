@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>加强版的微信支付APIv3媒体文件上传无依赖版NodeJS实现 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="NodeJS上无依赖版媒体文件上传 rfc1867/rfc2388 协议 multipart/form-data 实现。" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/pure-and-fullfilled-the-multipart-formdata-composer/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="加强版的微信支付APIv3媒体文件上传无依赖版NodeJS实现" />
+<meta property="og:description" content="NodeJS上无依赖版媒体文件上传 rfc1867/rfc2388 协议 multipart/form-data 实现。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/pure-and-fullfilled-the-multipart-formdata-composer/" />
+<meta property="article:published_time" content="2021-05-29T14:34:09&#43;08:00"/>
+<meta property="article:modified_time" content="2021-05-29T14:34:09&#43;08:00"/>
+
+<meta itemprop="name" content="加强版的微信支付APIv3媒体文件上传无依赖版NodeJS实现">
+<meta itemprop="description" content="NodeJS上无依赖版媒体文件上传 rfc1867/rfc2388 协议 multipart/form-data 实现。">
+
+
+<meta itemprop="datePublished" content="2021-05-29T14:34:09&#43;08:00" />
+<meta itemprop="dateModified" content="2021-05-29T14:34:09&#43;08:00" />
+<meta itemprop="wordCount" content="1152">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="加强版的微信支付APIv3媒体文件上传无依赖版NodeJS实现"/>
+<meta name="twitter:description" content="NodeJS上无依赖版媒体文件上传 rfc1867/rfc2388 协议 multipart/form-data 实现。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">加强版的微信支付APIv3媒体文件上传无依赖版NodeJS实现</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-05-29 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="设计思路">设计思路</h2>
+
+<p>没啥思路，纯体力活，就是用NodeJS来实现一把媒体文件上传的 rfc1867/rfc2388 协议。 NodeJS上可以搜罗到的 <code>multipart</code> 实现，大部分是解释器，装载器引用最多的是<code>form-data</code>这个包，接续<a href="https://developers.weixin.qq.com/community/develop/article/doc/000c24f0390ff8b5d91b2489059413">上一版</a>的实现，广度支持 nodejs http client，不挑食了。</p>
+
+<p><code>node-fetch</code>用来探测请求体是不是<code>FormData</code>函数片段：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">//refer: https://github.com/node-fetch/node-fetch/blob/master/src/utils/is.js#L47-L67
+</span><span class="c1"></span>
+<span class="cm">/**
+</span><span class="cm"> * Check if `obj` is a spec-compliant `FormData` object
+</span><span class="cm"> *
+</span><span class="cm"> * @param {*} object
+</span><span class="cm"> * @return {boolean}
+</span><span class="cm"> */</span>
+<span class="k">export</span> <span class="kd">function</span> <span class="nx">isFormData</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="k">typeof</span> <span class="nx">object</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span> <span class="o">&amp;&amp;</span>
+        <span class="k">typeof</span> <span class="nx">object</span><span class="p">.</span><span class="nx">append</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span>
+        <span class="k">typeof</span> <span class="nx">object</span><span class="p">.</span><span class="nx">set</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span>
+        <span class="k">typeof</span> <span class="nx">object</span><span class="p">.</span><span class="nx">get</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span>
+        <span class="k">typeof</span> <span class="nx">object</span><span class="p">.</span><span class="nx">getAll</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span>
+        <span class="k">typeof</span> <span class="nx">object</span><span class="p">.</span><span class="k">delete</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span>
+        <span class="k">typeof</span> <span class="nx">object</span><span class="p">.</span><span class="nx">keys</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span>
+        <span class="k">typeof</span> <span class="nx">object</span><span class="p">.</span><span class="nx">values</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span>
+        <span class="k">typeof</span> <span class="nx">object</span><span class="p">.</span><span class="nx">entries</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span>
+        <span class="k">typeof</span> <span class="nx">object</span><span class="p">.</span><span class="nx">constructor</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">&amp;&amp;</span>
+        <span class="nx">object</span><span class="p">[</span><span class="nx">Symbol</span><span class="p">.</span><span class="nx">toStringTag</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;FormData&#39;</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p><code>axios</code>用来探测代码片段:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">//refer: https://github.com/axios/axios/blob/master/lib/utils.js#L50-L58
+</span><span class="c1"></span><span class="cm">/**
+</span><span class="cm"> * Determine if a value is a FormData
+</span><span class="cm"> *
+</span><span class="cm"> * @param {Object} val The value to test
+</span><span class="cm"> * @returns {boolean} True if value is an FormData, otherwise false
+</span><span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">isFormData</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">FormData</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">val</span> <span class="k">instanceof</span> <span class="nx">FormData</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>这个函数在浏览器环境上是可以的，但在NodeJS上是有问题的，<code>FormData</code>不是全局对象，探测失败，退而求其次，使用如下探测函数:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// https://github.com/axios/axios/blob/master/lib/utils.js#L161-L169
+</span><span class="c1"></span><span class="cm">/**
+</span><span class="cm"> * Determine if a value is a Stream
+</span><span class="cm"> *
+</span><span class="cm"> * @param {Object} val The value to test
+</span><span class="cm"> * @returns {boolean} True if value is a Stream, otherwise false
+</span><span class="cm"> */</span>
+<span class="kd">function</span> <span class="nx">isStream</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">isObject</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nx">isFunction</span><span class="p">(</span><span class="nx">val</span><span class="p">.</span><span class="nx">pipe</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="实现">实现</h2>
+
+<p>在coding过程中，遇到了一个比较大的挑战就是对 <code>delete</code> 的实现。按照MDN的文档介绍，delete是要删除同名所有值，这里啃了好久，也妥妥的搞定了。总体实现就是在<a href="https://developers.weixin.qq.com/community/develop/article/doc/000c24f0390ff8b5d91b2489059413">上一版</a>的同步代码模型上，增加了10几个方法，覆盖住了<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/FormData">MDN FormData</a>上罗列的所有方法，并且支持了 stream 流动模式。</p>
+
+<p>核心代码就是以下4个函数，均是对内置的<code>data</code> BufferList 进行编排：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js">  <span class="nx">append</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">filename</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="p">{</span>
+      <span class="nx">data</span><span class="p">,</span> <span class="nx">dashDash</span><span class="p">,</span> <span class="nx">boundary</span><span class="p">,</span> <span class="nx">CRLF</span><span class="p">,</span> <span class="nx">indices</span><span class="p">,</span>
+    <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+
+    <span class="nx">data</span><span class="p">.</span><span class="nx">splice</span><span class="p">(...(</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">?</span> <span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">dashDash</span><span class="p">,</span> <span class="nx">boundary</span><span class="p">,</span> <span class="nx">CRLF</span><span class="p">]));</span>
+    <span class="nx">indices</span><span class="p">.</span><span class="nx">push</span><span class="p">([</span><span class="nx">name</span><span class="p">,</span> <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(...</span><span class="k">this</span><span class="p">.</span><span class="nx">formed</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">filename</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]);</span>
+    <span class="nx">data</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">CRLF</span><span class="p">,</span> <span class="nx">dashDash</span><span class="p">,</span> <span class="nx">boundary</span><span class="p">,</span> <span class="nx">dashDash</span><span class="p">,</span> <span class="nx">CRLF</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">formed</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">filename</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">const</span> <span class="p">{</span> <span class="nx">mimeTypes</span><span class="p">,</span> <span class="nx">CRLF</span><span class="p">,</span> <span class="nx">EMPTY</span> <span class="p">}</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
+    <span class="k">const</span> <span class="nx">isBufferOrStream</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">isBuffer</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="nx">value</span> <span class="k">instanceof</span> <span class="nx">ReadStream</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">[</span>
+      <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="sb">`Content-Disposition: form-data; name=&#34;</span><span class="si">${</span><span class="nx">name</span><span class="si">}</span><span class="sb">&#34;</span><span class="si">${</span><span class="nx">filename</span> <span class="o">&amp;&amp;</span> <span class="nx">isBufferOrStream</span> <span class="o">?</span> <span class="sb">`; filename=&#34;</span><span class="si">${</span><span class="nx">filename</span><span class="si">}</span><span class="sb">&#34;`</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="si">}</span><span class="sb">`</span><span class="p">),</span>
+      <span class="nx">CRLF</span><span class="p">,</span>
+      <span class="p">...(</span>
+        <span class="nx">filename</span> <span class="o">||</span> <span class="nx">isBufferOrStream</span>
+          <span class="o">?</span> <span class="p">[</span><span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="sb">`Content-Type: </span><span class="si">${</span><span class="nx">mimeTypes</span><span class="p">[</span><span class="nx">extname</span><span class="p">(</span><span class="nx">filename</span><span class="p">).</span><span class="nx">substring</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">toLowerCase</span><span class="p">()]</span> <span class="o">||</span> <span class="s1">&#39;application/octet-stream&#39;</span><span class="si">}</span><span class="sb">`</span><span class="p">),</span> <span class="nx">CRLF</span><span class="p">]</span>
+          <span class="o">:</span> <span class="p">[</span><span class="nx">EMPTY</span><span class="p">,</span> <span class="nx">EMPTY</span><span class="p">]</span>
+      <span class="p">),</span>
+      <span class="nx">CRLF</span><span class="p">,</span>
+      <span class="nx">isBufferOrStream</span> <span class="o">?</span> <span class="nx">value</span> <span class="o">:</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="nx">value</span><span class="p">)),</span>
+    <span class="p">];</span>
+  <span class="p">}</span>
+
+  <span class="nx">set</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">filename</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">has</span><span class="p">(</span><span class="nx">name</span><span class="p">))</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">filter</span><span class="p">(([</span><span class="nx">field</span><span class="p">])</span> <span class="p">=&gt;</span> <span class="nx">field</span> <span class="o">===</span> <span class="nx">name</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(([</span><span class="nx">field</span><span class="p">,</span> <span class="nx">index</span><span class="p">])</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="p">...</span><span class="k">this</span><span class="p">.</span><span class="nx">formed</span><span class="p">(</span><span class="nx">field</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">filename</span><span class="p">));</span>
+      <span class="p">});</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">filename</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">delete</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">indices</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">values</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">filter</span><span class="p">(([</span><span class="nx">field</span><span class="p">])</span> <span class="p">=&gt;</span> <span class="nx">field</span> <span class="o">===</span> <span class="nx">name</span><span class="p">).</span><span class="nx">reduceRight</span><span class="p">((</span><span class="nx">mapper</span><span class="p">,</span> <span class="p">[,</span> <span class="nx">index</span><span class="p">])</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">index</span> <span class="o">-</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+      <span class="nx">Reflect</span><span class="p">.</span><span class="nx">deleteProperty</span><span class="p">(</span><span class="nx">mapper</span><span class="p">,</span> <span class="sb">`</span><span class="si">${</span><span class="nx">index</span><span class="si">}</span><span class="sb">`</span><span class="p">);</span>
+      <span class="nb">Object</span><span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">mapper</span><span class="p">).</span><span class="nx">filter</span><span class="p">(([</span><span class="nx">fixed</span><span class="p">])</span> <span class="p">=&gt;</span> <span class="o">+</span><span class="nx">fixed</span> <span class="o">&gt;</span> <span class="nx">index</span><span class="p">).</span><span class="nx">forEach</span><span class="p">(([</span><span class="nx">fixed</span><span class="p">,</span> <span class="p">[</span><span class="nx">field</span><span class="p">,</span> <span class="nx">idx</span><span class="p">]])</span> <span class="p">=&gt;</span> <span class="p">{</span>
+        <span class="nx">Reflect</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">mapper</span><span class="p">,</span> <span class="sb">`</span><span class="si">${</span><span class="nx">fixed</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span> <span class="p">[</span><span class="nx">field</span><span class="p">,</span> <span class="nx">idx</span> <span class="o">-</span> <span class="mi">10</span><span class="p">]);</span>
+      <span class="p">});</span>
+      <span class="k">return</span> <span class="nx">mapper</span><span class="p">;</span>
+    <span class="p">},</span> <span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">reduce</span><span class="p">((</span><span class="nx">des</span><span class="p">,</span> <span class="p">[</span><span class="nx">field</span><span class="p">,</span> <span class="nx">value</span><span class="p">])</span> <span class="p">=&gt;</span> <span class="p">{</span>
+      <span class="nx">Reflect</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="nx">des</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="p">[</span><span class="nx">field</span><span class="p">,</span> <span class="nx">value</span><span class="p">]);</span>
+      <span class="k">return</span> <span class="nx">des</span><span class="p">;</span>
+    <span class="p">},</span> <span class="p">{})));</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">indices</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+  <span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="应用">应用</h2>
+
+<h3 id="同步模式">同步模式</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="p">(</span><span class="k">new</span> <span class="nx">Multipart</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="nx">Buffer</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="s1">&#39;31&#39;</span><span class="p">))</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({}),</span> <span class="s1">&#39;any.json&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;e&#39;</span><span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">).</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;/path/your/file.jpg&#39;</span><span class="p">),</span> <span class="s1">&#39;file.jpg&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">getBuffer</span><span class="p">();</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="异步-流动-模式">异步(流动)模式</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="p">(</span><span class="k">new</span> <span class="nx">Multipart</span><span class="p">())</span>
+  <span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;f&#39;</span><span class="p">,</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">).</span><span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;/path/your/file2.jpg&#39;</span><span class="p">),</span> <span class="s1">&#39;file2.jpg&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">).</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="s1">&#39;./file3.jpg&#39;</span><span class="p">));</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="示例上传代码">示例上传代码</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span><span class="nx">readFileSync</span><span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">)</span>
+
+<span class="k">const</span> <span class="p">{</span><span class="nx">Wechatpay</span><span class="p">,</span> <span class="nx">Multipart</span><span class="p">,</span> <span class="nx">Hash</span><span class="o">:</span> <span class="p">{</span> <span class="nx">sha256</span> <span class="p">}}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;wechatpay-axios-plugin&#39;</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="nx">wxpay</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wechatpay</span><span class="p">({</span> <span class="nx">mchid</span><span class="p">,</span> <span class="nx">secret</span><span class="p">,</span> <span class="nx">serial</span><span class="p">,</span> <span class="nx">privateKey</span><span class="p">,</span> <span class="nx">certs</span> <span class="p">});</span>
+
+<span class="k">const</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;./hellowechatpay.png&#39;</span><span class="p">);</span>
+<span class="k">const</span> <span class="nx">meta</span> <span class="o">=</span> <span class="p">{</span><span class="nx">filename</span><span class="o">:</span> <span class="s1">&#39;hellowechatpay.png&#39;</span><span class="p">,</span> <span class="nx">sha256</span><span class="o">:</span> <span class="nx">sha256</span><span class="p">(</span><span class="nx">file</span><span class="p">)};</span>
+
+<span class="k">const</span> <span class="nx">form</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Multipart</span><span class="p">();</span>
+<span class="nx">form</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="s1">&#39;hellowechatpay.png&#39;</span><span class="p">);</span>
+<span class="nx">form</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">meta</span><span class="p">),</span> <span class="s1">&#39;meta.json&#39;</span><span class="p">);</span>
+
+<span class="nx">wxpay</span>
+  <span class="p">.</span><span class="nx">v3</span><span class="p">.</span><span class="nx">marketing</span><span class="p">.</span><span class="nx">favor</span><span class="p">.</span><span class="nx">media</span><span class="p">.</span><span class="nx">imageUpload</span><span class="p">(</span><span class="nx">form</span><span class="p">,</span> <span class="p">{</span> <span class="nx">meta</span><span class="p">,</span> <span class="nx">headers</span><span class="o">:</span> <span class="nx">form</span><span class="p">.</span><span class="nx">getHeaders</span><span class="p">()</span> <span class="p">})</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(({</span><span class="nx">data</span><span class="o">:</span> <span class="p">{</span> <span class="nx">media_id</span> <span class="p">}})</span> <span class="p">=&gt;</span> <span class="nx">media_id</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">info</span><span class="p">)</span>
+  <span class="p">.</span><span class="k">catch</span><span class="p">(</span><span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>更高级的stream流动模式下，一条龙从浏览器客户端至微信服务端的媒体直接上传，用js来实现，就变得很有可能了，这个留给喜欢钻研的同学搞一搞了。</p>
+
+<h2 id="最后">最后</h2>
+
+<p>附上 <a href="https://github.com/TheNorthMemory/wechatpay-axios-plugin/blob/master/lib/multipart.js">源码地址</a> 及 <a href="https://github.com/TheNorthMemory/wechatpay-axios-plugin/blob/master/tests/lib/multipart.test.js">测试用例地址</a>，如果用着还不放心，可以再装一下 <code>form-data</code>包，通过   <code>new FormData</code> 来使用。</p>
+
+<p>希望本文能解决你的困惑，如果喜欢，欢迎 <strong>Star</strong>。</p>
+
+<h2 id="应用-1">应用</h2>
+
+<ul>
+<li><a href="https://developers.weixin.qq.com/community/pay/article/doc/00088ebe95036026e22c31c6f56c13">用了一天终于实现，云函数实现V3图片上传</a></li>
+</ul>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-05-29
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/cli-mode-of-the-wechatpay-axios-plugin-practics/">
+            <span class="next-text nav-default">简单bash组合CLI能力，练习接入/使用「微信支付v2」沙箱环境</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

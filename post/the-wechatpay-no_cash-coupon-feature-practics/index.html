@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>免充值产品测试验收用例的wechatpay-axios-plugin教学帖 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="微信开发者社区内大佬们都有贡献 「免充值代金券」 的测试用例实现，这篇文章也来凑一下热闹，顺带帮你把一下为啥要做这个 「测试验收」 以及 「验收注意」 细节。" /><meta name="keywords" content="微信支付, 免充值产品, 测试验收, wechatpay-axios-plugin" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/the-wechatpay-no_cash-coupon-feature-practics/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="免充值产品测试验收用例的wechatpay-axios-plugin教学帖" />
+<meta property="og:description" content="微信开发者社区内大佬们都有贡献 「免充值代金券」 的测试用例实现，这篇文章也来凑一下热闹，顺带帮你把一下为啥要做这个 「测试验收」 以及 「验收注意」 细节。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/the-wechatpay-no_cash-coupon-feature-practics/" />
+<meta property="article:published_time" content="2021-04-21T21:13:20&#43;08:00"/>
+<meta property="article:modified_time" content="2021-05-10T18:54:06&#43;08:00"/>
+
+<meta itemprop="name" content="免充值产品测试验收用例的wechatpay-axios-plugin教学帖">
+<meta itemprop="description" content="微信开发者社区内大佬们都有贡献 「免充值代金券」 的测试用例实现，这篇文章也来凑一下热闹，顺带帮你把一下为啥要做这个 「测试验收」 以及 「验收注意」 细节。">
+
+
+<meta itemprop="datePublished" content="2021-04-21T21:13:20&#43;08:00" />
+<meta itemprop="dateModified" content="2021-05-10T18:54:06&#43;08:00" />
+<meta itemprop="wordCount" content="4082">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="免充值产品测试验收用例的wechatpay-axios-plugin教学帖"/>
+<meta name="twitter:description" content="微信开发者社区内大佬们都有贡献 「免充值代金券」 的测试用例实现，这篇文章也来凑一下热闹，顺带帮你把一下为啥要做这个 「测试验收」 以及 「验收注意」 细节。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">免充值产品测试验收用例的wechatpay-axios-plugin教学帖</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-21 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<p>社区内大佬们都有贡献 <strong>「免充值代金券」</strong> 的测试用例实现，这篇文章也来凑一下热闹，顺带帮你把一下为啥要做这个 <strong>「测试验收」</strong> 以及 <strong>「验收注意」</strong> 细节。</p>
+
+<h2 id="引言">引言</h2>
+
+<p><a href="https://pay.weixin.qq.com/wiki/doc/api/download/mczyscsyl.pdf">官方用例文档链接</a> 一共25页，非常详细，照着描一步步做，很快就能验收完。本篇作为「教学帖」，试着让友商们理解，这个验收的重要性，如果希望能够获取帮助直接验收，请阅读<a href="https://developers.weixin.qq.com/community/pay/article/doc/0002e82b060c3028230c915f150813">代金券接口升级验收脚本 用例组合1001+1002+1003+1004+1005</a>。</p>
+
+<h2 id="安装nodejs-sdk">安装nodejs sdk</h2>
+
+<p>本篇以 <code>wechatpay-axios-plugin</code> 这款开发包展开，详细介绍可阅读 <a href="https://developers.weixin.qq.com/community/develop/article/doc/000ca44ae3cff894e9fbb46ba5b413">从APIv3到APIv2再到企业微信，这款微信支付开发包的README你应该来读一读</a>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="nx">npm</span> <span class="nx">install</span> <span class="nx">wechatpay</span><span class="o">-</span><span class="nx">axios</span><span class="o">-</span><span class="nx">plugin</span><span class="err">@</span><span class="s2">&#34;v0.5.5&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>v0.6系列做了<code>返回数据签名强校验</code>，以下示例代码需要做特殊处理，本篇以v0.5.5展开。</p>
+
+<h2 id="获取沙箱密钥">获取沙箱密钥</h2>
+
+<p>先要理解，沙箱环境是个仿真环境，不是生产环境，友商朋友们应该做环境隔离。起步需要商户使用生产环境的 <code>API秘钥</code>，去获取<code>沙箱秘钥</code>，后续所有<code>沙箱环境</code>操作都要使用由<code>沙箱秘钥</code>生成的<code>数据签名sign</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span> <span class="nx">Wechatpay</span><span class="p">,</span> <span class="nx">Formatter</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;wechatpay-axios-plugin&#39;</span><span class="p">);</span>
+
+<span class="k">const</span> <span class="nx">mchid</span> <span class="o">=</span> <span class="s1">&#39;你的商户号&#39;</span><span class="p">;</span>
+<span class="k">const</span> <span class="nx">secret</span> <span class="o">=</span> <span class="s1">&#39;你的32字节的`API密钥`字符串&#39;</span><span class="p">;</span>
+<span class="k">const</span> <span class="nx">appid</span> <span class="o">=</span> <span class="s1">&#39;你的APPID字符串&#39;</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="nx">mch_id</span> <span class="o">=</span> <span class="nx">mchid</span><span class="p">;</span>
+<span class="k">const</span> <span class="nx">noop</span> <span class="o">=</span> <span class="p">{</span><span class="nx">serial</span><span class="o">:</span> <span class="s1">&#39;any&#39;</span><span class="p">,</span> <span class="nx">privateKey</span><span class="o">:</span> <span class="s1">&#39;any&#39;</span><span class="p">,</span> <span class="nx">certs</span><span class="o">:</span> <span class="p">{</span><span class="nx">any</span><span class="o">:</span> <span class="kc">undefined</span><span class="p">}};</span>
+
+<span class="c1">// 实例化一个对象
+</span><span class="c1"></span><span class="kd">let</span> <span class="nx">wxpay</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wechatpay</span><span class="p">({</span> <span class="nx">secret</span><span class="p">,</span> <span class="nx">mchid</span><span class="p">,</span> <span class="p">...</span><span class="nx">noop</span> <span class="p">});</span>
+
+<span class="k">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span> <span class="nx">sandbox_signkey</span> <span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">getsignkey</span><span class="p">({</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">()</span> <span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="1001-付款码-刷卡-支付">1001 付款码(刷卡)支付</h2>
+
+<p>订单金额 <code>5.01</code> 元，其中 <code>0.01</code> 元使用免充值券，用户实际支付 <code>5.00</code> 元。验证商户具备正确解析及识别免充值代金券字段的能力。</p>
+
+<h3 id="1001-1-请求支付">1001.1 请求支付</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">// 重新实例化一个沙箱环境的对象
+</span><span class="c1"></span><span class="nx">wxpay</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wechatpay</span><span class="p">({</span> <span class="nx">secret</span><span class="o">:</span> <span class="nx">sandbox_signkey</span><span class="p">,</span> <span class="nx">mchid</span><span class="p">,</span> <span class="p">...</span><span class="nx">noop</span> <span class="p">});</span>
+
+<span class="c1">// 模拟一个商户订单号
+</span><span class="c1"></span><span class="kd">let</span> <span class="nx">out_trade_no</span> <span class="o">=</span> <span class="sb">`SD</span><span class="si">${</span><span class="o">+</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span><span class="si">}</span><span class="sb">_501`</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">coupon_fee</span><span class="p">,</span>
+  <span class="nx">settlement_total_fee</span><span class="p">,</span>
+  <span class="nx">total_fee</span>
+<span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">micropay</span><span class="p">({</span>
+    <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span> <span class="nx">out_trade_no</span><span class="p">,</span>
+    <span class="nx">body</span><span class="o">:</span> <span class="s1">&#39;dummybot&#39;</span><span class="p">,</span>
+    <span class="nx">total_fee</span><span class="o">:</span> <span class="mi">501</span><span class="p">,</span>
+    <span class="nx">spbill_create_ip</span><span class="o">:</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span>
+    <span class="nx">auth_code</span><span class="o">:</span> <span class="s1">&#39;120061098828009406&#39;</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span>
+    <span class="nx">代金券金额</span><span class="o">:</span> <span class="nx">coupon_fee</span><span class="p">,</span>
+    <span class="nx">应结订单金额</span><span class="o">:</span> <span class="nx">settlement_total_fee</span><span class="p">,</span>
+    <span class="nx">订单金额</span><span class="o">:</span> <span class="nx">total_fee</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>打印日志应如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">┌──────────────┬────────┐
+│   (index)    │ Values │
+├──────────────┼────────┤
+│  代金券金额    │  &#39;1&#39;   │
+│ 应结订单金额   │ &#39;500&#39;  │
+│   订单金额    │ &#39;501&#39;  │
+└──────────────┴────────┘</pre></td></tr></table>
+</div>
+</div>
+<h3 id="1001-2-获取支付结果">1001.2 获取支付结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">settlement_total_fee</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="p">,</span> <span class="nx">coupon_fee</span><span class="p">,</span>
+  <span class="nx">coupon_fee_0</span><span class="p">,</span>
+  <span class="nx">coupon_type_0</span><span class="p">,</span>
+  <span class="nx">coupon_count</span><span class="p">,</span>
+<span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">orderquery</span><span class="p">({</span>
+    <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span> <span class="nx">out_trade_no</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span>
+    <span class="nx">代金券金额</span><span class="o">:</span> <span class="nx">coupon_fee</span><span class="p">,</span>
+    <span class="nx">应结订单金额</span><span class="o">:</span> <span class="nx">settlement_total_fee</span><span class="p">,</span>
+    <span class="nx">订单金额</span><span class="o">:</span> <span class="nx">total_fee</span><span class="p">,</span>
+    <span class="nx">单个代金券支付金额</span><span class="o">:</span> <span class="nx">coupon_fee_0</span><span class="p">,</span>
+    <span class="nx">代金券类型</span><span class="o">:</span> <span class="nx">coupon_type_0</span><span class="p">,</span>
+    <span class="nx">代金券使用数量</span><span class="o">:</span> <span class="nx">coupon_count</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>打印日志应如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">┌────────────────────┬───────────┐
+│      (index)       │  Values   │
+├────────────────────┼───────────┤
+│     代金券金额       │    &#39;1&#39;    │
+│    应结订单金额      │   &#39;500&#39;   │
+│      订单金额       │   &#39;501&#39;   │
+│ 单个代金券支付金额    │    &#39;1&#39;    │
+│     代金券类型       │ &#39;NO_CACH&#39; │
+│   代金券使用数量     │    &#39;1&#39;    │
+└────────────────────┴───────────┘</pre></td></tr></table>
+</div>
+</div>
+<h2 id="1002-付款码-刷卡-支付退款">1002 付款码(刷卡)支付退款</h2>
+
+<p>订单金额 <code>5.02</code> 元，其中 <code>0.01</code> 元使用免充值代金劵，实际支付 <code>5.01</code> 元，退款查询升级。</p>
+
+<h3 id="1002-1-请求支付">1002.1 请求支付</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">//模拟重置一个商户订单号
+</span><span class="c1"></span><span class="nx">out_trade_no</span> <span class="o">=</span> <span class="sb">`SD</span><span class="si">${</span><span class="o">+</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span><span class="si">}</span><span class="sb">_502`</span><span class="p">;</span>
+
+<span class="k">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">coupon_fee</span><span class="p">,</span>
+  <span class="nx">settlement_total_fee</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="p">,</span>
+<span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">micropay</span><span class="p">({</span>
+    <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span> <span class="nx">out_trade_no</span><span class="p">,</span>
+    <span class="nx">body</span><span class="o">:</span> <span class="s1">&#39;dummybot&#39;</span><span class="p">,</span>
+    <span class="nx">total_fee</span><span class="o">:</span> <span class="mi">502</span><span class="p">,</span>
+    <span class="nx">spbill_create_ip</span><span class="o">:</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span>
+    <span class="nx">auth_code</span><span class="o">:</span> <span class="s1">&#39;120061098828009406&#39;</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span>
+  <span class="nx">代金券金额</span><span class="o">:</span> <span class="nx">coupon_fee</span><span class="p">,</span>
+  <span class="nx">应结订单金额</span><span class="o">:</span> <span class="nx">settlement_total_fee</span><span class="p">,</span>
+  <span class="nx">订单金额</span><span class="o">:</span> <span class="nx">total_fee</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>打印日志应如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">┌──────────────┬────────┐
+│   (index)    │ Values │
+├──────────────┼────────┤
+│  代金券金额   │  &#39;1&#39;   │
+│ 应结订单金额   │ &#39;501&#39;  │
+│   订单金额    │ &#39;502&#39;  │
+└──────────────┴────────┘</pre></td></tr></table>
+</div>
+</div>
+<h3 id="1002-2-获取支付结果">1002.2 获取支付结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">settlement_total_fee</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="p">,</span>
+  <span class="nx">coupon_fee</span><span class="p">,</span>
+  <span class="nx">coupon_fee_0</span><span class="p">,</span>
+  <span class="nx">coupon_type_0</span><span class="p">,</span>
+  <span class="nx">coupon_count</span>
+<span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">orderquery</span><span class="p">({</span>
+    <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span> <span class="nx">out_trade_no</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span>
+    <span class="nx">商户订单号</span><span class="o">:</span> <span class="nx">out_trade_no</span><span class="p">,</span>
+    <span class="nx">代金券金额</span><span class="o">:</span> <span class="nx">coupon_fee</span><span class="p">,</span>
+    <span class="nx">应结订单金额</span><span class="o">:</span> <span class="nx">settlement_total_fee</span><span class="p">,</span>
+    <span class="nx">订单金额</span><span class="o">:</span> <span class="nx">total_fee</span><span class="p">,</span>
+    <span class="nx">单个代金券支付金额</span><span class="o">:</span> <span class="nx">coupon_fee_0</span><span class="p">,</span>
+    <span class="nx">代金券类型</span><span class="o">:</span> <span class="nx">coupon_type_0</span><span class="p">,</span>
+    <span class="nx">代金券使用数量</span><span class="o">:</span> <span class="nx">coupon_count</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>打印日志应如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">┌────────────────────┬───────────────────────┐
+│      (index)       │        Values         │
+├────────────────────┼───────────────────────┤
+│     商户订单号     │ &#39;SD1618966329677_502&#39; │
+│     代金券金额     │          &#39;1&#39;          │
+│    应结订单金额    │         &#39;501&#39;         │
+│      订单金额      │         &#39;502&#39;         │
+│ 单个代金券支付金额 │          &#39;1&#39;          │
+│     代金券类型     │       &#39;NO_CACH&#39;       │
+│   代金券使用数量   │          &#39;1&#39;          │
+└────────────────────┴───────────────────────┘</pre></td></tr></table>
+</div>
+</div>
+<h3 id="1002-3-请求退款">1002.3 请求退款</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">cash_refund_fee</span><span class="p">,</span>
+  <span class="nx">cash_fee</span><span class="p">,</span>
+  <span class="nx">refund_fee</span><span class="p">,</span>
+  <span class="nx">total_fee</span>
+<span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">refund</span><span class="p">({</span>
+    <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span> <span class="nx">out_trade_no</span><span class="p">,</span>
+    <span class="nx">out_refund_no</span><span class="o">:</span> <span class="sb">`RD</span><span class="si">${</span><span class="nx">out_trade_no</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
+    <span class="nx">total_fee</span><span class="o">:</span> <span class="mi">502</span><span class="p">,</span>
+    <span class="nx">refund_fee</span><span class="o">:</span> <span class="mi">501</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span>
+    <span class="nx">退款金额</span><span class="o">:</span> <span class="nx">refund_fee</span><span class="p">,</span>
+    <span class="nx">标价金额</span><span class="o">:</span> <span class="nx">total_fee</span><span class="p">,</span>
+    <span class="nx">现金支付金额</span><span class="o">:</span> <span class="nx">cash_fee</span><span class="p">,</span>
+    <span class="nx">现金退款金额</span><span class="o">:</span> <span class="nx">cash_refund_fee</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>打印日志应如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">┌────────────────────┬─────────────┐
+│      (index)       │   Values    │
+├────────────────────┼─────────────┤
+│     退款金额        │   &#39;502&#39;     │
+│     标价金额        │    &#39;502&#39;    │
+│    现金支付金额      │    &#39;501&#39;    │
+│    现金退款金额      │    &#39;501&#39;    │
+└────────────────────┴─────────────┘</pre></td></tr></table>
+</div>
+</div>
+<h3 id="1002-4-获取退款结果">1002.4 获取退款结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">settlement_total_fee</span><span class="p">,</span>
+    <span class="nx">total_fee</span><span class="p">,</span>
+    <span class="nx">cash_fee</span><span class="p">,</span>
+    <span class="nx">settlement_refund_fee</span><span class="p">,</span>
+    <span class="nx">coupon_refund_fee_0</span><span class="p">,</span>
+    <span class="nx">coupon_type_0_0</span><span class="p">,</span>
+    <span class="nx">coupon_refund_fee_0_0</span><span class="p">,</span>
+    <span class="nx">refund_fee_0</span><span class="p">,</span>
+    <span class="nx">coupon_refund_count_0</span><span class="p">,</span>
+<span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">refundquery</span><span class="p">({</span>
+    <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">out_trade_no</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span>
+    <span class="nx">应结订单金额</span><span class="o">:</span> <span class="nx">settlement_total_fee</span><span class="p">,</span>
+    <span class="nx">订单金额</span><span class="o">:</span> <span class="nx">total_fee</span><span class="p">,</span>
+    <span class="nx">现金支付金额</span><span class="o">:</span> <span class="nx">cash_fee</span><span class="p">,</span>
+    <span class="nx">退款金额</span><span class="o">:</span> <span class="nx">settlement_refund_fee</span><span class="p">,</span>
+    <span class="nx">总代金券退款金额</span><span class="o">:</span> <span class="nx">coupon_refund_fee_0</span><span class="p">,</span>
+    <span class="nx">代金券类型</span><span class="o">:</span> <span class="nx">coupon_type_0_0</span><span class="p">,</span>
+    <span class="nx">总代金券退款金额</span><span class="o">:</span> <span class="nx">coupon_refund_fee_0_0</span><span class="p">,</span>
+    <span class="nx">申请退款金额</span><span class="o">:</span> <span class="nx">refund_fee_0</span><span class="p">,</span>
+    <span class="nx">退款代金券使用数量</span><span class="o">:</span> <span class="nx">coupon_refund_count_0</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="1003-jsapi-app-native支付">1003 JSAPI/APP/Native支付</h2>
+
+<p>订单金额 <code>5.51</code> 元，其中 <code>0.01</code> 元使用免充值券，实际支付 <code>5.50</code> 元。 验证正常支付流程，商户使用免充值代金券支付。</p>
+
+<h3 id="1003-1-统一下单">1003.1 统一下单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">//模拟重置一个商户订单号
+</span><span class="c1"></span><span class="nx">out_trade_no</span> <span class="o">=</span> <span class="sb">`SD</span><span class="si">${</span><span class="o">+</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span><span class="si">}</span><span class="sb">_551`</span><span class="p">;</span>
+<span class="k">const</span> <span class="p">{</span><span class="nx">data</span><span class="o">:</span> <span class="p">{</span> <span class="nx">prepay_id</span> <span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">unifiedorder</span><span class="p">({</span>
+  <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">out_trade_no</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+  <span class="nx">body</span><span class="o">:</span> <span class="s1">&#39;dummybot&#39;</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="o">:</span> <span class="mi">551</span><span class="p">,</span>
+  <span class="nx">notify_url</span><span class="o">:</span> <span class="s1">&#39;https://www.weixin.qq.com/wxpay/pay.php&#39;</span><span class="p">,</span>
+  <span class="nx">spbill_create_ip</span><span class="o">:</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span>
+  <span class="nx">trade_type</span><span class="o">:</span> <span class="s1">&#39;JSAPI&#39;</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span> <span class="nx">预支付交易会话标识</span><span class="o">:</span> <span class="nx">prepay_id</span> <span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="1003-2-获取支付结果">1003.2 获取支付结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">out_trade_no</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="p">,</span>
+  <span class="nx">cash_fee</span><span class="p">,</span>
+  <span class="nx">coupon_fee</span><span class="p">,</span>
+  <span class="nx">coupon_count</span><span class="p">,</span>
+  <span class="nx">coupon_fee_0</span><span class="p">,</span>
+  <span class="nx">coupon_type_0</span><span class="p">,</span>
+  <span class="nx">coupon_fee_0</span>
+<span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">orderquery</span><span class="p">({</span>
+    <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">out_trade_no</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span>
+  <span class="nx">out_trade_no</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="p">,</span>
+  <span class="nx">cash_fee</span><span class="p">,</span>
+  <span class="nx">coupon_fee</span><span class="p">,</span>
+  <span class="nx">coupon_count</span><span class="p">,</span>
+  <span class="nx">coupon_fee_0</span><span class="p">,</span>
+  <span class="nx">coupon_type_0</span><span class="p">,</span>
+  <span class="nx">coupon_fee_0</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="1004-jsapi-app-native支付退款">1004 JSAPI/APP/Native支付退款</h2>
+
+<p>订单金额 <code>5.52</code> 元，其中 <code>0.01</code> 元使用免充值券，实际支付 <code>5.51</code> 元。</p>
+
+<h3 id="1004-1-统一下单">1004.1 统一下单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="c1">//模拟重置一个商户订单号
+</span><span class="c1"></span><span class="nx">out_trade_no</span> <span class="o">=</span> <span class="sb">`SD</span><span class="si">${</span><span class="o">+</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span><span class="si">}</span><span class="sb">_551`</span><span class="p">;</span>
+<span class="k">const</span> <span class="p">{</span><span class="nx">data</span><span class="o">:</span> <span class="p">{</span> <span class="nx">prepay_id</span> <span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">unifiedorder</span><span class="p">({</span>
+  <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">out_trade_no</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+  <span class="nx">body</span><span class="o">:</span> <span class="s1">&#39;dummybot&#39;</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="o">:</span> <span class="mi">552</span><span class="p">,</span>
+  <span class="nx">notify_url</span><span class="o">:</span> <span class="s1">&#39;https://www.weixin.qq.com/wxpay/pay.php&#39;</span><span class="p">,</span>
+  <span class="nx">spbill_create_ip</span><span class="o">:</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span>
+  <span class="nx">trade_type</span><span class="o">:</span> <span class="s1">&#39;JSAPI&#39;</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span> <span class="nx">预支付交易会话标识</span><span class="o">:</span> <span class="nx">prepay_id</span> <span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="1004-2-获取支付结果">1004.2 获取支付结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+  <span class="nx">out_trade_no</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="p">,</span>
+  <span class="nx">cash_fee</span><span class="p">,</span>
+  <span class="nx">coupon_fee</span><span class="p">,</span>
+  <span class="nx">coupon_count</span><span class="p">,</span>
+  <span class="nx">coupon_fee_0</span><span class="p">,</span>
+  <span class="nx">coupon_type_0</span><span class="p">,</span>
+  <span class="nx">coupon_fee_0</span>
+<span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">orderquery</span><span class="p">({</span>
+    <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">out_trade_no</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span>
+  <span class="nx">out_trade_no</span><span class="p">,</span>
+  <span class="nx">total_fee</span><span class="p">,</span>
+  <span class="nx">cash_fee</span><span class="p">,</span>
+  <span class="nx">coupon_fee</span><span class="p">,</span>
+  <span class="nx">coupon_count</span><span class="p">,</span>
+  <span class="nx">coupon_fee_0</span><span class="p">,</span>
+  <span class="nx">coupon_type_0</span><span class="p">,</span>
+  <span class="nx">coupon_fee_0</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="1004-3-请求退款">1004.3 请求退款</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span> <span class="nx">cash_refund_fee</span><span class="p">,</span> <span class="nx">cash_fee</span><span class="p">,</span> <span class="nx">refund_fee</span><span class="p">,</span> <span class="nx">total_fee</span> <span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">refund</span><span class="p">({</span>
+    <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span> <span class="nx">out_trade_no</span><span class="p">,</span>
+    <span class="nx">out_refund_no</span><span class="o">:</span> <span class="sb">`RD</span><span class="si">${</span><span class="nx">out_trade_no</span><span class="si">}</span><span class="sb">`</span><span class="p">,</span>
+    <span class="nx">total_fee</span><span class="o">:</span> <span class="mi">552</span><span class="p">,</span>
+    <span class="nx">refund_fee</span><span class="o">:</span> <span class="mi">551</span><span class="p">,</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span>
+    <span class="nx">退款金额</span><span class="o">:</span> <span class="nx">refund_fee</span><span class="p">,</span> <span class="nx">标价金额</span><span class="o">:</span> <span class="nx">total_fee</span><span class="p">,</span> <span class="nx">现金支付金额</span><span class="o">:</span> <span class="nx">cash_fee</span><span class="p">,</span> <span class="nx">现金退款金额</span><span class="o">:</span> <span class="nx">cash_refund_fee</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>打印日志应如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">┌─────────────────┬──────────┐
+│      (index)    │  Values  │
+├─────────────────┼──────────┤
+│     退款金额     │  &#39;552&#39;   │
+│     标价金额     │   &#39;552&#39;  │
+│    现金支付金额   │  &#39;551&#39;  │
+│    现金退款金额   │  &#39;551&#39;  │
+└─────────────────┴──────────┘</pre></td></tr></table>
+</div>
+</div>
+<h3 id="1004-4-获取退款结果">1004.4 获取退款结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span>
+    <span class="nx">settlement_total_fee</span><span class="p">,</span>
+    <span class="nx">total_fee</span><span class="p">,</span>
+    <span class="nx">cash_fee</span><span class="p">,</span>
+    <span class="nx">settlement_refund_fee</span><span class="p">,</span>
+    <span class="nx">coupon_refund_fee_0</span><span class="p">,</span>
+    <span class="nx">coupon_type_0_0</span><span class="p">,</span>
+    <span class="nx">coupon_refund_fee_0_0</span><span class="p">,</span>
+    <span class="nx">refund_fee_0</span><span class="p">,</span>
+    <span class="nx">coupon_refund_count_0</span><span class="p">,</span>
+<span class="p">}</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">refundquery</span><span class="p">({</span>
+    <span class="nx">appid</span><span class="p">,</span> <span class="nx">mch_id</span><span class="p">,</span> <span class="nx">out_trade_no</span><span class="p">,</span> <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+<span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">({</span>
+    <span class="nx">应结订单金额</span><span class="o">:</span> <span class="nx">settlement_total_fee</span>
+    <span class="nx">订单金额</span><span class="o">:</span> <span class="nx">total_fee</span>
+    <span class="nx">现金支付金额</span><span class="o">:</span> <span class="nx">cash_fee</span><span class="p">,</span>
+    <span class="nx">退款金额</span><span class="o">:</span> <span class="nx">settlement_refund_fee</span>
+    <span class="nx">总代金券退款金额</span><span class="o">:</span> <span class="nx">coupon_refund_fee_0</span>
+    <span class="nx">代金券类型</span><span class="o">:</span> <span class="nx">coupon_type_0_0</span><span class="p">,</span>
+    <span class="nx">总代金券退款金额</span><span class="o">:</span> <span class="nx">coupon_refund_fee_0_0</span>
+    <span class="nx">申请退款金额</span><span class="o">:</span> <span class="nx">refund_fee_0</span>
+    <span class="nx">退款代金券使用数量</span><span class="o">:</span> <span class="nx">coupon_refund_count_0</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="1005-交易对账单下载">1005 交易对账单下载</h2>
+
+<p>使用了免充值券的订单，免充值券部分的金额不计入结算金额。验证商户对账能正确理解到这一点，对账无误。这里预期会返回 <code>1269</code> 条明细数据。</p>
+
+<p>汇总结果：总交易单数,应结订单总金额,退款总金额,充值券退款总金额,手续费总金额,订单总金额,申请退款金额。</p>
+
+<p>这里数据应为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">1269, `10.79, `5.93, `0.24, `0.0,`11.27, `6.37</pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-js" data-lang="js"><span class="k">const</span> <span class="p">{</span> <span class="nx">data</span> <span class="p">}</span> <span class="o">=</span> <span class="kr">await</span> <span class="nx">wxpay</span><span class="p">.</span><span class="nx">v2</span><span class="p">.</span><span class="nx">sandboxnew</span><span class="p">.</span><span class="nx">pay</span><span class="p">.</span><span class="nx">downloadbill</span><span class="p">({</span>
+  <span class="nx">appid</span><span class="p">,</span>
+  <span class="nx">mch_id</span><span class="p">,</span>
+  <span class="nx">bill_type</span><span class="o">:</span> <span class="s1">&#39;ALL&#39;</span><span class="p">,</span>
+  <span class="nx">bill_date</span><span class="o">:</span> <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="o">+</span><span class="k">new</span> <span class="nb">Date</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="mi">8</span> <span class="o">-</span> <span class="mi">48</span><span class="p">)</span><span class="o">*</span><span class="mi">3600</span><span class="o">*</span><span class="mi">1000</span><span class="p">)).</span><span class="nx">toISOString</span><span class="p">().</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span>
+  <span class="nx">nonce_str</span><span class="o">:</span> <span class="nx">Formatter</span><span class="p">.</span><span class="nx">nonce</span><span class="p">(),</span>
+<span class="p">},</span> <span class="p">{</span> <span class="nx">transformResponse</span><span class="o">:</span> <span class="p">[</span><span class="kd">function</span> <span class="nx">csvCastor</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">data</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span> <span class="p">}]</span> <span class="p">});</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">table</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>打印日志形如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">交易时间,公众账号ID,商户号,子商户号,设备号,微信订单号,商户订单号,用户标识,交易类型,交易状态,付款银行,货币种类,应结订单金额,代金券金额,微信退款单号,商户退款单号,退款金额,充值券退款金额,退款类型,退款状态,商品名称,商户数据包,手续费,费率,订单金额,申请退款金额,费率备注
+`2016-05-04  02:18:18,`wxf7c30a8258df4208,`10014843,`0,`harryma007,`4.00123E+27,`autotest_20160501030456_45023,`oT2kauIMXH398DZBeJ4m22CuSDQ0,`NATIVE,`REFUND,`PAB_DEBIT,`CNY,`0,`0,`2.00123E+27,`REF4001232001201605015390231647,`0.01,`0,`ORIGINAL,`PROCESSING,`body中文测试,`attach中文测试,`0,`0.60%,`0,`0.01,`
+`2016-05-04  02:18:18,`wxf7c30a8258df4208,`10014843,`0,`harryma007,`4.00123E+27,`autotest_20160501060418_79156,`oT2kauIMXH398DZBeJ4m22CuSDQ0,`NATIVE,`REFUND,`PAB_DEBIT,`CNY,`0,`0,`2.00123E+27,`REF4001232001201605015391766944,`0.01,`0,`ORIGINAL,`PROCESSING,`body中文测试,`attach中文测试,`0,`0.60%,`0,`0.01,`
+...
+14:51:51,`wxf7c30a8258df4208,`10014843,`0,`harryma8888,`4.00968E+27,`wxautotest1462344441,`oT2kauGtJag902bjdvevrJbpGuxo,`NATIVE,`SUCCESS,`CMBC_CREDIT,`CNY,`0.05,`0.01,`0,`0,`0,`0,`中文[body],`测试中文[attach],`0,`0.60%,`0.05,`0,`
+总交易单数,应结订单总金额,退款总金额,充值券退款总金额,手续费总金额,订单总金额,申请退款总金额
+1269,`10.79,`5.93,`0.24,`0,`11.27,`6.37</pre></td></tr></table>
+</div>
+</div>
+<h2 id="一铲到底">一铲到底</h2>
+
+<p>以下是一键验收全流程的一个<code>魔性 chain</code>到底的实现，感谢您阅读至此。本文如果对你开通 <strong>「免充代金券」</strong> 功能有帮助，那就来个赞呗。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-05-10
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/think-about-the-wechatpay-apiv3s-architecture/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">从安全角度审视，APIv3接口权限过大必须注意保管好证书文件</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/milestones-the-wechatpay-axios-plugin/">
+            <span class="next-text nav-default">悉数迄今为止功能最全的微信支付SDK基础开发包</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>简单bash组合CLI能力，练习接入/使用「微信支付v2」沙箱环境 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="前两天有一开发者，一直在捣鼓签名的事儿，我建议其使用一下CLI工具，发现还是得再做个“教程”引导贴，遂就拿沙箱环境来练习吧。" /><meta name="keywords" content="wechatpay, apiv2, sandbox, cli" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/cli-mode-of-the-wechatpay-axios-plugin-practics/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="简单bash组合CLI能力，练习接入/使用「微信支付v2」沙箱环境" />
+<meta property="og:description" content="前两天有一开发者，一直在捣鼓签名的事儿，我建议其使用一下CLI工具，发现还是得再做个“教程”引导贴，遂就拿沙箱环境来练习吧。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/cli-mode-of-the-wechatpay-axios-plugin-practics/" />
+<meta property="article:published_time" content="2021-04-30T21:20:07&#43;08:00"/>
+<meta property="article:modified_time" content="2021-04-30T21:20:07&#43;08:00"/>
+
+<meta itemprop="name" content="简单bash组合CLI能力，练习接入/使用「微信支付v2」沙箱环境">
+<meta itemprop="description" content="前两天有一开发者，一直在捣鼓签名的事儿，我建议其使用一下CLI工具，发现还是得再做个“教程”引导贴，遂就拿沙箱环境来练习吧。">
+
+
+<meta itemprop="datePublished" content="2021-04-30T21:20:07&#43;08:00" />
+<meta itemprop="dateModified" content="2021-04-30T21:20:07&#43;08:00" />
+<meta itemprop="wordCount" content="1312">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="简单bash组合CLI能力，练习接入/使用「微信支付v2」沙箱环境"/>
+<meta name="twitter:description" content="前两天有一开发者，一直在捣鼓签名的事儿，我建议其使用一下CLI工具，发现还是得再做个“教程”引导贴，遂就拿沙箱环境来练习吧。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">简单bash组合CLI能力，练习接入/使用「微信支付v2」沙箱环境</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-04-30 </span>
+        <div class="post-category">
+            <a href="/categories/javascript/"> javascript </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<p>前两天有一开发者，一直在捣鼓签名的事儿，我建议其使用一下CLI工具，发现还是得再做个“教程”引导贴，遂就拿沙箱环境来练习吧。</p>
+
+<h2 id="引言">引言</h2>
+
+<p>接续的是上一贴<a href="https://developers.weixin.qq.com/community/develop/article/doc/000ea011304e3852750cd611456c13">免充值产品测试验收用例的教学帖</a>，本篇以纯shell结合CLI模式运转，windows用户建议使用WSL/WSL2来练习。</p>
+
+<h2 id="环境准备">环境准备</h2>
+
+<ol>
+<li>空建一个文件夹，例如: ~/wxpay_sandbox (熟npm用户可忽略)</li>
+<li>增加两字节的内容是<code>{}</code>的<code>package.json</code>文件 (熟npm用户可忽略)</li>
+<li>安装依赖软件包 <code>npm install wechatpay-axios-plugin yargs --save</code></li>
+<li>简单shell套个壳，例如 <code>~/wxpay_sandbox/practice.sh</code></li>
+<li>更新文件为可执行 <code>chmod +x ~/wxpay_sandbox/practice.sh</code></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="cp">#!/bin/bash
+</span><span class="cp"></span>
+<span class="c1"># filename practice.sh</span>
+
+<span class="nv">appid</span><span class="o">=</span><span class="s2">&#34;你的appid&#34;</span>
+<span class="nv">mchid</span><span class="o">=</span><span class="s2">&#34;你的商户号&#34;</span>
+
+./node_modules/.bin/wxpay -c.appid <span class="nv">$appid</span> -c.mchid <span class="nv">$mchid</span> -c.serial any -c.privateKey any -c.certs.any <span class="nv">$@</span></code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="获取沙箱密钥">获取沙箱密钥</h2>
+
+<p>切换工作目录 <code>cd ~/wxpay_sandbox/</code>，然后执行如下命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.getsignkey -b -b -c.secret 你商户的密钥 -d.mch_id 你的商户号 -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<p>记录一下屏幕打印的 <code>沙箱密钥</code> sandbox_signkey 值，后续练习均需要这个值。</p>
+
+<h2 id="1001-付款码-刷卡-支付">1001 付款码(刷卡)支付</h2>
+
+<p>订单金额 <code>5.01</code> 元，其中 <code>0.01</code> 元使用免充值券，用户实际支付 <code>5.00</code> 元。验证商户具备正确解析及识别免充值代金券字段的能力。</p>
+
+<h3 id="1001-1-请求支付">1001.1 请求支付</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.micropay <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_501 <span class="se">\
+</span><span class="se"></span>  -d.body dummybot <span class="se">\
+</span><span class="se"></span>  -d.total_fee <span class="m">501</span> <span class="se">\
+</span><span class="se"></span>  -d.spbill_create_ip <span class="m">127</span>.0.0.1 <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS <span class="se">\
+</span><span class="se"></span>  -d.auth_code <span class="m">120061098828009406</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>注意查看屏幕打印的 coupon_fee 代金券金额, settlement_total_fee 应结订单金额, total_fee 订单金额</p>
+
+<h3 id="1001-2-获取支付结果">1001.2 获取支付结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.orderquery <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_501 <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<p>注意查看屏幕打印，这里不累述了</p>
+
+<h2 id="1002-付款码-刷卡-支付退款">1002 付款码(刷卡)支付退款</h2>
+
+<p>订单金额 <code>5.02</code> 元，其中 <code>0.01</code> 元使用免充值代金劵，实际支付 <code>5.01</code> 元，退款查询升级。</p>
+
+<h3 id="1002-1-请求支付">1002.1 请求支付</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.micropay <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.body dummybot <span class="se">\
+</span><span class="se"></span>  -d.total_fee <span class="m">502</span> <span class="se">\
+</span><span class="se"></span>  -d.spbill_create_ip <span class="m">127</span>.0.0.1 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_502 <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS <span class="se">\
+</span><span class="se"></span>  -d.auth_code <span class="m">120061098828009406</span></code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="1002-2-获取支付结果">1002.2 获取支付结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.orderquery <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_502 <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="1002-3-请求退款">1002.3 请求退款</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.refund <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_502 <span class="se">\
+</span><span class="se"></span>  -d.out_refund_no RD_sandbox20210430200000_502 <span class="se">\
+</span><span class="se"></span>  -d.total_fee <span class="m">502</span> <span class="se">\
+</span><span class="se"></span>  -d.refund_fee <span class="m">501</span> <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="1002-4-获取退款结果">1002.4 获取退款结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.refundquery <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_502 <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="1003-jsapi-app-native支付">1003 JSAPI/APP/Native支付</h2>
+
+<p>订单金额 <code>5.51</code> 元，其中 <code>0.01</code> 元使用免充值券，实际支付 <code>5.50</code> 元。 验证正常支付流程，商户使用免充值代金券支付。</p>
+
+<h3 id="1003-1-统一下单">1003.1 统一下单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.unifiedorder <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_551 <span class="se">\
+</span><span class="se"></span>  -d.body dummybot <span class="se">\
+</span><span class="se"></span>  -d.total_fee <span class="m">551</span> <span class="se">\
+</span><span class="se"></span>  -d.notify_url https://www.weixin.qq.com/wxpay/pay.php <span class="se">\
+</span><span class="se"></span>  -d.spbill_create_ip <span class="m">127</span>.0.0.1 <span class="se">\
+</span><span class="se"></span>  -d.trade_type JSAPI <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="1003-2-获取支付结果">1003.2 获取支付结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.orderquery <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_551 <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="1004-jsapi-app-native支付退款">1004 JSAPI/APP/Native支付退款</h2>
+
+<p>订单金额 <code>5.52</code> 元，其中 <code>0.01</code> 元使用免充值券，实际支付 <code>5.51</code> 元。</p>
+
+<h3 id="1004-1-统一下单">1004.1 统一下单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.unifiedorder <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_552 <span class="se">\
+</span><span class="se"></span>  -d.body dummybot <span class="se">\
+</span><span class="se"></span>  -d.total_fee <span class="m">552</span> <span class="se">\
+</span><span class="se"></span>  -d.notify_url https://www.weixin.qq.com/wxpay/pay.php <span class="se">\
+</span><span class="se"></span>  -d.spbill_create_ip <span class="m">127</span>.0.0.1 <span class="se">\
+</span><span class="se"></span>  -d.trade_type JSAPI <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="1004-2-获取支付结果">1004.2 获取支付结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.orderquery <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_552 <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="1004-3-请求退款">1004.3 请求退款</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.refund <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_552 <span class="se">\
+</span><span class="se"></span>  -d.out_refund_no RD_sandbox20210430200000_552 <span class="se">\
+</span><span class="se"></span>  -d.total_fee <span class="m">552</span> <span class="se">\
+</span><span class="se"></span>  -d.refund_fee <span class="m">551</span> <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="1004-4-获取退款结果">1004.4 获取退款结果</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.refundquery <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.out_trade_no sandbox20210430200000_552 <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="1005-交易对账单下载">1005 交易对账单下载</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">./practice.sh v2.sandboxnew.pay.downloadbill <span class="se">\
+</span><span class="se"></span>  -b -b -b <span class="se">\
+</span><span class="se"></span>  -c.secret 沙箱密钥 <span class="se">\
+</span><span class="se"></span>  -d.appid 你的appid <span class="se">\
+</span><span class="se"></span>  -d.mch_id 你的商户号 <span class="se">\
+</span><span class="se"></span>  -d.bill_type ALL <span class="se">\
+</span><span class="se"></span>  -d.bill_date <span class="m">2021</span>-04-30 <span class="se">\
+</span><span class="se"></span>  -d.nonce_str 5K8264ILTKCH16CQ2502SI8ZNMTM67VS</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="最后">最后</h2>
+
+<p>就等你来练习咯～</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-04-30
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/pure-and-fullfilled-the-multipart-formdata-composer/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">加强版的微信支付APIv3媒体文件上传无依赖版NodeJS实现</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/think-about-the-wechatpay-apiv3s-architecture/">
+            <span class="next-text nav-default">从安全角度审视，APIv3接口权限过大必须注意保管好证书文件</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
