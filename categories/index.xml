@@ -6,10 +6,28 @@
     <description>Recent content in Categories on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Sat, 29 May 2021 14:34:09 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 25 Jun 2021 11:49:15 +0800</lastBuildDate>
     
 	<atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>php</title>
+      <link>/categories/php/</link>
+      <pubDate>Fri, 25 Jun 2021 11:49:15 +0800</pubDate>
+      
+      <guid>/categories/php/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>wechat</title>
+      <link>/categories/wechat/</link>
+      <pubDate>Fri, 25 Jun 2021 11:49:15 +0800</pubDate>
+      
+      <guid>/categories/wechat/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>javascript</title>
@@ -17,15 +35,6 @@
       <pubDate>Sat, 29 May 2021 14:34:09 +0800</pubDate>
       
       <guid>/categories/javascript/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>wechat</title>
-      <link>/categories/wechat/</link>
-      <pubDate>Sat, 29 May 2021 14:34:09 +0800</pubDate>
-      
-      <guid>/categories/wechat/</guid>
       <description></description>
     </item>
     

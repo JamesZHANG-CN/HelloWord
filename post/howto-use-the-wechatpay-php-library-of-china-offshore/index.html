@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>香港及海外接入点，如何使用wechatpay-php支付开发包概览 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="简述非中国大陆区使用 wechatpay/wechatpay 开发包的step1.2.3." /><meta name="keywords" content="微信支付, WeChatPay PHP SDK, GuzzleHttp, offshore usage" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/howto-use-the-wechatpay-php-library-of-china-offshore/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="香港及海外接入点，如何使用wechatpay-php支付开发包概览" />
+<meta property="og:description" content="简述非中国大陆区使用 wechatpay/wechatpay 开发包的step1.2.3." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/howto-use-the-wechatpay-php-library-of-china-offshore/" />
+<meta property="article:published_time" content="2021-06-25T11:49:15&#43;08:00"/>
+<meta property="article:modified_time" content="2021-06-27T10:52:06&#43;08:00"/>
+
+<meta itemprop="name" content="香港及海外接入点，如何使用wechatpay-php支付开发包概览">
+<meta itemprop="description" content="简述非中国大陆区使用 wechatpay/wechatpay 开发包的step1.2.3.">
+
+
+<meta itemprop="datePublished" content="2021-06-25T11:49:15&#43;08:00" />
+<meta itemprop="dateModified" content="2021-06-27T10:52:06&#43;08:00" />
+<meta itemprop="wordCount" content="595">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="香港及海外接入点，如何使用wechatpay-php支付开发包概览"/>
+<meta name="twitter:description" content="简述非中国大陆区使用 wechatpay/wechatpay 开发包的step1.2.3."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">香港及海外接入点，如何使用wechatpay-php支付开发包概览</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-06-25 </span>
+        <div class="post-category">
+            <a href="/categories/php/"> php </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="前置条件">前置条件</h2>
+
+<p>已有商户号、商户私钥、商户证书、APIV3密钥，通过此包内置的 平台证书下载器，已取得平台证书。</p>
+
+<h2 id="安装软件">安装软件</h2>
+
+<p><code>composer require wechatpay/wechatpay</code></p>
+
+<h2 id="wechatpay-builder-factory-工厂方法">WeChatPay\Builder::factory 工厂方法</h2>
+
+<p>在工厂方法内，只需传入指定的接入点<code>base_uri</code>即可支持，例如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$instance = \WeChatPay\Builder::factory([
+    &#39;base_uri&#39; =&gt; &#39;https://api.mch.weixin.qq.com/hk/&#39;,
+    &#39;mchid&#39; =&gt; &#39;1234567&#39;,
+    &#39;serial&#39; =&gt; &#39;7654321&#39;,
+    &#39;privateKey&#39; =&gt; \WeChatPay\Util\PemUtil::loadPrivateKey(&#39;/path/to/apiclient_key.pem&#39;),
+    &#39;certs&#39; =&gt; [
+        &#39;7890123&#39; =&gt; \WeChatPay\Util\PemUtil::loadCertificate(&#39;/path/to/wechatpay_7890123.pem&#39;),
+    ]
+]);</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="融合钱包-请求下单">融合钱包-请求下单</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$instance-&gt;v3-&gt;pay-&gt;transactions-&gt;micropay
+-&gt;postAsync([&#39;json&#39; =&gt; [
+    &#39;mchid&#39; =&gt; &#39;1234567&#39;,
+    &#39;appid&#39; =&gt; &#39;wx8888888888888888&#39;,
+    &#39;out_trade_no&#39; =&gt; &#39;your_out_trade_no&#39;,
+    &#39;trade_type&#39; =&gt; &#39;MICROPAY&#39;,
+    &#39;description&#39; =&gt; &#39;QQ Doll&#39;,
+    &#39;amount&#39; =&gt; [
+        &#39;total&#39; =&gt; 528800,
+        &#39;currency&#39; =&gt; &#39;HKD&#39;,
+    ]
+]])
+-&gt;then(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some successful procedure
+})
+-&gt;otherwise(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some fail procedure
+});</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="融合钱包-查单">融合钱包-查单</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$instance-&gt;v3-&gt;pay-&gt;transactions-&gt;transaction_id-&gt;&#39;{transaction_id}&#39;
+-&gt;getAsync([
+    &#39;transaction_id&#39; =&gt; &#39;your_achived_transaction_id&#39;,
+])
+-&gt;then(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some successful procedure
+})
+-&gt;otherwise(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some fail procedure
+});</code></pre></td></tr></table>
+</div>
+</div>
+<p>OR</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$instance-&gt;v3-&gt;pay-&gt;transactions-&gt;outTradeNo-&gt;&#39;{out_trade_no}&#39;
+-&gt;getAsync([
+    &#39;out_trade_no&#39; =&gt; &#39;your_out_trade_no&#39;,
+])
+-&gt;then(function(\Psr\Http\Message\ResponseInterface) {
+    // do some successful procedure
+})
+-&gt;otherwise(function(\Psr\Http\Message\ResponseInterface) {
+    // do some fail procedure
+});</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="融合钱包-撤销订单">融合钱包-撤销订单</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$instance-&gt;v3-&gt;pay-&gt;transactions-&gt;transaction_id-&gt;&#39;{transaction_id}&#39;-&gt;reverse
+-&gt;postAsync([
+    &#39;transaction_id&#39; =&gt; &#39;your_achived_transaction_id&#39;,
+])
+-&gt;then(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some successful procedure
+})
+-&gt;otherwise(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some fail procedure
+});</code></pre></td></tr></table>
+</div>
+</div>
+<p>OR</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$instance-&gt;v3-&gt;pay-&gt;transactions-&gt;outTradeNo-&gt;&#39;{out_trade_no}&#39;-&gt;reverse
+-&gt;postAsync([
+    &#39;out_trade_no&#39; =&gt; &#39;your_out_trade_no&#39;,
+])
+-&gt;then(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some successful procedure
+})
+-&gt;otherwise(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some fail procedure
+});</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="融合钱包-退款">融合钱包-退款</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$instance-&gt;v3-&gt;refunds-&gt;postAsync([&#39;json&#39; =&gt; [
+    &#39;mchid&#39; =&gt; &#39;1234567&#39;,
+    &#39;appid&#39; =&gt; &#39;wx8888888888888888&#39;,
+    &#39;out_trade_no&#39; =&gt; &#39;your_out_trade_no&#39;,
+    &#39;out_refund_no&#39; =&gt; &#39;your_out_refund_no&#39;,
+    &#39;trade_type&#39; =&gt; &#39;MICROPAY&#39;,
+    &#39;description&#39; =&gt; &#39;QQ Doll&#39;,
+    &#39;amount&#39; =&gt; [
+        &#39;refund&#39; =&gt; 528800,
+        &#39;total&#39; =&gt; 528800,
+        &#39;currency&#39; =&gt; &#39;HKD&#39;,
+    ]
+]])
+-&gt;then(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some successful procedure
+})
+-&gt;otherwise(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some fail procedure
+});</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="融合钱包-查询单笔退款">融合钱包-查询单笔退款</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$instance-&gt;v3-&gt;refunds-&gt;transaction_id-&gt;&#39;{transaction_id}&#39;
+-&gt;getAsync([
+    &#39;transaction_id&#39; =&gt; &#39;your_achived_transaction_id&#39;,
+])
+-&gt;then(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some successful procedure
+})
+-&gt;otherwise(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some fail procedure
+});</code></pre></td></tr></table>
+</div>
+</div>
+<p>OR</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$instance-&gt;v3-&gt;refunds-&gt;outTradeNo-&gt;&#39;{out_trade_no}&#39;
+-&gt;getAsync([
+    &#39;out_trade_no&#39; =&gt; &#39;your_out_trade_no&#39;,
+])
+-&gt;then(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some successful procedure
+})
+-&gt;otherwise(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some fail procedure
+});</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="融合钱包-查询所有退款">融合钱包-查询所有退款</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$instance-&gt;v3-&gt;refunds-&gt;getAsync([&#39;query&#39; =&gt; [
+    &#39;mchid&#39; =&gt; &#39;1234567&#39;,
+    &#39;offset&#39; =&gt; 0,
+    &#39;count&#39; =&gt; 20,
+]])
+-&gt;then(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some successful procedure
+})
+-&gt;otherwise(function(\Psr\Http\Message\ResponseInterface $response) {
+    // do some fail procedure
+});</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="最后">最后</h2>
+
+<p>对照着文档，写代码就是如此简单。。。</p>
+
+<p>Repo: <a href="https://github.com/TheNorthMemory/wechatpay-php">https://github.com/TheNorthMemory/wechatpay-php</a> 欢迎 Star .</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-06-27
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/async-sync-chainable-wechatpay-v2-and-v3-openapi-sdk-for-php/">
+            <span class="next-text nav-default">可链式调用微信支付OpenAPI的PHP版SDK</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

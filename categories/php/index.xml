@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>php on TheNorthMemory</title>
+    <link>/categories/php/</link>
+    <description>Recent content in php on TheNorthMemory</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh_CN</language>
+    <lastBuildDate>Fri, 25 Jun 2021 11:49:15 +0800</lastBuildDate>
+    
+	<atom:link href="/categories/php/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>香港及海外接入点，如何使用wechatpay-php支付开发包概览</title>
+      <link>/post/howto-use-the-wechatpay-php-library-of-china-offshore/</link>
+      <pubDate>Fri, 25 Jun 2021 11:49:15 +0800</pubDate>
+      
+      <guid>/post/howto-use-the-wechatpay-php-library-of-china-offshore/</guid>
+      <description>简述非中国大陆区使用 wechatpay/wechatpay 开发包的step1.2.3.</description>
+    </item>
+    
+    <item>
+      <title>可链式调用微信支付OpenAPI的PHP版SDK</title>
+      <link>/post/async-sync-chainable-wechatpay-v2-and-v3-openapi-sdk-for-php/</link>
+      <pubDate>Thu, 17 Jun 2021 19:26:11 +0800</pubDate>
+      
+      <guid>/post/async-sync-chainable-wechatpay-v2-and-v3-openapi-sdk-for-php/</guid>
+      <description>一款 PHPStan Level8 最严谨级别，用起来会觉得原来程序还可以这么自由编写的微信支付SDK——[A]Sync Chainable WeChatPay v2&amp;amp;v3&amp;rsquo;s OpenAPI SDK for PHP</description>
+    </item>
+    
+  </channel>
+</rss>

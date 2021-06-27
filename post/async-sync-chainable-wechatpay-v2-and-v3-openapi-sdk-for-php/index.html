@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>可链式调用微信支付OpenAPI的PHP版SDK - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="一款 PHPStan Level8 最严谨级别，用起来会觉得原来程序还可以这么自由编写的微信支付SDK——[A]Sync Chainable WeChatPay v2&v3&#39;s OpenAPI SDK for PHP" /><meta name="keywords" content="微信支付, WeChatPay PHP SDK, GuzzleHttp, PHPStan Level8" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/async-sync-chainable-wechatpay-v2-and-v3-openapi-sdk-for-php/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="可链式调用微信支付OpenAPI的PHP版SDK" />
+<meta property="og:description" content="一款 PHPStan Level8 最严谨级别，用起来会觉得原来程序还可以这么自由编写的微信支付SDK——[A]Sync Chainable WeChatPay v2&amp;v3&#39;s OpenAPI SDK for PHP" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/async-sync-chainable-wechatpay-v2-and-v3-openapi-sdk-for-php/" />
+<meta property="article:published_time" content="2021-06-17T19:26:11&#43;08:00"/>
+<meta property="article:modified_time" content="2021-06-27T10:50:06&#43;08:00"/>
+
+<meta itemprop="name" content="可链式调用微信支付OpenAPI的PHP版SDK">
+<meta itemprop="description" content="一款 PHPStan Level8 最严谨级别，用起来会觉得原来程序还可以这么自由编写的微信支付SDK——[A]Sync Chainable WeChatPay v2&amp;v3&#39;s OpenAPI SDK for PHP">
+
+
+<meta itemprop="datePublished" content="2021-06-17T19:26:11&#43;08:00" />
+<meta itemprop="dateModified" content="2021-06-27T10:50:06&#43;08:00" />
+<meta itemprop="wordCount" content="2904">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="可链式调用微信支付OpenAPI的PHP版SDK"/>
+<meta name="twitter:description" content="一款 PHPStan Level8 最严谨级别，用起来会觉得原来程序还可以这么自由编写的微信支付SDK——[A]Sync Chainable WeChatPay v2&amp;v3&#39;s OpenAPI SDK for PHP"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">可链式调用微信支付OpenAPI的PHP版SDK</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-06-17 </span>
+        <div class="post-category">
+            <a href="/categories/php/"> php </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<h2 id="概览">概览</h2>
+
+<p>微信支付 APIv2&amp;APIv3 的 <code>Guzzle HttpClient</code> 封装组合，
+APIv2已内置请求数据签名及<code>XML</code>转换器，应答做了数据<code>签名验签</code>，转换提供有<code>WeChatPay\Transformer::toArray</code>静态方法，按需转换；
+APIv3已内置 <code>请求签名</code> 和 <code>应答验签</code> 两个middleware中间件，创新性地实现了链式面向对象同步/异步调用远程接口。</p>
+
+<p>如果你是使用 <code>Guzzle</code> 的商户开发者，可以使用 <code>WeChatPay\Builder</code> 工厂方法直接创建一个 <code>GuzzleHttp\Client</code> 的链式调用封装器，
+实例在执行请求时将自动携带身份认证信息，并检查应答的微信支付签名。</p>
+
+<h2 id="项目状态">项目状态</h2>
+
+<p>当前版本为 <code>1.0.2</code> 测试版本。请商户的专业技术人员在使用时注意系统和软件的正确性和兼容性，以及带来的风险。</p>
+
+<h2 id="环境要求">环境要求</h2>
+
+<p>我们开发和测试使用的环境如下：</p>
+
+<ul>
+<li>PHP &gt;=7.2</li>
+<li>guzzlehttp/guzzle ^7.0</li>
+</ul>
+
+<h2 id="安装">安装</h2>
+
+<p>推荐使用PHP包管理工具<code>composer</code>引入SDK到项目中：</p>
+
+<h3 id="方式一">方式一</h3>
+
+<p>在项目目录中，通过composer命令行添加：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">composer require wechatpay/wechatpay</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="方式二">方式二</h3>
+
+<p>在项目的<code>composer.json</code>中加入以下配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-json" data-lang="json"><span class="s2">&#34;require&#34;</span><span class="err">:</span> <span class="p">{</span>
+    <span class="nt">&#34;wechatpay/wechatpay&#34;</span><span class="p">:</span> <span class="s2">&#34;^1.0.2&#34;</span>
+<span class="p">}</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>添加配置后，执行安装</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell"><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">composer install</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="约定">约定</h2>
+
+<p>本类库是以 <code>OpenAPI</code> 对应的接入点 <code>URL.pathname</code> 以<code>/</code>做切分，映射成<code>segments</code>，编码书写方式有如下约定：</p>
+
+<ol>
+<li>请求 <code>pathname</code> 切分后的每个<code>segment</code>，可直接以对象获取形式串接，例如 <code>v3/pay/transactions/native</code> 即串成 <code>v3-&gt;pay-&gt;transactions-&gt;native</code>;</li>
+<li>每个 <code>pathname</code> 所支持的 <code>HTTP METHOD</code>，即作为被串接对象的末尾执行方法，例如: <code>v3-&gt;pay-&gt;transactions-&gt;native-&gt;post(['json' =&gt; []])</code>;</li>
+<li>每个 <code>pathname</code> 所支持的 <code>HTTP METHOD</code>，同时支持<code>Async</code>语法糖，例如: <code>v3-&gt;pay-&gt;transactions-&gt;native-&gt;postAsync(['json' =&gt; []])</code>;</li>
+<li>每个 <code>segment</code> 有中线(dash)分隔符的，可以使用驼峰<code>camelCase</code>风格书写，例如: <code>merchant-service</code>可写成 <code>merchantService</code>，或如 <code>{'merchant-service'}</code>;</li>
+<li>每个 <code>segment</code> 中，若有<code>uri_template</code>动态参数，例如 <code>business_code/{business_code}</code> 推荐以<code>business_code-&gt;{'{business_code}'}</code>形式书写，其格式语义与<code>pathname</code>基本一致，阅读起来比较自然;</li>
+<li>SDK内置以 <code>v2</code> 特殊标识为 <code>APIv2</code> 的起始 <code>segmemt</code>，之后串接切分后的 <code>segments</code>，如源 <code>pay/micropay</code> 即串成 <code>v2-&gt;pay-&gt;micropay-&gt;post(['xml' =&gt; []])</code> 即以XML形式请求远端接口；</li>
+<li>在IDE集成环境下，也可以按照内置的<code>chain($segment)</code>接口规范，直接以<code>pathname</code>作为变量<code>$segment</code>，来获取<code>OpenAPI</code>接入点的<code>endpoints</code>串接对象，驱动末尾执行方法(填入对应参数)，发起请求，例如 <code>chain('v3/pay/transactions/jsapi')-&gt;post(['json' =&gt; []])</code>；</li>
+</ol>
+
+<p>以下示例用法，以<code>异步(Async/PromiseA+)</code>或<code>同步(Sync)</code>结合此种编码模式展开。</p>
+
+<blockquote>
+<p>Note of the <code>segments</code>: See <a href="https://www.rfc-editor.org/rfc/rfc3986.html#section-3.3">RFC3986 #section-3.3</a>
+&gt; A path consists of a sequence of path segments separated by a slash (&ldquo;/&rdquo;) character.</p>
+
+<p>Note of the <code>uri_template</code>: See <a href="https://www.rfc-editor.org/rfc/rfc6570.html">RFC6570</a></p>
+</blockquote>
+
+<h2 id="开始">开始</h2>
+
+<p>首先，通过 <code>WeChatPay\Builder</code> 工厂方法构建一个实例，然后如上述<code>约定</code>，链式<code>同步</code>或<code>异步</code>请求远端<code>OpenAPI</code>接口。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">use WeChatPay\Builder;
+use WeChatPay\Util\PemUtil;
+
+// 工厂方法构造一个实例
+$instance = Builder::factory([
+    // 商户号
+    &#39;mchid&#39; =&gt; &#39;1000100&#39;,
+    // 商户证书序列号
+    &#39;serial&#39; =&gt; &#39;XXXXXXXXXX&#39;,
+    // 商户API私钥 PEM格式的文本字符串或者文件resource
+    &#39;privateKey&#39; =&gt; PemUtil::loadPrivateKey(&#39;/path/to/mch/apiclient_key.pem&#39;),
+    &#39;certs&#39; =&gt; [
+        // 可由内置的平台证书下载器 `./bin/CertificateDownloader.php` 生成
+        &#39;YYYYYYYYYY&#39; =&gt; PemUtil::loadCertificate(&#39;/path/to/wechatpay/cert.pem&#39;)
+    ],
+    // APIv2密钥(32字节)--不使用APIv2可选
+    &#39;secret&#39; =&gt; &#39;ZZZZZZZZZZ&#39;,
+    &#39;merchant&#39; =&gt; [// --不使用APIv2可选
+        // 商户证书 文件路径 --不使用APIv2可选
+        &#39;cert&#39; =&gt; &#39;/path/to/mch/apiclient_cert.pem&#39;,
+        // 商户API私钥 文件路径 --不使用APIv2可选
+        &#39;key&#39; =&gt; &#39;/path/to/mch/apiclient_key.pem&#39;,
+    ],
+]);</code></pre></td></tr></table>
+</div>
+</div>
+<p>初始化字典说明如下：</p>
+
+<ul>
+<li><code>mchid</code> 为你的<code>商户号</code>，一般是10字节纯数字</li>
+<li><code>serial</code> 为你的<code>商户证书序列号</code>，一般是40字节字符串</li>
+<li><code>privateKey</code> 为你的<code>商户API私钥</code>，一般是通过官方证书生成工具生成的文件名是<code>apiclient_key.pem</code>文件，支持纯字符串或者文件<code>resource</code>格式</li>
+<li><code>certs[$serial_number =&gt; #resource]</code> 为通过下载工具下载的平台证书<code>key/value</code>键值对，键为<code>平台证书序列号</code>，值为<code>平台证书</code>pem格式的纯字符串或者文件<code>resource</code>格式</li>
+<li><code>secret</code> 为APIv2版的<code>密钥</code>，商户平台上设置的32字节字符串</li>
+<li><code>merchant[cert =&gt; $path]</code> 为你的<code>商户证书</code>,一般是文件名为<code>apiclient_cert.pem</code>文件路径，接受<code>[$path, $passphrase]</code> 格式，其中<code>$passphrase</code>为证书密码</li>
+<li><code>merchant[key =&gt; $path]</code> 为你的<code>商户API私钥</code>，一般是通过官方证书生成工具生成的文件名是<code>apiclient_key.pem</code>文件路径，接受<code>[$path, $passphrase]</code> 格式，其中<code>$passphrase</code>为私钥密码</li>
+</ul>
+
+<p><strong>注：</strong> <code>APIv3</code>, <code>APIv2</code> 以及 <code>GuzzleHttp\Client</code> 的 <code>$config = []</code> 初始化参数，均融合在一个型参上; 另外初始化参数说明中的<code>平台证书下载器</code>可阅读<a href="bin/README.md">使用说明文档</a>。</p>
+
+<h2 id="apiv3">APIv3</h2>
+
+<h3 id="native下单">Native下单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">try {
+    $resp = $instance-&gt;v3-&gt;pay-&gt;transactions-&gt;native-&gt;post([&#39;json&#39; =&gt; [
+        &#39;mchid&#39; =&gt; &#39;1900006XXX&#39;,
+        &#39;out_trade_no&#39; =&gt; &#39;native12177525012014070332333&#39;,
+        &#39;appid&#39; =&gt; &#39;wxdace645e0bc2cXXX&#39;,
+        &#39;description&#39; =&gt; &#39;Image形象店-深圳腾大-QQ公仔&#39;,
+        &#39;notify_url&#39; =&gt; &#39;https://weixin.qq.com/&#39;,
+        &#39;amount&#39; =&gt; [
+            &#39;total&#39; =&gt; 1,
+            &#39;currency&#39;: &#39;CNY&#39;
+        ],
+    ]]);
+
+    echo $resp-&gt;getStatusCode() .&#39; &#39; . $resp-&gt;getReasonPhrase().&#34;\n&#34;;
+    echo $resp-&gt;getBody() . &#34;\n&#34;;
+} catch (RequestException $e) {
+    // 进行错误处理
+    echo $e-&gt;getMessage().&#34;\n&#34;;
+    if ($e-&gt;hasResponse()) {
+        echo $e-&gt;getResponse()-&gt;getStatusCode().&#39; &#39;.$e-&gt;getResponse()-&gt;getReasonPhrase().&#34;\n&#34;;
+        echo $e-&gt;getResponse()-&gt;getBody();
+    }
+}</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="查单">查单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$res = $instance-&gt;v3-&gt;pay-&gt;transactions-&gt;id-&gt;{&#39;{transaction_id}&#39;}
+-&gt;getAsync([
+    // 查询参数结构
+    &#39;query&#39; =&gt; [&#39;mchid&#39; =&gt; &#39;1230000109&#39;],
+    // uri_template 字面量参数
+    &#39;transaction_id&#39; =&gt; &#39;1217752501201407033233368018&#39;,
+])
+-&gt;then(function($response) {
+    // 正常逻辑回调处理
+    echo $response-&gt;getBody()-&gt;getContents(), PHP_EOL;
+    return $response;
+})
+-&gt;otherwise(function($exception) {
+    // 异常错误处理
+    $body = $exception-&gt;getResponse()-&gt;getBody();
+    echo $body-&gt;getContents(), PHP_EOL, PHP_EOL, PHP_EOL;
+    echo $exception-&gt;getTraceAsString(), PHP_EOL;
+})
+-&gt;wait();</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="关单">关单</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$res = $instance-&gt;v3-&gt;pay-&gt;transactions-&gt;outTradeNo-&gt;{&#39;{out_trade_no}&#39;}-&gt;close
+-&gt;postAsync([
+    // 请求参数结构
+    &#39;json&#39; =&gt; [&#39;mchid&#39; =&gt; &#39;1230000109&#39;],
+    // uri_template 字面量参数
+    &#39;out_trade_no&#39; =&gt; &#39;1217752501201407033233368018&#39;,
+])
+-&gt;then(function($response) {
+    // 正常逻辑回调处理
+    echo $response-&gt;getBody()-&gt;getContents(), PHP_EOL;
+    return $response;
+})
+-&gt;otherwise(function($exception) {
+    // 异常错误处理
+    $body = $exception-&gt;getResponse()-&gt;getBody();
+    echo $body-&gt;getContents(), PHP_EOL, PHP_EOL, PHP_EOL;
+    echo $exception-&gt;getTraceAsString(), PHP_EOL;
+})
+-&gt;wait();</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="退款">退款</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$res = $instance-&gt;chain(&#39;v3/refund/domestic/refunds&#39;)
+-&gt;postAsync([
+    &#39;json&#39; =&gt; [
+        &#39;transaction_id&#39; =&gt; &#39;1217752501201407033233368018&#39;,
+        &#39;out_refund_no&#39; =&gt; &#39;1217752501201407033233368018&#39;,
+        &#39;amount&#39; =&gt; [
+            &#39;refund&#39; =&gt; 888,
+            &#39;total&#39; =&gt; 888,
+            &#39;currency&#39; =&gt; &#39;CNY&#39;,
+        ],
+    ],
+])
+-&gt;then(function($response) {
+    // 正常逻辑回调处理
+    echo $response-&gt;getBody()-&gt;getContents(), PHP_EOL;
+    return $response;
+})
+-&gt;otherwise(function($exception) {
+    // 异常错误处理
+    $body = $exception-&gt;getResponse()-&gt;getBody();
+    echo $body-&gt;getContents(), PHP_EOL, PHP_EOL, PHP_EOL;
+    echo $exception-&gt;getTraceAsString(), PHP_EOL;
+})
+-&gt;wait();</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="视频文件上传">视频文件上传</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">// 参考上述指引说明，并引入 `MediaUtil` 正常初始化，无额外条件
+use WeChatPay\Util\MediaUtil;
+// 实例化一个媒体文件流，注意文件后缀名需符合接口要求
+$media = new MediaUtil(&#39;/your/file/path/with.extension&#39;);
+
+try {
+    $resp = $instance[&#39;v3/merchant/media/video_upload&#39;]-&gt;post([
+        &#39;body&#39;    =&gt; $media-&gt;getStream(),
+        &#39;headers&#39; =&gt; [
+            &#39;content-type&#39; =&gt; $media-&gt;getContentType(),
+        ]
+    ]);
+    echo $resp-&gt;getStatusCode().&#39; &#39;.$resp-&gt;getReasonPhrase().&#34;\n&#34;;
+    echo $resp-&gt;getBody().&#34;\n&#34;;
+} catch (Exception $e) {
+    echo $e-&gt;getMessage().&#34;\n&#34;;
+    if ($e-&gt;hasResponse()) {
+        echo $e-&gt;getResponse()-&gt;getStatusCode().&#39; &#39;.$e-&gt;getResponse()-&gt;getReasonPhrase().&#34;\n&#34;;
+        echo $e-&gt;getResponse()-&gt;getBody();
+    }
+}</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="图片上传">图片上传</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">$resp = $instance-&gt;v3-&gt;marketing-&gt;favor-&gt;media-&gt;imageUpload
+-&gt;postAsync([
+    &#39;body&#39;    =&gt; $media-&gt;getStream(),
+    &#39;headers&#39; =&gt; [
+        &#39;content-type&#39; =&gt; $media-&gt;getContentType(),
+    ]
+])
+-&gt;then(function($response) {
+    echo $response-&gt;getBody()-&gt;getContents(), PHP_EOL;
+    return $response;
+})
+-&gt;otherwise(function($exception) {
+    $body = $exception-&gt;getResponse()-&gt;getBody();
+    echo $body-&gt;getContents(), PHP_EOL, PHP_EOL, PHP_EOL;
+    echo $exception-&gt;getTraceAsString(), PHP_EOL;
+})
+-&gt;wait();</code></pre></td></tr></table>
+</div>
+</div>
+<h3 id="敏感信息加-解密">敏感信息加/解密</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">// 参考上上述说明，引入 `WeChatPay\Crypto\Rsa`
+use WeChatPay\Crypto\Rsa;
+// 加载最新的平台证书
+$publicKey = PemUtil::loadCertificate(&#39;/path/to/wechatpay/cert.pem&#39;);
+// 做一个匿名方法，供后续方便使用
+$encryptor = function($msg) use ($publicKey) { return Rsa::encrypt($msg, $publicKey); };
+
+// 正常使用Guzzle发起API请求
+try {
+    // POST 语法糖
+    $resp = $instance-&gt;chain(&#39;v3/applyment4sub/applyment/&#39;)-&gt;post([
+        &#39;json&#39; =&gt; [
+            &#39;business_code&#39; =&gt; &#39;APL_98761234&#39;,
+            &#39;contact_info&#39;  =&gt; [
+                &#39;contact_name&#39;      =&gt; $encryptor(&#39;value of `contact_name`&#39;),
+                &#39;contact_id_number&#39; =&gt; $encryptor(&#39;value of `contact_id_number&#39;),
+                &#39;mobile_phone&#39;      =&gt; $encryptor(&#39;value of `mobile_phone`&#39;),
+                &#39;contact_email&#39;     =&gt; $encryptor(&#39;value of `contact_email`&#39;),
+            ],
+            //...
+        ],
+        &#39;headers&#39; =&gt; [
+            // 命令行获取证书序列号
+            // openssl x509 -in /path/to/wechatpay/cert.pem -noout -serial | awk -F= &#39;{print $2}&#39;
+            // 或者使用工具类获取证书序列号 `PemUtil::parseCertificateSerialNo($certificate)`
+            &#39;Wechatpay-Serial&#39; =&gt; &#39;下载的平台证书序列号&#39;,
+        ],
+    ]);
+    echo $resp-&gt;getStatusCode().&#39; &#39;.$resp-&gt;getReasonPhrase().&#34;\n&#34;;
+    echo $resp-&gt;getBody().&#34;\n&#34;;
+} catch (Exception $e) {
+    echo $e-&gt;getMessage().&#34;\n&#34;;
+    if ($e-&gt;hasResponse()) {
+        echo $e-&gt;getResponse()-&gt;getStatusCode().&#39; &#39;.$e-&gt;getResponse()-&gt;getReasonPhrase().&#34;\n&#34;;
+        echo $e-&gt;getResponse()-&gt;getBody();
+    }
+    return;
+}</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="apiv2">APIv2</h2>
+
+<p>末尾驱动的 <code>HTTP METHOD</code> 方法入参 <code>array $options</code>，接受两个自定义参数，释义如下：</p>
+
+<ul>
+<li><code>$options['nonceless']</code> - 标量 <code>scalar</code> 任意值，语义上即，本次请求不用自动添加<code>nonce_str</code>参数，推荐 <code>boolean(True)</code></li>
+<li><code>$options['security']</code> - 布尔量<code>True</code>，语义上即，本次请求需要加载ssl证书，对应的是初始化 <code>array $config['merchant']</code> 结构体</li>
+</ul>
+
+<h3 id="企业付款到零钱">企业付款到零钱</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">use WeChatPay\Transformer;
+$res = $instance-&gt;v2-&gt;mmpaymkttransfers-&gt;promotion-&gt;transfers
+-&gt;postAsync([
+    &#39;xml&#39; =&gt; [
+      &#39;appid&#39; =&gt; &#39;wx8888888888888888&#39;,
+      &#39;mch_id&#39; =&gt; &#39;1900000109&#39;,
+      &#39;partner_trade_no&#39; =&gt; &#39;10000098201411111234567890&#39;,
+      &#39;openid&#39; =&gt; &#39;oxTWIuGaIt6gTKsQRLau2M0yL16E&#39;,
+      &#39;check_name&#39; =&gt; &#39;FORCE_CHECK&#39;,
+      &#39;re_user_name&#39; =&gt; &#39;王小王&#39;,
+      &#39;amount&#39; =&gt; 10099,
+      &#39;desc&#39; =&gt; &#39;理赔&#39;,
+      &#39;spbill_create_ip&#39; =&gt; &#39;192.168.0.1&#39;,
+    ],
+    &#39;security&#39; =&gt; true,
+    &#39;debug&#39; =&gt; true //开启调试模式
+])
+-&gt;then(static function($response) { return Transformer::toArray($response-&gt;getBody()-&gt;getContents()); })
+-&gt;otherwise(static function($exception) { return Transformer::toArray($exception-&gt;getResponse()-&gt;getBody()-&gt;getContents()); })
+-&gt;wait();
+print_r($res);</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="更多">更多</h2>
+
+<p>SDK包的设计是开放式的，目前已知可以采用不下十种方式编程编码方式均可触达，同步/异步、模版字面量、驼峰、链式，甚至企业微信之企业支付，均可按开放规范正常工作。</p>
+
+<p>项目链接地址：<a href="https://github.com/TheNorthMemory/wechatpay-php">https://github.com/TheNorthMemory/wechatpay-php</a> 如果喜欢，欢迎star。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-06-27
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/howto-use-the-wechatpay-php-library-of-china-offshore/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">香港及海外接入点，如何使用wechatpay-php支付开发包概览</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/pure-and-fullfilled-the-multipart-formdata-composer/">
+            <span class="next-text nav-default">加强版的微信支付APIv3媒体文件上传无依赖版NodeJS实现</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>
