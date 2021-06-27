@@ -26,7 +26,7 @@ author: "James"
 
 ## 01: Formatter 从格式化参数说起
 
-[Formatter 从格式化参数说起](./18-points-of-the-wechatpay-php-openspi-sdk-section01/)
+[Formatter 从格式化参数说起](/post/18-points-of-the-wechatpay-php-openspi-sdk-section01/)
 
 ## 02: Crypto\AesGcm AES-GCM加解密函数重构
 
