@@ -6,10 +6,28 @@
     <description>Recent content in Posts on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Fri, 25 Jun 2021 11:49:15 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 27 Jun 2021 17:00:11 +0800</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起</title>
+      <link>/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/</link>
+      <pubDate>Sun, 27 Jun 2021 17:00:11 +0800</pubDate>
+      
+      <guid>/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/</guid>
+      <description>SDK目标是优先&lt;code&gt;APIv3&lt;/code&gt;版，当然也需要考虑当下，&lt;code&gt;APIv2&lt;/code&gt;还在并行运行。两者之间有共性也有特性，把共性部分抽象出来，当属&lt;code&gt;格式化&lt;/code&gt;参数部分。&lt;code&gt;随机字符串&lt;/code&gt;首当其冲，那就从这个函数实现开始吧。</description>
+    </item>
+    
+    <item>
+      <title>微信支付PHP开发对接18讲——从起步到跑顺路</title>
+      <link>/post/18-points-of-the-wechatpay-php-openapi-sdk-catelog/</link>
+      <pubDate>Sun, 27 Jun 2021 16:00:11 +0800</pubDate>
+      
+      <guid>/post/18-points-of-the-wechatpay-php-openapi-sdk-catelog/</guid>
+      <description>用时18天，18个文件，2021年6月18日正式发布，带你了解一下「可链式调用的微信支付PHPSDK」研发细节。</description>
+    </item>
     
     <item>
       <title>香港及海外接入点，如何使用wechatpay-php支付开发包概览</title>

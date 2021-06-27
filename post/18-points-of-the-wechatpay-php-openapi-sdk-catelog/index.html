@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>微信支付PHP开发对接18讲——从起步到跑顺路 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="用时18天，18个文件，2021年6月18日正式发布，带你了解一下「可链式调用的微信支付PHPSDK」研发细节。" /><meta name="keywords" content="微信支付, WeChatPay PHP SDK, GuzzleHttp, PHPStan Level8" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/18-points-of-the-wechatpay-php-openapi-sdk-catelog/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="微信支付PHP开发对接18讲——从起步到跑顺路" />
+<meta property="og:description" content="用时18天，18个文件，2021年6月18日正式发布，带你了解一下「可链式调用的微信支付PHPSDK」研发细节。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/18-points-of-the-wechatpay-php-openapi-sdk-catelog/" />
+<meta property="article:published_time" content="2021-06-27T16:00:11&#43;08:00"/>
+<meta property="article:modified_time" content="2021-06-27T16:00:11&#43;08:00"/>
+
+<meta itemprop="name" content="微信支付PHP开发对接18讲——从起步到跑顺路">
+<meta itemprop="description" content="用时18天，18个文件，2021年6月18日正式发布，带你了解一下「可链式调用的微信支付PHPSDK」研发细节。">
+
+
+<meta itemprop="datePublished" content="2021-06-27T16:00:11&#43;08:00" />
+<meta itemprop="dateModified" content="2021-06-27T16:00:11&#43;08:00" />
+<meta itemprop="wordCount" content="889">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="微信支付PHP开发对接18讲——从起步到跑顺路"/>
+<meta name="twitter:description" content="用时18天，18个文件，2021年6月18日正式发布，带你了解一下「可链式调用的微信支付PHPSDK」研发细节。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">微信支付PHP开发对接18讲——从起步到跑顺路</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-06-27 </span>
+        <div class="post-category">
+            <a href="/categories/php/"> php </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<h1 id="微信支付php开发对接18讲-从起步到跑顺路">微信支付PHP开发对接18讲——从起步到跑顺路</h1>
+
+<p>用时18天，18个文件，2021年6月18日正式发布，带你了解一下「可链式调用的微信支付PHPSDK」研发细节。</p>
+
+<p>在QQ群、微信群以及微信开发者社区内，看多了对接开发的千奇百怪的问题，也尝试回答了许多开发者的问题，终究敌不过新晋问题的产生，与其这样反反复复地回答几乎相同的问题，不如“造”一把，从易用性上下手，着重把 <code>wechatpay-guzzle-middle</code> 官方PHP包给翻新一下。</p>
+
+<p>设定目标： <code>GuzzleHttp</code> 升级至 <code>7</code> ，引申地，PHP最低版本兼容至 <code>7.2.5</code>。 <code>PHP7</code> 上许多特性即可用起来，比如 变量类型签名、函数入参及返回值签名，这些均是安全地、受控地使用SDK的必要因素。对于习惯了动态语言编程的开发者来说，限定不是为了限制使用，恰恰相反，新的SDK更具创新性地把链式调用带入了PHP语言中。关于链式可参考 <code>wechatpay-axios-plugin</code> 这款nodejs包的使用说明。 PHP上做了部分语言相关适配，会在后期的讲解中展开。</p>
+
+<p>另外，<code>GuzzleHttp</code> 带入了 <code>PromiseA+</code> 的一个实现，把<code>异步编程</code>带入到了PHP语言中， <code>wechatpapy-php</code> 把链式及异步揉合在了一起，开发对接写起代码来，可以自由流畅地在顺序代码中使用异步模式编程。其优势即：<code>resolve</code>模型对应的是正确逻辑，<code>reject</code>即异常逻辑，很自然地就把业务逻辑区分开了，编码效率及健壮性有了很大提升。</p>
+
+<p>链式解决了一个问题就是，代码看起来就像是内置的（其实是动态的），无任何IDE辅助的情况下，程序即可自我解释「我在干什么」，这里简单提一句先，后边再展开讲“链”抽象的切入点。</p>
+
+<p>下面步入正文，一个文件一个文件的讲解「研发细节」。</p>
+
+<h2 id="01-formatter-从格式化参数说起">01: Formatter 从格式化参数说起</h2>
+
+<p><a href="/post/18-points-of-the-wechatpay-php-openspi-sdk-section01/">Formatter 从格式化参数说起</a></p>
+
+<h2 id="02-crypto-aesgcm-aes-gcm加解密函数重构">02: Crypto\AesGcm AES-GCM加解密函数重构</h2>
+
+<h2 id="03-crypto-aesinterface-aes抽象接口">03: Crypto\AesInterface AES抽象接口</h2>
+
+<h2 id="04-crypto-rsa-rsa-oaep非对称加解密重构">04: Crypto\Rsa RSA-OAEP非对称加解密重构</h2>
+
+<h2 id="05-clientdecorator-httpclient的魔幻装饰器">05: ClientDecorator HTTPClient的魔幻装饰器</h2>
+
+<h2 id="06-clientdecoratorinterface-抽象装饰器接口">06: ClientDecoratorInterface 抽象装饰器接口</h2>
+
+<h2 id="07-clientjsontrait-apiv3抽象可复用代码块">07: ClientJsonTrait APIv3抽象可复用代码块</h2>
+
+<h2 id="08-builder-工厂模式创建链式组合">08: Builder 工厂模式创建链式组合</h2>
+
+<h2 id="09-buildertrait-可链式复用方法代码块">09: BuilderTrait 可链式复用方法代码块</h2>
+
+<h2 id="10-bin-certificatedownloader-重写平台证书下载器">10: bin/CertificateDownloader 重写平台证书下载器</h2>
+
+<h2 id="11-util-mediautil-媒体文件上传封装文件适配php7">11: Util\MediaUtil 媒体文件上传封装文件适配PHP7+</h2>
+
+<h2 id="12-readme-md-we-re-ready-for-apiv3-developing">12: README.md We&rsquo;re ready for APIv3 developing</h2>
+
+<h2 id="13-clientxmltrait-apiv2抽象可复用代码块">13: ClientXmlTrait APIv2抽象可复用代码块</h2>
+
+<h2 id="14-crypto-hash-hash散列数据签名">14: Crypto\Hash Hash散列数据签名</h2>
+
+<h2 id="15-crypto-aesecb-aes-ecb加解密">15: Crypto\AesEcb AES-ECB加解密</h2>
+
+<h2 id="16-transformer-xml2array2xml转换器">16: Transformer Xml2Array2Xml转换器</h2>
+
+<h2 id="17-exception-wechatpayexception-异常处理接口">17: Exception\WeChatPayException 异常处理接口</h2>
+
+<h2 id="18-跑顺路-就是这么简单">18: 跑顺路，就是这么简单</h2>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-06-27
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/howto-use-the-wechatpay-php-library-of-china-offshore/">
+            <span class="next-text nav-default">香港及海外接入点，如何使用wechatpay-php支付开发包概览</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

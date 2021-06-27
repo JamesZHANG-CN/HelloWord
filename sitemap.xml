@@ -3,32 +3,46 @@
   
   <url>
     <loc>https://thenorthmemory.github.io/categories/</loc>
-    <lastmod>2021-06-27T10:52:06+08:00</lastmod>
+    <lastmod>2021-06-27T17:00:11+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://thenorthmemory.github.io/post/</loc>
-    <lastmod>2021-06-27T10:52:06+08:00</lastmod>
+    <lastmod>2021-06-27T17:00:11+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://thenorthmemory.github.io/</loc>
-    <lastmod>2021-06-27T10:52:06+08:00</lastmod>
+    <lastmod>2021-06-27T17:00:11+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://thenorthmemory.github.io/categories/php/</loc>
-    <lastmod>2021-06-27T10:52:06+08:00</lastmod>
+    <lastmod>2021-06-27T17:00:11+08:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://thenorthmemory.github.io/categories/wechat/</loc>
-    <lastmod>2021-06-27T10:52:06+08:00</lastmod>
+    <lastmod>2021-06-27T17:00:11+08:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/</loc>
+    <lastmod>2021-06-27T17:00:11+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://thenorthmemory.github.io/post/18-points-of-the-wechatpay-php-openapi-sdk-catelog/</loc>
+    <lastmod>2021-06-27T16:00:11+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
   
   <url>
