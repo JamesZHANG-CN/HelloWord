@@ -45,15 +45,15 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/" />
 <meta property="article:published_time" content="2021-06-27T17:00:11&#43;08:00"/>
-<meta property="article:modified_time" content="2021-06-27T17:00:11&#43;08:00"/>
+<meta property="article:modified_time" content="2021-06-27T19:11:48&#43;08:00"/>
 
 <meta itemprop="name" content="微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起">
 <meta itemprop="description" content="SDK目标是优先`APIv3`版，当然也需要考虑当下，`APIv2`还在并行运行。两者之间有共性也有特性，把共性部分抽象出来，当属`格式化`参数部分。`随机字符串`首当其冲，那就从这个函数实现开始吧。">
 
 
 <meta itemprop="datePublished" content="2021-06-27T17:00:11&#43;08:00" />
-<meta itemprop="dateModified" content="2021-06-27T17:00:11&#43;08:00" />
-<meta itemprop="wordCount" content="1177">
+<meta itemprop="dateModified" content="2021-06-27T19:11:48&#43;08:00" />
+<meta itemprop="wordCount" content="2429">
 
 
 
@@ -437,9 +437,195 @@ public function testNonce(int $size, string $pattern): void
 
 <p><strong>一个重要提示</strong>： 按照PHP手册上提示，<code>mt_rand</code>是密码学不安全的函数，这里也做一并提示 <code>Formatter::nonce()</code> 也是密码学不安全实现。本类库在使用时，仅当<code>salt</code>（盐）使用，扩展使用时，请注意使用场景。</p>
 
-<h2 id="formatter-timestamp">Formatter::timestamp</h2>
+<h3 id="formatter-timestamp-时间戳">Formatter::timestamp 时间戳</h3>
 
-<h2 id="formatter-authorization">Formatter::authorization</h2>
+<p>这个函数是对<code>time()</code>的一个及其简单的一个封装。之所以要封装，其实是有一点点说法的。按照微信支付官方开发文档说明，时间戳是自1970年1月1日起的<code>Unix timesamp</code>，即 Epoch timesamp。PHP内置<code>time()</code>函数就是这个值。其他平台，有见到把<code>timesamp</code>翻译成<code>yyyy-MM-dd HH:mm:ss</code>格式的字符串，做这么个封装的原因：</p>
+
+<ol>
+<li>对函数返回值做类型签名，严格区分其他平台的翻译；</li>
+<li>PHP的命名空间<code>namespace</code>，存在<code>FQN</code>引用，自<code>PHP7</code>开始，在命名空间下可以<code>use function</code>，为让代码通俗易懂，在一个地方引用内置函数，比多次引用要直观；</li>
+</ol>
+
+<p>代码块如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">/**
+ * Retrieve the current `Unix` timestamp.
+ *
+ * @return int - Epoch timestamp.
+ */
+public static function timestamp(): int
+{
+    return time();
+}</code></pre></td></tr></table>
+</div>
+</div>
+<p><a href="https://github.com/TheNorthMemory/wechatpay-php/blob/5fb1c64a154cc63bbff730e59c0632c0f6e45043/tests/FormatterTest.php">测试用例</a>如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">public function testTimestamp(): void
+{
+    $timestamp = Formatter::timestamp();
+    $pattern = &#39;/^1[0-9]{9}/&#39;;
+
+    self::assertIsInt($timestamp);
+
+    $timestamp = strval($timestamp);
+
+    self::assertTrue(strlen($timestamp) === 10);
+
+    if (method_exists($this, &#39;assertMatchesRegularExpression&#39;)) {
+        self::assertMatchesRegularExpression($pattern, $timestamp);
+    } else {
+        self::assertRegExp($pattern, $timestamp);
+    }
+}</code></pre></td></tr></table>
+</div>
+</div>
+<p>1开头的10位纯数字，记住了，这就是 <code>Unix timestamp</code> 。</p>
+
+<h3 id="formatter-authorization-认证值">Formatter::authorization 认证值</h3>
+
+<p>这个函数，官方文档说的很详细了，但是内涵相当多的知识点，没有明说(哲学：我认为你应该知道所以我不讲了)，这个函数就是其中之一。翻<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Authorization">MDN</a>，引申有说明，<a href="https://tools.ietf.org/html/rfc7235#section-4.2">RFC 7235, section 4.2: Authorization</a>：只要符合规范，厂商可自主实现<code>&lt;type&gt; &lt;credentials&gt;</code>。</p>
+
+<p>微信支付 <code>APIv3</code> 即以 <code>WECHATPAY2-SHA256-RSA2048</code> 声明 <code>type</code> 变量，<code>mchid=&quot;%s&quot;,nonce_str=&quot;%s&quot;,signature=&quot;%s&quot;,timestamp=&quot;%s&quot;,serial_no=&quot;%s&quot;</code> 组合实现 <code>credentials</code> 声明。</p>
+
+<p>代码块如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">/**
+ * Formatting for the heading `Authorization` value.
+ *
+ * @param string $mchid - The merchant ID.
+ * @param string $nonce - The Nonce string.
+ * @param string $signature - The base64-encoded `Rsa::sign` ciphertext.
+ * @param string $timestamp - The `Unix` timestamp.
+ * @param string $serial - The serial number of the merchant public certification.
+ *
+ * @return string - The APIv3 Authorization `header` value
+ */
+public static function authorization(string $mchid, string $nonce, string $signature, string $timestamp, string $serial): string
+{
+    return sprintf(
+        &#39;WECHATPAY2-SHA256-RSA2048 mchid=&#34;%s&#34;,nonce_str=&#34;%s&#34;,signature=&#34;%s&#34;,timestamp=&#34;%s&#34;,serial_no=&#34;%s&#34;&#39;,
+        $mchid, $nonce, $signature, $timestamp, $serial
+    );
+}</code></pre></td></tr></table>
+</div>
+</div>
+<p>那些官方没有明说的知识点就来了：</p>
+
+<ol>
+<li>商户号 <code>mchid</code> 是1至32字符的<code>base62</code>字符串，当前绝大部分商户号是纯数字；</li>
+<li>请求随机串 <code>nonce_str</code> 是至少16字符的<code>base62</code>字符串，上限不清楚，没测试过（不敢，怕封号)；</li>
+<li>签名值 <code>signature</code> 是<code>base64</code>字符串，base64末尾有可能有0个、1个或者2个<code>=</code>号，这都是正常的<code>base64</code>字符串；</li>
+<li>时间戳 <code>timestamp</code> 是 <code>unix timestamp</code>，如 <code>Formatter::timestamp()</code> 封装所述;</li>
+<li>商户API证书 <code>serial_no</code> 是8至40字符的<code>【0-9A-Z]</code>全大写字符串；</li>
+<li>认证值有严格的顺序要求，即 <code>mchid,nonce,signature,timestamp,serial</code> 非字典序，值的组合用半角逗号(,)分隔，严格没有空格；</li>
+</ol>
+
+<p>我们用测试用例覆盖来校验如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php">public function testAuthorization(): void
+{
+    $value = Formatter::authorization(&#39;1001&#39;, Formatter::nonce(), &#39;mock&#39;, (string) Formatter::timestamp(), &#39;mockmockmock&#39;);
+
+    self::assertIsString($value);
+
+    self::assertStringStartsWith(&#39;WECHATPAY2-SHA256-RSA2048 &#39;, $value);
+    self::assertStringEndsWith(&#39;&#34;&#39;, $value);
+
+    $pattern = &#39;/^WECHATPAY2-SHA256-RSA2048 &#39;
+        . &#39;mchid=&#34;(?:[0-9A-Za-z]{1,32})&#34;,&#39;
+        . &#39;nonce_str=&#34;(?:[0-9A-Za-z]{16,})&#34;,&#39;
+        . &#39;signature=&#34;(?:[0-9A-Za-z+\/]+)={0,2}&#34;,&#39;
+        . &#39;timestamp=&#34;(?:1[0-9]{9})&#34;,&#39;
+        . &#39;serial_no=&#34;(?:[0-9A-Z]{8,40})&#34;$/&#39;;
+
+    if (method_exists($this, &#39;assertMatchesRegularExpression&#39;)) {
+        self::assertMatchesRegularExpression($pattern, $value);
+    } else {
+        self::assertRegExp($pattern, $value);
+    }
+}</code></pre></td></tr></table>
+</div>
+</div>
+<p>PS: 官方文档上，特意说了 认证类型 <code>&lt;type&gt;</code>，目前为 <code>WECHATPAY2-SHA256-RSA2048</code>，畅想应该还会有其他值。所以在<code>APIv3</code>开发的时候，建议还是要<strong>多看看官方文档/公告说明</strong>，以免 <code>我的代码没动过啊，为什么现在不行了</code> 这类问题产生。</p>
 
 <h2 id="formatter-request">Formatter::request</h2>
 
