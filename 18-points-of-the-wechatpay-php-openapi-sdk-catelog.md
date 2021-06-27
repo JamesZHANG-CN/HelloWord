@@ -10,8 +10,6 @@ summary: "用时18天，18个文件，2021年6月18日正式发布，带你了�
 author: "James"
 ---
 
-# 微信支付PHP开发对接18讲——从起步到跑顺路
-
 用时18天，18个文件，2021年6月18日正式发布，带你了解一下「可链式调用的微信支付PHPSDK」研发细节。
 
 在QQ群、微信群以及微信开发者社区内，看多了对接开发的千奇百怪的问题，也尝试回答了许多开发者的问题，终究敌不过新晋问题的产生，与其这样反反复复地回答几乎相同的问题，不如“造”一把，从易用性上下手，着重把 `wechatpay-guzzle-middle` 官方PHP包给翻新一下。
@@ -26,7 +24,7 @@ author: "James"
 
 ## 01: Formatter 从格式化参数说起
 
-[Formatter 从格式化参数说起](/post/18-points-of-the-wechatpay-php-openspi-sdk-section01/)
+[Formatter 从格式化参数说起](/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/)
 
 ## 02: Crypto\AesGcm AES-GCM加解密函数重构
 
