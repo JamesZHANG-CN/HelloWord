@@ -45,15 +45,15 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/" />
 <meta property="article:published_time" content="2021-06-27T17:00:11&#43;08:00"/>
-<meta property="article:modified_time" content="2021-06-27T19:11:48&#43;08:00"/>
+<meta property="article:modified_time" content="2021-06-28T12:11:48&#43;08:00"/>
 
 <meta itemprop="name" content="微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起">
 <meta itemprop="description" content="SDK目标是优先`APIv3`版，当然也需要考虑当下，`APIv2`还在并行运行。两者之间有共性也有特性，把共性部分抽象出来，当属`格式化`参数部分。`随机字符串`首当其冲，那就从这个函数实现开始吧。">
 
 
 <meta itemprop="datePublished" content="2021-06-27T17:00:11&#43;08:00" />
-<meta itemprop="dateModified" content="2021-06-27T19:11:48&#43;08:00" />
-<meta itemprop="wordCount" content="2429">
+<meta itemprop="dateModified" content="2021-06-28T12:11:48&#43;08:00" />
+<meta itemprop="wordCount" content="3873">
 
 
 
@@ -155,21 +155,24 @@
 </span><span class="lnt">11
 </span><span class="lnt">12
 </span><span class="lnt">13
+</span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">/**
- * Generate a random ASCII string aka `nonce`, similar as `random_bytes`.
- *
- * @param int $size - Nonce string length, default is 32.
- *
- * @return string - base62 random string.
- */
-public static function nonce(int $size = 32): string
-{
-    return array_reduce(range(1, $size), static function(string $char) {
-        return $char .= &#39;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;[mt_rand(0, 61)];
-    }, &#39;&#39;);
-}</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Generate a random ASCII string aka `nonce`, similar as `random_bytes`.
+</span><span class="sd"> *
+</span><span class="sd"> * @param int $size - Nonce string length, default is 32.
+</span><span class="sd"> *
+</span><span class="sd"> * @return string - base62 random string.
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">nonce</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$size</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="nx">array_reduce</span><span class="p">(</span><span class="nx">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nv">$size</span><span class="p">),</span> <span class="k">static</span> <span class="k">function</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$char</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$char</span> <span class="o">.=</span> <span class="s1">&#39;abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span><span class="p">[</span><span class="nx">mt_rand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">61</span><span class="p">)];</span>
+    <span class="p">},</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
 <p>本来是可以一行显示的，为了阅读起来方便，特意做了格式化，这个函数使用了PHP内置的三个函数<code>array_reduce</code>, <code>range</code> 及 <code>mt_rand</code>，并且使用了 <code>Closure</code> <code>Static Anonymous Functions</code>。
@@ -186,16 +189,19 @@ public static function nonce(int $size = 32): string
 </span><span class="lnt">6
 </span><span class="lnt">7
 </span><span class="lnt">8
+</span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">const BASE62_CHARS = &#39;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;;
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">const</span> <span class="no">BASE62_CHARS</span> <span class="o">=</span> <span class="s1">&#39;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span><span class="p">;</span>
 
-public static function nonce(int $size = 32): string
-{
-    return preg_replace_callback(&#39;#0#&#39;, static function() {
-        return BASE62_CHARS[rand(0, 61)];
-    }, str_repeat(&#39;0&#39;, $size));
-}</code></pre></td></tr></table>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">nonce</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$size</span> <span class="o">=</span> <span class="mi">32</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="nx">preg_replace_callback</span><span class="p">(</span><span class="s1">&#39;#0#&#39;</span><span class="p">,</span> <span class="k">static</span> <span class="k">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">BASE62_CHARS</span><span class="p">[</span><span class="nx">rand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">61</span><span class="p">)];</span>
+    <span class="p">},</span> <span class="nx">str_repeat</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="nv">$size</span><span class="p">));</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
 <p>使用了 <code>preg_replace_callback</code> <code>rand</code> 及 <code>str_repeat</code> 三个内置函数，同样的设计思路，不过有个缺陷，即 <code>$size</code> 型参必须大于0，这个是受限 <code>str_repeat</code> 型参要求。</p>
@@ -399,45 +405,48 @@ public static function nonce(int $size = 32): string
 </span><span class="lnt">28
 </span><span class="lnt">29
 </span><span class="lnt">30
+</span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">public function nonceRulesProvider(): array
-{
-    return [
-        &#39;default $size=32&#39;       =&gt; [32,  &#39;/[a-zA-Z0-9]{32}/&#39;],
-        &#39;half-default $size=16&#39;  =&gt; [16,  &#39;/[a-zA-Z0-9]{16}/&#39;],
-        &#39;hundred $size=100&#39;      =&gt; [100, &#39;/[a-zA-Z0-9]{100}/&#39;],
-        &#39;one $size=1&#39;            =&gt; [1,   &#39;/[a-zA-Z0-9]{1}/&#39;],
-        &#39;zero $size=0&#39;           =&gt; [0,   &#39;/[a-zA-Z0-9]{2}/&#39;],
-        &#39;negative $size=-1&#39;      =&gt; [-1,  &#39;/[a-zA-Z0-9]{3}/&#39;],
-        &#39;negative $size=-16&#39;     =&gt; [-16, &#39;/[a-zA-Z0-9]{18}/&#39;],
-        &#39;negative $size=-32&#39;     =&gt; [-32, &#39;/[a-zA-Z0-9]{34}/&#39;],
-    ];
-}
-/**
- * @dataProvider nonceRulesProvider
- */
-public function testNonce(int $size, string $pattern): void
-{
-    $nonce = Formatter::nonce($size);
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">nonceRulesProvider</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s1">&#39;default $size=32&#39;</span>       <span class="o">=&gt;</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span>  <span class="s1">&#39;/[a-zA-Z0-9]{32}/&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;half-default $size=16&#39;</span>  <span class="o">=&gt;</span> <span class="p">[</span><span class="mi">16</span><span class="p">,</span>  <span class="s1">&#39;/[a-zA-Z0-9]{16}/&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;hundred $size=100&#39;</span>      <span class="o">=&gt;</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;/[a-zA-Z0-9]{100}/&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;one $size=1&#39;</span>            <span class="o">=&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span>   <span class="s1">&#39;/[a-zA-Z0-9]{1}/&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;zero $size=0&#39;</span>           <span class="o">=&gt;</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span>   <span class="s1">&#39;/[a-zA-Z0-9]{2}/&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;negative $size=-1&#39;</span>      <span class="o">=&gt;</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span>  <span class="s1">&#39;/[a-zA-Z0-9]{3}/&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;negative $size=-16&#39;</span>     <span class="o">=&gt;</span> <span class="p">[</span><span class="o">-</span><span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;/[a-zA-Z0-9]{18}/&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;negative $size=-32&#39;</span>     <span class="o">=&gt;</span> <span class="p">[</span><span class="o">-</span><span class="mi">32</span><span class="p">,</span> <span class="s1">&#39;/[a-zA-Z0-9]{34}/&#39;</span><span class="p">],</span>
+    <span class="p">];</span>
+<span class="p">}</span>
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider nonceRulesProvider
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testNonce</span><span class="p">(</span><span class="nx">int</span> <span class="nv">$size</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$pattern</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$nonce</span> <span class="o">=</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(</span><span class="nv">$size</span><span class="p">);</span>
 
-    self::assertIsString($nonce);
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$nonce</span><span class="p">);</span>
 
-    self::assertTrue(strlen($nonce) === ($size &gt; 0 ? $size : abs($size - 2)));
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertTrue</span><span class="p">(</span><span class="nx">strlen</span><span class="p">(</span><span class="nv">$nonce</span><span class="p">)</span> <span class="o">===</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">?</span> <span class="nv">$size</span> <span class="o">:</span> <span class="nx">abs</span><span class="p">(</span><span class="nv">$size</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)));</span>
 
-    if (method_exists($this, &#39;assertMatchesRegularExpression&#39;)) {
-        self::assertMatchesRegularExpression($pattern, $nonce);
-    } else {
-        self::assertRegExp($pattern, $nonce);
-    }
-}</code></pre></td></tr></table>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">method_exists</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;assertMatchesRegularExpression&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertMatchesRegularExpression</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$nonce</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertRegExp</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$nonce</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
 <p>适应性上堪称完美。</p>
 
 <p><strong>一个重要提示</strong>： 按照PHP手册上提示，<code>mt_rand</code>是密码学不安全的函数，这里也做一并提示 <code>Formatter::nonce()</code> 也是密码学不安全实现。本类库在使用时，仅当<code>salt</code>（盐）使用，扩展使用时，请注意使用场景。</p>
 
-<h3 id="formatter-timestamp-时间戳">Formatter::timestamp 时间戳</h3>
+<h2 id="formatter-timestamp-时间戳">Formatter::timestamp 时间戳</h2>
 
 <p>这个函数是对<code>time()</code>的一个及其简单的一个封装。之所以要封装，其实是有一点点说法的。按照微信支付官方开发文档说明，时间戳是自1970年1月1日起的<code>Unix timesamp</code>，即 Epoch timesamp。PHP内置<code>time()</code>函数就是这个值。其他平台，有见到把<code>timesamp</code>翻译成<code>yyyy-MM-dd HH:mm:ss</code>格式的字符串，做这么个封装的原因：</p>
 
@@ -449,26 +458,29 @@ public function testNonce(int $size, string $pattern): void
 <p>代码块如下</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span><span class="lnt">5
-</span><span class="lnt">6
-</span><span class="lnt">7
-</span><span class="lnt">8
-</span><span class="lnt">9
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">/**
- * Retrieve the current `Unix` timestamp.
- *
- * @return int - Epoch timestamp.
- */
-public static function timestamp(): int
-{
-    return time();
-}</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Retrieve the current `Unix` timestamp.
+</span><span class="sd"> *
+</span><span class="sd"> * @return int - Epoch timestamp.
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">timestamp</span><span class="p">()</span><span class="o">:</span> <span class="nx">int</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="nx">time</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
 <p><a href="https://github.com/TheNorthMemory/wechatpay-php/blob/5fb1c64a154cc63bbff730e59c0632c0f6e45043/tests/FormatterTest.php">测试用例</a>如下：</p>
@@ -491,25 +503,28 @@ public static function timestamp(): int
 </span><span class="lnt">15
 </span><span class="lnt">16
 </span><span class="lnt">17
+</span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">public function testTimestamp(): void
-{
-    $timestamp = Formatter::timestamp();
-    $pattern = &#39;/^1[0-9]{9}/&#39;;
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testTimestamp</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$timestamp</span> <span class="o">=</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">timestamp</span><span class="p">();</span>
+    <span class="nv">$pattern</span> <span class="o">=</span> <span class="s1">&#39;/^1[0-9]{9}/&#39;</span><span class="p">;</span>
 
-    self::assertIsInt($timestamp);
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsInt</span><span class="p">(</span><span class="nv">$timestamp</span><span class="p">);</span>
 
-    $timestamp = strval($timestamp);
+    <span class="nv">$timestamp</span> <span class="o">=</span> <span class="nx">strval</span><span class="p">(</span><span class="nv">$timestamp</span><span class="p">);</span>
 
-    self::assertTrue(strlen($timestamp) === 10);
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertTrue</span><span class="p">(</span><span class="nx">strlen</span><span class="p">(</span><span class="nv">$timestamp</span><span class="p">)</span> <span class="o">===</span> <span class="mi">10</span><span class="p">);</span>
 
-    if (method_exists($this, &#39;assertMatchesRegularExpression&#39;)) {
-        self::assertMatchesRegularExpression($pattern, $timestamp);
-    } else {
-        self::assertRegExp($pattern, $timestamp);
-    }
-}</code></pre></td></tr></table>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">method_exists</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;assertMatchesRegularExpression&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertMatchesRegularExpression</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$timestamp</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertRegExp</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$timestamp</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
 <p>1开头的10位纯数字，记住了，这就是 <code>Unix timestamp</code> 。</p>
@@ -541,26 +556,29 @@ public static function timestamp(): int
 </span><span class="lnt">16
 </span><span class="lnt">17
 </span><span class="lnt">18
+</span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">/**
- * Formatting for the heading `Authorization` value.
- *
- * @param string $mchid - The merchant ID.
- * @param string $nonce - The Nonce string.
- * @param string $signature - The base64-encoded `Rsa::sign` ciphertext.
- * @param string $timestamp - The `Unix` timestamp.
- * @param string $serial - The serial number of the merchant public certification.
- *
- * @return string - The APIv3 Authorization `header` value
- */
-public static function authorization(string $mchid, string $nonce, string $signature, string $timestamp, string $serial): string
-{
-    return sprintf(
-        &#39;WECHATPAY2-SHA256-RSA2048 mchid=&#34;%s&#34;,nonce_str=&#34;%s&#34;,signature=&#34;%s&#34;,timestamp=&#34;%s&#34;,serial_no=&#34;%s&#34;&#39;,
-        $mchid, $nonce, $signature, $timestamp, $serial
-    );
-}</code></pre></td></tr></table>
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Formatting for the heading `Authorization` value.
+</span><span class="sd"> *
+</span><span class="sd"> * @param string $mchid - The merchant ID.
+</span><span class="sd"> * @param string $nonce - The Nonce string.
+</span><span class="sd"> * @param string $signature - The base64-encoded `Rsa::sign` ciphertext.
+</span><span class="sd"> * @param string $timestamp - The `Unix` timestamp.
+</span><span class="sd"> * @param string $serial - The serial number of the merchant public certification.
+</span><span class="sd"> *
+</span><span class="sd"> * @return string - The APIv3 Authorization `header` value
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">authorization</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$mchid</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$nonce</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$signature</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$timestamp</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$serial</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="nx">sprintf</span><span class="p">(</span>
+        <span class="s1">&#39;WECHATPAY2-SHA256-RSA2048 mchid=&#34;%s&#34;,nonce_str=&#34;%s&#34;,signature=&#34;%s&#34;,timestamp=&#34;%s&#34;,serial_no=&#34;%s&#34;&#39;</span><span class="p">,</span>
+        <span class="nv">$mchid</span><span class="p">,</span> <span class="nv">$nonce</span><span class="p">,</span> <span class="nv">$signature</span><span class="p">,</span> <span class="nv">$timestamp</span><span class="p">,</span> <span class="nv">$serial</span>
+    <span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
 <p>那些官方没有明说的知识点就来了：</p>
@@ -599,37 +617,330 @@ public static function authorization(string $mchid, string $nonce, string $signa
 </span><span class="lnt">20
 </span><span class="lnt">21
 </span><span class="lnt">22
+</span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-php" data-lang="php">public function testAuthorization(): void
-{
-    $value = Formatter::authorization(&#39;1001&#39;, Formatter::nonce(), &#39;mock&#39;, (string) Formatter::timestamp(), &#39;mockmockmock&#39;);
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testAuthorization</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$value</span> <span class="o">=</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">authorization</span><span class="p">(</span><span class="s1">&#39;1001&#39;</span><span class="p">,</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(),</span> <span class="s1">&#39;mock&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">string</span><span class="p">)</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">timestamp</span><span class="p">(),</span> <span class="s1">&#39;mockmockmock&#39;</span><span class="p">);</span>
 
-    self::assertIsString($value);
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
 
-    self::assertStringStartsWith(&#39;WECHATPAY2-SHA256-RSA2048 &#39;, $value);
-    self::assertStringEndsWith(&#39;&#34;&#39;, $value);
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertStringStartsWith</span><span class="p">(</span><span class="s1">&#39;WECHATPAY2-SHA256-RSA2048 &#39;</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertStringEndsWith</span><span class="p">(</span><span class="s1">&#39;&#34;&#39;</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
 
-    $pattern = &#39;/^WECHATPAY2-SHA256-RSA2048 &#39;
-        . &#39;mchid=&#34;(?:[0-9A-Za-z]{1,32})&#34;,&#39;
-        . &#39;nonce_str=&#34;(?:[0-9A-Za-z]{16,})&#34;,&#39;
-        . &#39;signature=&#34;(?:[0-9A-Za-z+\/]+)={0,2}&#34;,&#39;
-        . &#39;timestamp=&#34;(?:1[0-9]{9})&#34;,&#39;
-        . &#39;serial_no=&#34;(?:[0-9A-Z]{8,40})&#34;$/&#39;;
+    <span class="nv">$pattern</span> <span class="o">=</span> <span class="s1">&#39;/^WECHATPAY2-SHA256-RSA2048 &#39;</span>
+        <span class="o">.</span> <span class="s1">&#39;mchid=&#34;[0-9A-Za-z]{1,32}&#34;,&#39;</span>
+        <span class="o">.</span> <span class="s1">&#39;nonce_str=&#34;[0-9A-Za-z]{16,}&#34;,&#39;</span>
+        <span class="o">.</span> <span class="s1">&#39;signature=&#34;[0-9A-Za-z\+\/]+={0,2}&#34;,&#39;</span>
+        <span class="o">.</span> <span class="s1">&#39;timestamp=&#34;1[0-9]{9}&#34;,&#39;</span>
+        <span class="o">.</span> <span class="s1">&#39;serial_no=&#34;[0-9A-Z]{8,40}&#34;$/&#39;</span><span class="p">;</span>
 
-    if (method_exists($this, &#39;assertMatchesRegularExpression&#39;)) {
-        self::assertMatchesRegularExpression($pattern, $value);
-    } else {
-        self::assertRegExp($pattern, $value);
-    }
-}</code></pre></td></tr></table>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">method_exists</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;assertMatchesRegularExpression&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertMatchesRegularExpression</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertRegExp</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
 </div>
 </div>
 <p>PS: 官方文档上，特意说了 认证类型 <code>&lt;type&gt;</code>，目前为 <code>WECHATPAY2-SHA256-RSA2048</code>，畅想应该还会有其他值。所以在<code>APIv3</code>开发的时候，建议还是要<strong>多看看官方文档/公告说明</strong>，以免 <code>我的代码没动过啊，为什么现在不行了</code> 这类问题产生。</p>
 
-<h2 id="formatter-request">Formatter::request</h2>
+<h2 id="formatter-request-请求字符串">Formatter::request 请求字符串</h2>
 
-<h2 id="formatter-response">Formatter::response</h2>
+<p>顾名思义，这个函数就是用来格式化请求参数的，按照官方开发文档介绍，输入参数是需要按照&rdquo;\n&rdquo;(char<code>0x0A</code>)做排列合并，而<code>0x0A</code>是个非打印字符，文本描述起来比较困难，另外对于空请求串情况，占位行不能省略，顾做一个纵向封装，以程序语言(函数型参)来描述请求串，代码块如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Formatting this `HTTP::request` for `Rsa::sign` input.
+</span><span class="sd"> *
+</span><span class="sd"> * @param string $method - The HTTP verb, must be the uppercase sting.
+</span><span class="sd"> * @param string $uri - Combined string with `URL::pathname` and `URL::search`.
+</span><span class="sd"> * @param string $timestamp - The `Unix` timestamp, should be the one used in `authorization`.
+</span><span class="sd"> * @param string $nonce - The `Nonce` string, should be the one used in `authorization`.
+</span><span class="sd"> * @param string $body - The playload string, HTTP `GET` should be an empty string.
+</span><span class="sd"> *
+</span><span class="sd"> * @return string - The content for `Rsa::sign`
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">request</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$method</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$uri</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$timestamp</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$nonce</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$body</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="k">static</span><span class="o">::</span><span class="na">joinedByLineFeed</span><span class="p">(</span><span class="nv">$method</span><span class="p">,</span> <span class="nv">$uri</span><span class="p">,</span> <span class="nv">$timestamp</span><span class="p">,</span> <span class="nv">$nonce</span><span class="p">,</span> <span class="nv">$body</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>函数入参接受5部分，其中<code>$body</code>可为空，内置驱动 <code>joinedByLineFeed</code> 做参数合并并返回字符串。这里有个点就是对入参 <code>$timestamp</code> 的类型定义，这里用了字符串定义，原因是：合并后的输出是个字符串，输入端就做了*妥协*，当然在非严格限制模式行，用纯数字输入也是可以的。</p>
+
+<p>测试用例覆盖如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">const</span> <span class="no">LINE_FEED</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">requestPhrasesProvider</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s1">&#39;DELETE root(/)&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;DELETE root(/) with query&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="s1">&#39;/?hello=wechatpay&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;GET root(/)&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;GET root(/) with query&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;/?hello=wechatpay&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;POST root(/) with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;{}&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;POST root(/) with body and query&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="s1">&#39;/?hello=wechatpay&#39;</span><span class="p">,</span> <span class="s1">&#39;{}&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;PUT root(/) with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;{}&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;PUT root(/) with body and query&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="s1">&#39;/?hello=wechatpay&#39;</span><span class="p">,</span> <span class="s1">&#39;{}&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;PATCH root(/) with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;PATCH&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;{}&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;PATCH root(/) with body and query&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;PATCH&#39;</span><span class="p">,</span> <span class="s1">&#39;/?hello=wechatpay&#39;</span><span class="p">,</span> <span class="s1">&#39;{}&#39;</span><span class="p">],</span>
+    <span class="p">];</span>
+<span class="p">}</span>
+
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider requestPhrasesProvider
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testRequest</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$method</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$uri</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$body</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$value</span> <span class="o">=</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">request</span><span class="p">(</span><span class="nv">$method</span><span class="p">,</span> <span class="nv">$uri</span><span class="p">,</span> <span class="p">(</span><span class="nx">string</span><span class="p">)</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">timestamp</span><span class="p">(),</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(),</span> <span class="nv">$body</span><span class="p">);</span>
+
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
+
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertStringStartsWith</span><span class="p">(</span><span class="nv">$method</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertStringEndsWith</span><span class="p">(</span><span class="nx">LINE_FEED</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertLessThanOrEqual</span><span class="p">(</span><span class="nx">substr_count</span><span class="p">(</span><span class="nv">$value</span><span class="p">,</span> <span class="nx">LINE_FEED</span><span class="p">),</span> <span class="mi">5</span><span class="p">);</span>
+
+    <span class="nv">$pattern</span> <span class="o">=</span> <span class="s1">&#39;#^&#39;</span> <span class="o">.</span> <span class="nv">$method</span> <span class="o">.</span> <span class="nx">LINE_FEED</span>
+        <span class="o">.</span>  <span class="nx">preg_quote</span><span class="p">(</span><span class="nv">$uri</span><span class="p">)</span> <span class="o">.</span> <span class="nx">LINE_FEED</span>
+        <span class="o">.</span> <span class="s1">&#39;1[0-9]{9}&#39;</span> <span class="o">.</span> <span class="nx">LINE_FEED</span>
+        <span class="o">.</span> <span class="s1">&#39;[0-9A-Za-z]{32}&#39;</span> <span class="o">.</span> <span class="nx">LINE_FEED</span>
+        <span class="o">.</span> <span class="nx">preg_quote</span><span class="p">(</span><span class="nv">$body</span><span class="p">)</span> <span class="o">.</span> <span class="nx">LINE_FEED</span>
+        <span class="o">.</span> <span class="s1">&#39;$#&#39;</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">method_exists</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;assertMatchesRegularExpression&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertMatchesRegularExpression</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertRegExp</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>测试用例说明一下，共计十种情形，函数返回值，必须以所请求的 <code>$method</code> 开头，并且至少含有5个<code>LINE_FEED</code>常量，其中一个<code>LINE_FEED</code>在末尾。 用例的数据供给，含了已知的<code>APIv3</code> HTTP verbs，即：<code>DELETE</code>, <code>GET</code>, <code>POST</code>, <code>PUT</code> 及 <code>PATCH</code>。 按照 <a href="https://tools.ietf.org/html/rfc3986">rfc3986</a> 规范，<code>DELETE</code>及<code>GET</code>是不带请求<code>$body</code>的。</p>
+
+<h2 id="formatter-response-响应字符串">Formatter::response 响应字符串</h2>
+
+<p>这个函数是<code>APIv3</code>开发文档上验签逻辑的一个封装，直白代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Formatting this `HTTP::response` for `Rsa::verify` input.
+</span><span class="sd"> *
+</span><span class="sd"> * @param string $timestamp - The `Unix` timestamp, should be the one from `response::headers[Wechatpay-Timestamp]`.
+</span><span class="sd"> * @param string $nonce - The `Nonce` string, should be the one from `response::headers[Wechatpay-Nonce]`.
+</span><span class="sd"> * @param string $body - The response payload string, HTTP status(`201`, `204`) should be an empty string.
+</span><span class="sd"> *
+</span><span class="sd"> * @return string - The content for `Rsa::verify`
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">response</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$timestamp</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$nonce</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$body</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="k">static</span><span class="o">::</span><span class="na">joinedByLineFeed</span><span class="p">(</span><span class="nv">$timestamp</span><span class="p">,</span> <span class="nv">$nonce</span><span class="p">,</span> <span class="nv">$body</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>测试用例覆盖如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">responsePhrasesProvider</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s1">&#39;HTTP 200 STATUS with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;{}&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 200 STATUS with no body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 202 STATUS with no body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 204 STATUS with no body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 301 STATUS with no body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 301 STATUS with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&lt;html&gt;&lt;/html&gt;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 302 STATUS with no body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 302 STATUS with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&lt;html&gt;&lt;/html&gt;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 307 STATUS with no body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 307 STATUS with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&lt;html&gt;&lt;/html&gt;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 400 STATUS with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;{}&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 401 STATUS with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;{}&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 403 STATUS with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&lt;html&gt;&lt;/html&gt;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 404 STATUS with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&lt;html&gt;&lt;/html&gt;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 500 STATUS with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;{}&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 502 STATUS with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&lt;html&gt;&lt;/html&gt;&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;HTTP 503 STATUS with body&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;&lt;html&gt;&lt;/html&gt;&#39;</span><span class="p">],</span>
+    <span class="p">];</span>
+<span class="p">}</span>
+
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider responsePhrasesProvider
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testResponse</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$body</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$value</span> <span class="o">=</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">response</span><span class="p">((</span><span class="nx">string</span><span class="p">)</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">timestamp</span><span class="p">(),</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(),</span> <span class="nv">$body</span><span class="p">);</span>
+
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
+
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertStringEndsWith</span><span class="p">(</span><span class="nx">LINE_FEED</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertLessThanOrEqual</span><span class="p">(</span><span class="nx">substr_count</span><span class="p">(</span><span class="nv">$value</span><span class="p">,</span> <span class="nx">LINE_FEED</span><span class="p">),</span> <span class="mi">3</span><span class="p">);</span>
+
+    <span class="nv">$pattern</span> <span class="o">=</span> <span class="s1">&#39;#^1[0-9]{9}&#39;</span> <span class="o">.</span> <span class="nx">LINE_FEED</span>
+        <span class="o">.</span> <span class="s1">&#39;[0-9A-Za-z]{32}&#39;</span> <span class="o">.</span> <span class="nx">LINE_FEED</span>
+        <span class="o">.</span> <span class="nx">preg_quote</span><span class="p">(</span><span class="nv">$body</span><span class="p">)</span> <span class="o">.</span> <span class="nx">LINE_FEED</span>
+        <span class="o">.</span> <span class="s1">&#39;$#&#39;</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">method_exists</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;assertMatchesRegularExpression&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertMatchesRegularExpression</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertRegExp</span><span class="p">(</span><span class="nv">$pattern</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>知识点如下：</p>
+
+<ol>
+<li>HTTP请求返回内容，均是纯文本格式，即使是头部内容，解析出来也是字符串形式；</li>
+<li>与请求串格式化函数很像，这里接受3个参数，并且使用内置抽象函数<code>joinedByLineFeed</code>做数据合并；</li>
+<li>官方文档上，仅描述了<code>204</code>状态码时的返回内容为空，其实API接口，也有可能产生<code>202</code>状态码返回，内容也是空的；</li>
+<li><code>301/302/307/403/404/502/503</code>等状态码时，返回的内容有可能不是预期的<code>json</code>字符串，而是<code>html</code>串；</li>
+<li><code>$timestamp</code>/<code>$nonce</code> 是从HTTP HEADES上取，对应的key是<code>Wechatpay-Timestamp</code>及<code>Wechatpay-Nonce</code>，其实还有3个key非常有用，后边再讲;</li>
+</ol>
 
 <h2 id="formatter-joinedbylinefeed">Formatter::joinedByLineFeed</h2>
 
@@ -647,7 +958,7 @@ public static function authorization(string $mchid, string $nonce, string $signa
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2021-06-27
+        2021-06-28
         
     </span>
   </p>
