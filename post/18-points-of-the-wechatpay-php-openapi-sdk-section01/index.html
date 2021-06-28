@@ -45,15 +45,15 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/" />
 <meta property="article:published_time" content="2021-06-27T17:00:11&#43;08:00"/>
-<meta property="article:modified_time" content="2021-06-28T12:11:48&#43;08:00"/>
+<meta property="article:modified_time" content="2021-06-28T15:54:50&#43;08:00"/>
 
 <meta itemprop="name" content="微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起">
 <meta itemprop="description" content="SDK目标是优先`APIv3`版，当然也需要考虑当下，`APIv2`还在并行运行。两者之间有共性也有特性，把共性部分抽象出来，当属`格式化`参数部分。`随机字符串`首当其冲，那就从这个函数实现开始吧。">
 
 
 <meta itemprop="datePublished" content="2021-06-27T17:00:11&#43;08:00" />
-<meta itemprop="dateModified" content="2021-06-28T12:11:48&#43;08:00" />
-<meta itemprop="wordCount" content="3873">
+<meta itemprop="dateModified" content="2021-06-28T15:54:50&#43;08:00" />
+<meta itemprop="wordCount" content="5337">
 
 
 
@@ -529,7 +529,7 @@
 </div>
 <p>1开头的10位纯数字，记住了，这就是 <code>Unix timestamp</code> 。</p>
 
-<h3 id="formatter-authorization-认证值">Formatter::authorization 认证值</h3>
+<h2 id="formatter-authorization-认证值">Formatter::authorization 认证值</h2>
 
 <p>这个函数，官方文档说的很详细了，但是内涵相当多的知识点，没有明说(哲学：我认为你应该知道所以我不讲了)，这个函数就是其中之一。翻<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Authorization">MDN</a>，引申有说明，<a href="https://tools.ietf.org/html/rfc7235#section-4.2">RFC 7235, section 4.2: Authorization</a>：只要符合规范，厂商可自主实现<code>&lt;type&gt; &lt;credentials&gt;</code>。</p>
 
@@ -942,11 +942,417 @@
 <li><code>$timestamp</code>/<code>$nonce</code> 是从HTTP HEADES上取，对应的key是<code>Wechatpay-Timestamp</code>及<code>Wechatpay-Nonce</code>，其实还有3个key非常有用，后边再讲;</li>
 </ol>
 
-<h2 id="formatter-joinedbylinefeed">Formatter::joinedByLineFeed</h2>
+<h2 id="formatter-joinedbylinefeed-字符合并">Formatter::joinedByLineFeed 字符合并</h2>
 
-<h2 id="formatter-ksort">Formatter::ksort</h2>
+<p>上边两个函数，都提到这个字符串合并函数了，之所以单独拎出来，是因为这个函数不仅仅用在这两个函数之上，微信字符与微信的数据交换<code>二次签名</code>以及<code>官方小程序发券</code>插件数据签名，数据格式均以<code>0x0A</code>做合并签名，并且末行的<code>0x0A</code>是不能少的。</p>
 
-<h2 id="formatter-querystringlike">Formatter::queryStringLike</h2>
+<p>这里不得不对<code>APIv3</code>的规范性做个感性评价，一致性还是相当可以的（虽然有难以言表的接口出现，拔特总体还是很可以的）。</p>
+
+<p>代码块如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Joined this inputs by for `Line Feed`(LF) char.
+</span><span class="sd"> *
+</span><span class="sd"> * @param string[] ...$pieces - The string(s) joined by line feed.
+</span><span class="sd"> *
+</span><span class="sd"> * @return string - The joined string.
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">joinedByLineFeed</span><span class="p">(</span><span class="o">...</span><span class="nv">$pieces</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="nx">implode</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="nx">array_merge</span><span class="p">(</span><span class="nv">$pieces</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]));</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>这里用到了<code>PHP7</code>的弹性入参功能<code>Variable-length argument lists</code>，入参是平展展的字符串，赋值给<code>$piecies</code>型参，内部用了内置的<code>implode</code>及<code>array_merge</code>函数，来构建末尾是<code>0xoA</code>的字符串。</p>
+
+<p>测试用例如下(其实request/response都已经覆盖)：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">joinedByLineFeedPhrasesProvider</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s1">&#39;one argument&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="s1">&#39;two arguments&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;mixed arguments&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="nx">LINE_FEED</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span> <span class="k">false</span><span class="p">,</span> <span class="k">null</span><span class="nx">，</span> <span class="s1">&#39;4&#39;</span><span class="p">],</span>
+    <span class="p">];</span>
+<span class="p">}</span>
+
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider joinedByLineFeedPhrasesProvider
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testJoinedByLineFeed</span><span class="p">(</span><span class="o">...</span><span class="nv">$data</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$value</span> <span class="o">=</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">joinedByLineFeed</span><span class="p">(</span><span class="o">...</span><span class="nv">$data</span><span class="p">);</span>
+
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
+
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertStringEndsWith</span><span class="p">(</span><span class="nx">LINE_FEED</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertLessThanOrEqual</span><span class="p">(</span><span class="nx">substr_count</span><span class="p">(</span><span class="nv">$value</span><span class="p">,</span> <span class="nx">LINE_FEED</span><span class="p">),</span> <span class="nx">count</span><span class="p">(</span><span class="nv">$data</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testNoneArgumentPassedToJoinedByLineFeed</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$value</span> <span class="o">=</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">joinedByLineFeed</span><span class="p">();</span>
+
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
+
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertStringNotContainsString</span><span class="p">(</span><span class="nx">LINE_FEED</span><span class="p">,</span> <span class="nv">$value</span><span class="p">);</span>
+
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertTrue</span><span class="p">(</span><span class="nx">strlen</span><span class="p">(</span><span class="nv">$value</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>小技巧：</strong> 在测试用例上，使用了<code>PHP7</code>的变长函数参数特性，透传给了被测试函数（不一定是个好方案），姑且先这样测试，后续再说。</p>
+
+<h2 id="formatter-ksort-字典序排列数组">Formatter::ksort 字典序排列数组</h2>
+
+<p>这个函数是<code>APIv2</code>用的，字典序排序入参，代码块如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Sort an array by key with `SORT_FLAG_CASE | SORT_NATURAL` flag.
+</span><span class="sd"> *
+</span><span class="sd"> * @param array&lt;string, string|int&gt; $thing - The input array.
+</span><span class="sd"> *
+</span><span class="sd"> * @return array&lt;string, string|int&gt; - The sorted array.
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">ksort</span><span class="p">(</span><span class="k">array</span> <span class="nv">$thing</span> <span class="o">=</span> <span class="p">[])</span><span class="o">:</span> <span class="k">array</span>
+<span class="p">{</span>
+    <span class="nx">ksort</span><span class="p">(</span><span class="nv">$thing</span><span class="p">,</span> <span class="nx">SORT_FLAG_CASE</span> <span class="o">|</span> <span class="nx">SORT_NATURAL</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="nv">$thing</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>知识点:</strong> <code>PHP</code> 的 <code>SORT_NATURAL</code> 是按自然序排序，让我们用测试用例来感受一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">ksortByFlagNaturePhrasesProvider</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="s1">&#39;a&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;aa&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s1">&#39;a&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;aa&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;3&#39;</span><span class="p">],</span>
+        <span class="p">],</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="s1">&#39;rfc1&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;rfc822&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;rfc2086&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;3&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;rfc1&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;rfc822&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;rfc2086&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;3&#39;</span><span class="p">],</span>
+        <span class="p">],</span>
+    <span class="p">];</span>
+<span class="p">}</span>
+
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider ksortByFlagNaturePhrasesProvider
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testKsort</span><span class="p">(</span><span class="k">array</span> <span class="nv">$thing</span><span class="p">,</span> <span class="k">array</span> <span class="nv">$excepted</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertEquals</span><span class="p">(</span><span class="nx">Formatter</span><span class="o">::</span><span class="na">ksort</span><span class="p">(</span><span class="nv">$thing</span><span class="p">),</span> <span class="nv">$excepted</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">nativeKsortPhrasesProvider</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="s1">&#39;a&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;aa&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s1">&#39;a&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;aa&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;3&#39;</span><span class="p">],</span>
+        <span class="p">],</span>
+        <span class="p">[</span>
+            <span class="p">[</span><span class="s1">&#39;rfc1&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;rfc822&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;2&#39;</span><span class="p">,</span> <span class="s1">&#39;rfc2086&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;3&#39;</span><span class="p">],</span>
+            <span class="p">[</span><span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;4&#39;</span><span class="p">,</span> <span class="s1">&#39;rfc1&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;rfc2086&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;rfc822&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span>
+        <span class="p">],</span>
+    <span class="p">];</span>
+<span class="p">}</span>
+
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider nativeKsortPhrasesProvider
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testNativeKsort</span><span class="p">(</span><span class="k">array</span> <span class="nv">$thing</span><span class="p">,</span> <span class="k">array</span> <span class="nv">$excepted</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nx">ksort</span><span class="p">(</span><span class="nv">$thing</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$thing</span><span class="p">,</span> <span class="nv">$excepted</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>差异点就在于，对于字符串+数字序列的键值，自然排序是<code>rfc1, rfc822, rfc2086</code>，默认排序是<code>rfc1, rfc2086, rfc822</code>，理论上，这个和官方的<code>字典序</code>排序是不完全一样的，待后续观察。</p>
+
+<h2 id="formatter-querystringlike-数组转字符串">Formatter::queryStringLike 数组转字符串</h2>
+
+<p>方法名儿已经语义化了，是跟<code>querystring</code>做法类似，但是是有排除，排除规则是：键值是<code>sign</code>的，值是空串或者<code>null</code>的。代码块如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Like `queryString` does but without the `sign` and `empty value` entities.
+</span><span class="sd"> *
+</span><span class="sd"> * @param array&lt;string, string|int|null&gt; $thing - The input array.
+</span><span class="sd"> *
+</span><span class="sd"> * @return string - The `key=value` pair string whose joined by `&amp;` char.
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">queryStringLike</span><span class="p">(</span><span class="k">array</span> <span class="nv">$thing</span> <span class="o">=</span> <span class="p">[])</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="nv">$data</span> <span class="o">=</span> <span class="p">[];</span>
+
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$thing</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$key</span> <span class="o">===</span> <span class="s1">&#39;sign&#39;</span> <span class="o">||</span> <span class="nx">is_null</span><span class="p">(</span><span class="nv">$value</span><span class="p">)</span> <span class="o">||</span> <span class="nv">$value</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">continue</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nv">$data</span><span class="p">[]</span> <span class="o">=</span> <span class="nx">implode</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="p">[</span><span class="nv">$key</span><span class="p">,</span> <span class="nv">$value</span><span class="p">]);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">implode</span><span class="p">(</span><span class="s1">&#39;&amp;&#39;</span><span class="p">,</span> <span class="nv">$data</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>为什么要排除掉<code>null</code>呢？？这其实是本SDK一个强制要求，<code>APIv2</code>上，有一个接口是不太标准的，要求入参是<code>NULL</code>字符串，<code>null</code>数据类型和<code>NULL</code>字符串不是一回事儿，不是一回事儿，不是一回事儿，重要的事情说三遍。。。。</p>
+
+<p>测试用例覆盖如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider nativeKsortPhrasesProvider
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testNativeKsort</span><span class="p">(</span><span class="k">array</span> <span class="nv">$thing</span><span class="p">,</span> <span class="k">array</span> <span class="nv">$excepted</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertTrue</span><span class="p">(</span><span class="nx">ksort</span><span class="p">(</span><span class="nv">$thing</span><span class="p">));</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$thing</span><span class="p">,</span> <span class="nv">$excepted</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">function</span> <span class="nf">queryStringLikePhrasesProvider</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s1">&#39;none specific chars&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s1">&#39;a&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;aa&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;a=1&amp;b=3&amp;aa=2&#39;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="s1">&#39;has `sign` key&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s1">&#39;a&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;sign&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;a=1&amp;b=3&#39;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="s1">&#39;has `empty` value&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s1">&#39;a&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;a=1&amp;b=3&#39;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="s1">&#39;has `null` value&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s1">&#39;a&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span> <span class="o">=&gt;</span> <span class="k">null</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;2&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;a=1&amp;c=2&#39;</span><span class="p">,</span>
+        <span class="p">],</span>
+        <span class="s1">&#39;mixed `sign` key, `empty` and `null` values&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="p">[</span><span class="s1">&#39;bob&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;alice&#39;</span> <span class="o">=&gt;</span> <span class="k">null</span><span class="p">,</span> <span class="s1">&#39;tom&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;sign&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;mock&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;bob=1&#39;</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">];</span>
+<span class="p">}</span>
+
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider queryStringLikePhrasesProvider
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testQueryStringLike</span><span class="p">(</span><span class="k">array</span> <span class="nv">$thing</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$excepted</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$value</span> <span class="o">=</span> <span class="nx">Formatter</span><span class="o">::</span><span class="na">queryStringLike</span><span class="p">(</span><span class="nv">$thing</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$value</span><span class="p">,</span> <span class="nv">$excepted</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>至此，SDK上封装的基础格式化参数函数讲解完了，知识点即“踩坑”点，规集整理出来，分享给大家。</p>
 
     </div>
 
