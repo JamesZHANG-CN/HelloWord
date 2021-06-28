@@ -1,7 +1,7 @@
 ---
 title: "微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起"
 date: 2021-06-27T17:00:11+08:00
-lastmod: 2021-06-27T19:11:48+08:00
+lastmod: 2021-06-28T12:11:48+08:00
 keywords: ["微信支付", "WeChatPay PHP SDK", "GuzzleHttp", "PHPStan Level8"]
 description: "SDK目标是优先`APIv3`版，当然也需要考虑当下，`APIv2`还在并行运行。两者之间有共性也有特性，把共性部分抽象出来，当属`格式化`参数部分。`随机字符串`首当其冲，那就从这个函数实现开始吧。"
 tags: []
@@ -18,6 +18,7 @@ SDK目标是优先`APIv3`版，当然也需要考虑当下，`APIv2`还在并行
 本博发布之日，这个函数已经迭代了一个版本，并且加入了测试用例覆盖，最终形态如下：
 
 ```php
+<?php
 /**
  * Generate a random ASCII string aka `nonce`, similar as `random_bytes`.
  *
@@ -39,6 +40,7 @@ public static function nonce(int $size = 32): string
 上一版是这么实现的：
 
 ```php
+<?php
 const BASE62_CHARS = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 public static function nonce(int $size = 32): string
@@ -142,6 +144,7 @@ printf(
 [测试用例](https://github.com/TheNorthMemory/wechatpay-php/blob/5fb1c64a154cc63bbff730e59c0632c0f6e45043/tests/FormatterTest.php)如下：
 
 ```php
+<?php
 public function nonceRulesProvider(): array
 {
     return [
@@ -178,7 +181,7 @@ public function testNonce(int $size, string $pattern): void
 
 **一个重要提示**： 按照PHP手册上提示，`mt_rand`是密码学不安全的函数，这里也做一并提示 `Formatter::nonce()` 也是密码学不安全实现。本类库在使用时，仅当`salt`（盐）使用，扩展使用时，请注意使用场景。
 
-### Formatter::timestamp 时间戳
+## Formatter::timestamp 时间戳
 
 这个函数是对`time()`的一个及其简单的一个封装。之所以要封装，其实是有一点点说法的。按照微信支付官方开发文档说明，时间戳是自1970年1月1日起的`Unix timesamp`，即 Epoch timesamp。PHP内置`time()`函数就是这个值。其他平台，有见到把`timesamp`翻译成`yyyy-MM-dd HH:mm:ss`格式的字符串，做这么个封装的原因：
 
@@ -188,6 +191,7 @@ public function testNonce(int $size, string $pattern): void
 代码块如下
 
 ```php
+<?php
 /**
  * Retrieve the current `Unix` timestamp.
  *
@@ -202,6 +206,7 @@ public static function timestamp(): int
 [测试用例](https://github.com/TheNorthMemory/wechatpay-php/blob/5fb1c64a154cc63bbff730e59c0632c0f6e45043/tests/FormatterTest.php)如下：
 
 ```php
+<?php
 public function testTimestamp(): void
 {
     $timestamp = Formatter::timestamp();
@@ -232,6 +237,7 @@ public function testTimestamp(): void
 代码块如下：
 
 ```php
+<?php
 /**
  * Formatting for the heading `Authorization` value.
  *
@@ -264,6 +270,7 @@ public static function authorization(string $mchid, string $nonce, string $signa
 我们用测试用例覆盖来校验如下：
 
 ```php
+<?php
 public function testAuthorization(): void
 {
     $value = Formatter::authorization('1001', Formatter::nonce(), 'mock', (string) Formatter::timestamp(), 'mockmockmock');
@@ -274,11 +281,11 @@ public function testAuthorization(): void
     self::assertStringEndsWith('"', $value);
 
     $pattern = '/^WECHATPAY2-SHA256-RSA2048 '
-        . 'mchid="(?:[0-9A-Za-z]{1,32})",'
-        . 'nonce_str="(?:[0-9A-Za-z]{16,})",'
-        . 'signature="(?:[0-9A-Za-z+\/]+)={0,2}",'
-        . 'timestamp="(?:1[0-9]{9})",'
-        . 'serial_no="(?:[0-9A-Z]{8,40})"$/';
+        . 'mchid="[0-9A-Za-z]{1,32}",'
+        . 'nonce_str="[0-9A-Za-z]{16,}",'
+        . 'signature="[0-9A-Za-z\+\/]+={0,2}",'
+        . 'timestamp="1[0-9]{9}",'
+        . 'serial_no="[0-9A-Z]{8,40}"$/';
 
     if (method_exists($this, 'assertMatchesRegularExpression')) {
         self::assertMatchesRegularExpression($pattern, $value);
@@ -290,9 +297,163 @@ public function testAuthorization(): void
 
 PS: 官方文档上，特意说了 认证类型 `<type>`，目前为 `WECHATPAY2-SHA256-RSA2048`，畅想应该还会有其他值。所以在`APIv3`开发的时候，建议还是要**多看看官方文档/公告说明**，以免 `我的代码没动过啊，为什么现在不行了` 这类问题产生。
 
-## Formatter::request
+## Formatter::request 请求字符串
 
-## Formatter::response
+顾名思义，这个函数就是用来格式化请求参数的，按照官方开发文档介绍，输入参数是需要按照"\n"(char`0x0A`)做排列合并，而`0x0A`是个非打印字符，文本描述起来比较困难，另外对于空请求串情况，占位行不能省略，顾做一个纵向封装，以程序语言(函数型参)来描述请求串，代码块如下：
+
+```php
+<?php
+/**
+ * Formatting this `HTTP::request` for `Rsa::sign` input.
+ *
+ * @param string $method - The HTTP verb, must be the uppercase sting.
+ * @param string $uri - Combined string with `URL::pathname` and `URL::search`.
+ * @param string $timestamp - The `Unix` timestamp, should be the one used in `authorization`.
+ * @param string $nonce - The `Nonce` string, should be the one used in `authorization`.
+ * @param string $body - The playload string, HTTP `GET` should be an empty string.
+ *
+ * @return string - The content for `Rsa::sign`
+ */
+public static function request(string $method, string $uri, string $timestamp, string $nonce, string $body = ''): string
+{
+    return static::joinedByLineFeed($method, $uri, $timestamp, $nonce, $body);
+}
+```
+
+函数入参接受5部分，其中`$body`可为空，内置驱动 `joinedByLineFeed` 做参数合并并返回字符串。这里有个点就是对入参 `$timestamp` 的类型定义，这里用了字符串定义，原因是：合并后的输出是个字符串，输入端就做了*妥协*，当然在非严格限制模式行，用纯数字输入也是可以的。
+
+测试用例覆盖如下:
+
+```php
+<?php
+const LINE_FEED = "\n";
+
+public function requestPhrasesProvider(): array
+{
+    return [
+        'DELETE root(/)' => ['DELETE', '/', ''],
+        'DELETE root(/) with query' => ['DELETE', '/?hello=wechatpay', ''],
+        'GET root(/)' => ['GET', '/', ''],
+        'GET root(/) with query' => ['GET', '/?hello=wechatpay', ''],
+        'POST root(/) with body' => ['POST', '/', '{}'],
+        'POST root(/) with body and query' => ['POST', '/?hello=wechatpay', '{}'],
+        'PUT root(/) with body' => ['PUT', '/', '{}'],
+        'PUT root(/) with body and query' => ['PUT', '/?hello=wechatpay', '{}'],
+        'PATCH root(/) with body' => ['PATCH', '/', '{}'],
+        'PATCH root(/) with body and query' => ['PATCH', '/?hello=wechatpay', '{}'],
+    ];
+}
+
+/**
+ * @dataProvider requestPhrasesProvider
+ */
+public function testRequest(string $method, string $uri, string $body): void
+{
+    $value = Formatter::request($method, $uri, (string) Formatter::timestamp(), Formatter::nonce(), $body);
+
+    self::assertIsString($value);
+
+    self::assertStringStartsWith($method, $value);
+    self::assertStringEndsWith(LINE_FEED, $value);
+    self::assertLessThanOrEqual(substr_count($value, LINE_FEED), 5);
+
+    $pattern = '#^' . $method . LINE_FEED
+        .  preg_quote($uri) . LINE_FEED
+        . '1[0-9]{9}' . LINE_FEED
+        . '[0-9A-Za-z]{32}' . LINE_FEED
+        . preg_quote($body) . LINE_FEED
+        . '$#';
+
+    if (method_exists($this, 'assertMatchesRegularExpression')) {
+        self::assertMatchesRegularExpression($pattern, $value);
+    } else {
+        self::assertRegExp($pattern, $value);
+    }
+}
+```
+
+测试用例说明一下，共计十种情形，函数返回值，必须以所请求的 `$method` 开头，并且至少含有5个`LINE_FEED`常量，其中一个`LINE_FEED`在末尾。 用例的数据供给，含了已知的`APIv3` HTTP verbs，即：`DELETE`, `GET`, `POST`, `PUT` 及 `PATCH`。 按照 [rfc3986](https://tools.ietf.org/html/rfc3986) 规范，`DELETE`及`GET`是不带请求`$body`的。
+
+## Formatter::response 响应字符串
+
+这个函数是`APIv3`开发文档上验签逻辑的一个封装，直白代码如下：
+
+```php
+<?php
+/**
+ * Formatting this `HTTP::response` for `Rsa::verify` input.
+ *
+ * @param string $timestamp - The `Unix` timestamp, should be the one from `response::headers[Wechatpay-Timestamp]`.
+ * @param string $nonce - The `Nonce` string, should be the one from `response::headers[Wechatpay-Nonce]`.
+ * @param string $body - The response payload string, HTTP status(`201`, `204`) should be an empty string.
+ *
+ * @return string - The content for `Rsa::verify`
+ */
+public static function response(string $timestamp, string $nonce, string $body = ''): string
+{
+    return static::joinedByLineFeed($timestamp, $nonce, $body);
+}
+```
+
+测试用例覆盖如下：
+
+```php
+<?php
+public function responsePhrasesProvider(): array
+{
+    return [
+        'HTTP 200 STATUS with body' => ['{}'],
+        'HTTP 200 STATUS with no body' => [''],
+        'HTTP 202 STATUS with no body' => [''],
+        'HTTP 204 STATUS with no body' => [''],
+        'HTTP 301 STATUS with no body' => [''],
+        'HTTP 301 STATUS with body' => ['<html></html>'],
+        'HTTP 302 STATUS with no body' => [''],
+        'HTTP 302 STATUS with body' => ['<html></html>'],
+        'HTTP 307 STATUS with no body' => [''],
+        'HTTP 307 STATUS with body' => ['<html></html>'],
+        'HTTP 400 STATUS with body' => ['{}'],
+        'HTTP 401 STATUS with body' => ['{}'],
+        'HTTP 403 STATUS with body' => ['<html></html>'],
+        'HTTP 404 STATUS with body' => ['<html></html>'],
+        'HTTP 500 STATUS with body' => ['{}'],
+        'HTTP 502 STATUS with body' => ['<html></html>'],
+        'HTTP 503 STATUS with body' => ['<html></html>'],
+    ];
+}
+
+/**
+ * @dataProvider responsePhrasesProvider
+ */
+public function testResponse(string $body): void
+{
+    $value = Formatter::response((string) Formatter::timestamp(), Formatter::nonce(), $body);
+
+    self::assertIsString($value);
+
+    self::assertStringEndsWith(LINE_FEED, $value);
+    self::assertLessThanOrEqual(substr_count($value, LINE_FEED), 3);
+
+    $pattern = '#^1[0-9]{9}' . LINE_FEED
+        . '[0-9A-Za-z]{32}' . LINE_FEED
+        . preg_quote($body) . LINE_FEED
+        . '$#';
+
+    if (method_exists($this, 'assertMatchesRegularExpression')) {
+        self::assertMatchesRegularExpression($pattern, $value);
+    } else {
+        self::assertRegExp($pattern, $value);
+    }
+}
+```
+
+知识点如下：
+
+1. HTTP请求返回内容，均是纯文本格式，即使是头部内容，解析出来也是字符串形式；
+2. 与请求串格式化函数很像，这里接受3个参数，并且使用内置抽象函数`joinedByLineFeed`做数据合并；
+3. 官方文档上，仅描述了`204`状态码时的返回内容为空，其实API接口，也有可能产生`202`状态码返回，内容也是空的；
+4. `301/302/307/403/404/502/503`等状态码时，返回的内容有可能不是预期的`json`字符串，而是`html`串；
+5. `$timestamp`/`$nonce` 是从HTTP HEADES上取，对应的key是`Wechatpay-Timestamp`及`Wechatpay-Nonce`，其实还有3个key非常有用，后边再讲;
 
 ## Formatter::joinedByLineFeed
 
