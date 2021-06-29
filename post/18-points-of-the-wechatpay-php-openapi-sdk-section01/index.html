@@ -45,15 +45,15 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/" />
 <meta property="article:published_time" content="2021-06-27T17:00:11&#43;08:00"/>
-<meta property="article:modified_time" content="2021-06-28T15:54:50&#43;08:00"/>
+<meta property="article:modified_time" content="2021-06-29T11:59:20&#43;08:00"/>
 
 <meta itemprop="name" content="微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起">
 <meta itemprop="description" content="SDK目标是优先`APIv3`版，当然也需要考虑当下，`APIv2`还在并行运行。两者之间有共性也有特性，把共性部分抽象出来，当属`格式化`参数部分。`随机字符串`首当其冲，那就从这个函数实现开始吧。">
 
 
 <meta itemprop="datePublished" content="2021-06-27T17:00:11&#43;08:00" />
-<meta itemprop="dateModified" content="2021-06-28T15:54:50&#43;08:00" />
-<meta itemprop="wordCount" content="5337">
+<meta itemprop="dateModified" content="2021-06-29T11:59:20&#43;08:00" />
+<meta itemprop="wordCount" content="5347">
 
 
 
@@ -585,11 +585,11 @@
 
 <ol>
 <li>商户号 <code>mchid</code> 是1至32字符的<code>base62</code>字符串，当前绝大部分商户号是纯数字；</li>
-<li>请求随机串 <code>nonce_str</code> 是至少16字符的<code>base62</code>字符串，上限不清楚，没测试过（不敢，怕封号)；</li>
+<li>请求随机串 <code>nonce_str</code> 只要能通过HTTP上送的字符均可，建议是至少16字符的<code>base62</code>字符串；</li>
 <li>签名值 <code>signature</code> 是<code>base64</code>字符串，base64末尾有可能有0个、1个或者2个<code>=</code>号，这都是正常的<code>base64</code>字符串；</li>
 <li>时间戳 <code>timestamp</code> 是 <code>unix timestamp</code>，如 <code>Formatter::timestamp()</code> 封装所述;</li>
 <li>商户API证书 <code>serial_no</code> 是8至40字符的<code>【0-9A-Z]</code>全大写字符串；</li>
-<li>认证值有严格的顺序要求，即 <code>mchid,nonce,signature,timestamp,serial</code> 非字典序，值的组合用半角逗号(,)分隔，严格没有空格；</li>
+<li>认证值有字典要求，即 <code>mchid,nonce,signature,timestamp,serial</code> 即这5个必须出现，排列组合顺序任意，值的组合用半角逗号(,)分隔，严格没有空格；</li>
 </ol>
 
 <p>我们用测试用例覆盖来校验如下：</p>
@@ -1364,7 +1364,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2021-06-28
+        2021-06-29
         
     </span>
   </p>
