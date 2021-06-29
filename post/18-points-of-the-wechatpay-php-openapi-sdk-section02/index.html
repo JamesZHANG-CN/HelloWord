@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>微信支付PHP开发对接18讲——02: RSA-OAEP非对称加解密重构 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="有开发者反馈，先前的加解密`Util\SensitiveInfoCrypto`实现，用法看似简单，其实用起来&#39;坑&#39;蛮多的。&#39;坑&#39;点在于：初始化所需的`私钥`和`公钥(证书)`，在业务场景下是`非配对`的！`公钥(证书)`加密时，所用的`公钥(证书)`是`平台证书(公钥)`，而解密时所需的`私钥`，是`商户私钥`。并且，加解密稍不注意就会干扰到业务处理(初始化参数以及切换`stage`稍微繁琐)。遂重构一遍，命名为 `Crypto\Rsa` 类。" /><meta name="keywords" content="微信支付, WeChatPay PHP SDK, GuzzleHttp, PHPStan Level8" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/18-points-of-the-wechatpay-php-openapi-sdk-section02/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="微信支付PHP开发对接18讲——02: RSA-OAEP非对称加解密重构" />
+<meta property="og:description" content="有开发者反馈，先前的加解密`Util\SensitiveInfoCrypto`实现，用法看似简单，其实用起来&#39;坑&#39;蛮多的。&#39;坑&#39;点在于：初始化所需的`私钥`和`公钥(证书)`，在业务场景下是`非配对`的！`公钥(证书)`加密时，所用的`公钥(证书)`是`平台证书(公钥)`，而解密时所需的`私钥`，是`商户私钥`。并且，加解密稍不注意就会干扰到业务处理(初始化参数以及切换`stage`稍微繁琐)。遂重构一遍，命名为 `Crypto\Rsa` 类。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/18-points-of-the-wechatpay-php-openapi-sdk-section02/" />
+<meta property="article:published_time" content="2021-06-29T14:50:11&#43;08:00"/>
+<meta property="article:modified_time" content="2021-06-29T14:50:11&#43;08:00"/>
+
+<meta itemprop="name" content="微信支付PHP开发对接18讲——02: RSA-OAEP非对称加解密重构">
+<meta itemprop="description" content="有开发者反馈，先前的加解密`Util\SensitiveInfoCrypto`实现，用法看似简单，其实用起来&#39;坑&#39;蛮多的。&#39;坑&#39;点在于：初始化所需的`私钥`和`公钥(证书)`，在业务场景下是`非配对`的！`公钥(证书)`加密时，所用的`公钥(证书)`是`平台证书(公钥)`，而解密时所需的`私钥`，是`商户私钥`。并且，加解密稍不注意就会干扰到业务处理(初始化参数以及切换`stage`稍微繁琐)。遂重构一遍，命名为 `Crypto\Rsa` 类。">
+
+
+<meta itemprop="datePublished" content="2021-06-29T14:50:11&#43;08:00" />
+<meta itemprop="dateModified" content="2021-06-29T14:50:11&#43;08:00" />
+<meta itemprop="wordCount" content="1325">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="微信支付PHP开发对接18讲——02: RSA-OAEP非对称加解密重构"/>
+<meta name="twitter:description" content="有开发者反馈，先前的加解密`Util\SensitiveInfoCrypto`实现，用法看似简单，其实用起来&#39;坑&#39;蛮多的。&#39;坑&#39;点在于：初始化所需的`私钥`和`公钥(证书)`，在业务场景下是`非配对`的！`公钥(证书)`加密时，所用的`公钥(证书)`是`平台证书(公钥)`，而解密时所需的`私钥`，是`商户私钥`。并且，加解密稍不注意就会干扰到业务处理(初始化参数以及切换`stage`稍微繁琐)。遂重构一遍，命名为 `Crypto\Rsa` 类。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">微信支付PHP开发对接18讲——02: RSA-OAEP非对称加解密重构</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-06-29 </span>
+        <div class="post-category">
+            <a href="/categories/php/"> php </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<p>这个 <code>Crypto\Rsa</code> 类，是对之前的一个实现 <code>Util\SensitiveInfoCrypto</code> 重构。上一版实现是这么用的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="c1">// Encrypt usage:
+</span><span class="c1"></span><span class="nv">$encryptor</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SensitiveInfoCrypto</span><span class="p">(</span>
+    <span class="nx">PemUtil</span><span class="o">::</span><span class="na">loadCertificate</span><span class="p">(</span><span class="s1">&#39;/downloaded/pubcert.pem&#39;</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="nv">$json</span> <span class="o">=</span> <span class="nx">json_encode</span><span class="p">([</span><span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="nv">$encryptor</span><span class="p">(</span><span class="s1">&#39;Alice&#39;</span><span class="p">)]);</span>
+<span class="c1">// That&#39;s simple!
+</span><span class="c1"></span>
+<span class="c1">// Decrypt usage:
+</span><span class="c1"></span><span class="nv">$decryptor</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SensitiveInfoCrypto</span><span class="p">(</span>
+    <span class="k">null</span><span class="p">,</span>
+    <span class="nx">PemUtil</span><span class="o">::</span><span class="na">loadPrivateKey</span><span class="p">(</span><span class="s1">&#39;/merchant/key.pem&#39;</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="nv">$decrypted</span> <span class="o">=</span> <span class="nv">$decryptor</span><span class="o">-&gt;</span><span class="na">setStage</span><span class="p">(</span><span class="s1">&#39;decrypt&#39;</span><span class="p">)(</span>
+    <span class="s1">&#39;base64 encoding message was given by the payment plat&#39;</span>
+<span class="p">);</span>
+<span class="c1">// That&#39;s simple too!
+</span><span class="c1"></span>
+<span class="c1">// Working both Encrypt and Decrypt usages:
+</span><span class="c1"></span><span class="nv">$crypto</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SensitiveInfoCrypto</span><span class="p">(</span>
+    <span class="nx">PemUtil</span><span class="o">::</span><span class="na">loadCertificate</span><span class="p">(</span><span class="s1">&#39;/merchant/cert.pem&#39;</span><span class="p">),</span>
+    <span class="nx">PemUtil</span><span class="o">::</span><span class="na">loadPrivateKey</span><span class="p">(</span><span class="s1">&#39;/merchant/key.pem&#39;</span><span class="p">)</span>
+<span class="p">);</span>
+<span class="nv">$encrypted</span> <span class="o">=</span> <span class="nv">$crypto</span><span class="p">(</span><span class="s1">&#39;Carol&#39;</span><span class="p">);</span>
+<span class="nv">$decrypted</span> <span class="o">=</span> <span class="nv">$crypto</span><span class="o">-&gt;</span><span class="na">setStage</span><span class="p">(</span><span class="s1">&#39;decrypt&#39;</span><span class="p">)(</span><span class="nv">$encrypted</span><span class="p">);</span>
+<span class="c1">// Having fun with this!
+</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>有开发者反馈，上述用法看似简单，其实用起来&rdquo;坑&rdquo;蛮多的。稍微分析一下，确实是的。&rdquo;坑&rdquo;点在于：初始化所需的<code>私钥</code>和<code>公钥(证书)</code>，在业务场景下是<code>非配对</code>的！<code>公钥(证书)</code>加密时，所用的<code>公钥(证书)</code>是<code>平台证书(公钥)</code>，而解密时所需的<code>私钥</code>，是<code>商户私钥</code>。并且，加解密稍不注意就会干扰到业务处理(初始化参数以及切换<code>stage</code>稍微繁琐)。</p>
+
+<p>是的，这个<code>SensitiveInfoCrypto</code>类过度设计了。</p>
+
+<p>所以，在新包内，这个是必须要被重写一遍实现的。</p>
+
+<h2 id="crypto-rsa-precondition-前置条件检测">Crypto\Rsa::preCondition 前置条件检测</h2>
+
+<p>检测当前<code>ext-openssl</code>扩展，是否支持<code>SHA256</code>哈希散列，为了更清晰地区别传统<code>Hash</code>散列算法，这里用到了算法别名即<code>sha256WithRSAEncryption</code>。代码块如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">const</span> <span class="no">sha256WithRSAEncryption</span> <span class="o">=</span> <span class="s1">&#39;sha256WithRSAEncryption&#39;</span><span class="p">;</span>
+<span class="k">private</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">preCondition</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">in_array</span><span class="p">(</span><span class="nx">sha256WithRSAEncryption</span><span class="p">,</span> <span class="nx">openssl_get_md_methods</span><span class="p">(</span><span class="k">true</span><span class="p">)))</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">RuntimeException</span><span class="p">(</span><span class="s1">&#39;It looks like the ext-openssl extension missing the `sha256WithRSAEncryption` digest method.&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p><strong>小技巧:</strong> 这里用到了命名空间下常量功能(<code>PHP7</code>开始支持)，定义了一个同名的 <code>sha256WithRSAEncryption</code> 哈希别名常量，RSA下的<code>SHA256</code>哈希散列别名，这个检测其实是多余的，在未来的某个版本，可以安全地移除掉。</p>
+
+<h2 id="crypto-rsa-encrypt-公钥加密">Crypto\Rsa::encrypt 公钥加密</h2>
+
+<p>既然是要重写，首先要考虑易用，那静态方法其实比实例化后使用方便得多，代码块如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Encrypts text with `OPENSSL_PKCS1_OAEP_PADDING`.
+</span><span class="sd"> *
+</span><span class="sd"> * @param string $plaintext - Cleartext to encode.
+</span><span class="sd"> * @param \OpenSSLAsymmetricKey|\OpenSSLCertificate|object|resource|string|mixed $publicKey - A PEM encoded public key.
+</span><span class="sd"> *
+</span><span class="sd"> * @return string - The base64-encoded ciphertext.
+</span><span class="sd"> * @throws UnexpectedValueException
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">encrypt</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$publicKey</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">openssl_public_encrypt</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$encrypted</span><span class="p">,</span> <span class="nv">$publicKey</span><span class="p">,</span> <span class="nx">OPENSSL_PKCS1_OAEP_PADDING</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">UnexpectedValueException</span><span class="p">(</span><span class="s1">&#39;Encrypting the input $plaintext failed, please checking your $publicKey whether or nor correct.&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">base64_encode</span><span class="p">(</span><span class="nv">$encrypted</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>函数接受两个参数，同时对返回值做了类型签名，所接受的第二参数 <code>$publicKey</code> 是透传给 <code>openssl_public_encrypt</code> 函数的，所以可以接受的类型范围比较广。 这里捎带提一下，<code>PHP8</code> 有许多改进，尤其是把<code>OpenSSL</code>相关的原<code>资源</code>类型，现在定义成<code>对象</code>了，即代码注释上的: <code>\OpenSSLAsymmetricKey|\OpenSSLCertificate</code>，这俩是<code>PHP8</code>上才有的。</p>
+
+<p>在加入<code>PHPStan</code>代码静态分析工具后，这里就稍显尴尬了，因为本SDK最低版本要兼容至<code>PHP7.2</code>，迭代过程中，前后兼容<code>PHP8</code>是个挑战，遂加入了 <code>phpstan-baseline.neon</code> 基线，特意区分开了 <code>phpstan-php7.neon</code> 及 <code>phpstan.neon.dist</code> 各两个配置文件，静态分析从4级(<code>level3</code>)提升至6级(<code>level5</code>)再至7级(<code>level6</code>)，以至最高级别(<code>level8</code>/<code>max</code>)做了大量的代码注释修正以及代码优化。 目前看到的即是<code>最高等级</code>静态分析的代码。</p>
+
+<p><strong>小技巧</strong>: 这里同样用到了<code>PHP7</code>命名空间下声明使用常量功能，即 <code>use const OPENSSL_PKCS1_OAEP_PADDING;</code>。所以在中间代码块上，可以不用再特别注意 <code>FQN</code>,可以安全使用。</p>
+
+<h2 id="crypto-rsa-decrypt-私钥解密">Crypto\Rsa::decrypt 私钥解密</h2>
+
+<p>对应地，私钥解密也变得用起来简单得多了，型参类型签名，返回值类型签名，代码块如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Decrypts base64 encoded string with `privateKey` with `OPENSSL_PKCS1_OAEP_PADDING`.
+</span><span class="sd"> *
+</span><span class="sd"> * @param string $ciphertext - Was previously encrypted string using the corresponding public key.
+</span><span class="sd"> * @param \OpenSSLAsymmetricKey|\OpenSSLCertificate|resource|string|mixed $privateKey - A PEM encoded private key.
+</span><span class="sd"> *
+</span><span class="sd"> * @return string - The utf-8 plaintext.
+</span><span class="sd"> * @throws UnexpectedValueException
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">decrypt</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$ciphertext</span><span class="p">,</span> <span class="nv">$privateKey</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">openssl_private_decrypt</span><span class="p">(</span><span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$ciphertext</span><span class="p">),</span> <span class="nv">$decrypted</span><span class="p">,</span> <span class="nv">$privateKey</span><span class="p">,</span> <span class="nx">OPENSSL_PKCS1_OAEP_PADDING</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">UnexpectedValueException</span><span class="p">(</span><span class="s1">&#39;Decrypting the input $ciphertext failed, please checking your $privateKey whether or nor correct.&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nv">$decrypted</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<h2 id="crypto-rsa-sign-私钥签名">Crypto\Rsa::sign 私钥签名</h2>
+
+<h2 id="crypto-rsa-verify-公钥验签">Crypto\Rsa::verify 公钥验签</h2>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-06-29
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/">
+            <span class="next-text nav-default">微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

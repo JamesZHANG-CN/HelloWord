@@ -47,7 +47,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/" />
 
-<meta property="og:updated_time" content="2021-06-27T17:00:11&#43;08:00"/>
+<meta property="og:updated_time" content="2021-06-29T14:50:11&#43;08:00"/>
 
 <meta itemprop="name" content="TheNorthMemory">
 <meta itemprop="description" content="">
@@ -111,6 +111,28 @@
       <div class="content-wrapper">
         <div id="content" class="content">
           <section id="posts" class="posts">
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/18-points-of-the-wechatpay-php-openapi-sdk-section02/">微信支付PHP开发对接18讲——02: RSA-OAEP非对称加解密重构</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2021-06-29 </span>
+      <div class="post-category">
+          <a href="/categories/php/"> php </a>
+          <a href="/categories/wechat/"> wechat </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      有开发者反馈，先前的加解密<code>Util\SensitiveInfoCrypto</code>实现，用法看似简单，其实用起来&rsquo;坑&rsquo;蛮多的。&rsquo;坑&rsquo;点在于：初始化所需的<code>私钥</code>和<code>公钥(证书)</code>，在业务场景下是<code>非配对</code>的！<code>公钥(证书)</code>加密时，所用的<code>公钥(证书)</code>是<code>平台证书(公钥)</code>，而解密时所需的<code>私钥</code>，是<code>商户私钥</code>。并且，加解密稍不注意就会干扰到业务处理(初始化参数以及切换<code>stage</code>稍微繁琐)。遂重构一遍，命名为 <code>Crypto\Rsa</code> 类。
+    </div>
+    <div class="read-more">
+      <a href="/post/18-points-of-the-wechatpay-php-openapi-sdk-section02/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
     <article class="post">
   <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/">微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起</a></h1>

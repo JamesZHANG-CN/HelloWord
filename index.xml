@@ -6,10 +6,19 @@
     <description>Recent content on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Sun, 27 Jun 2021 17:00:11 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 29 Jun 2021 14:50:11 +0800</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>微信支付PHP开发对接18讲——02: RSA-OAEP非对称加解密重构</title>
+      <link>/post/18-points-of-the-wechatpay-php-openapi-sdk-section02/</link>
+      <pubDate>Tue, 29 Jun 2021 14:50:11 +0800</pubDate>
+      
+      <guid>/post/18-points-of-the-wechatpay-php-openapi-sdk-section02/</guid>
+      <description>有开发者反馈，先前的加解密&lt;code&gt;Util\SensitiveInfoCrypto&lt;/code&gt;实现，用法看似简单，其实用起来&amp;rsquo;坑&amp;rsquo;蛮多的。&amp;rsquo;坑&amp;rsquo;点在于：初始化所需的&lt;code&gt;私钥&lt;/code&gt;和&lt;code&gt;公钥(证书)&lt;/code&gt;，在业务场景下是&lt;code&gt;非配对&lt;/code&gt;的！&lt;code&gt;公钥(证书)&lt;/code&gt;加密时，所用的&lt;code&gt;公钥(证书)&lt;/code&gt;是&lt;code&gt;平台证书(公钥)&lt;/code&gt;，而解密时所需的&lt;code&gt;私钥&lt;/code&gt;，是&lt;code&gt;商户私钥&lt;/code&gt;。并且，加解密稍不注意就会干扰到业务处理(初始化参数以及切换&lt;code&gt;stage&lt;/code&gt;稍微繁琐)。遂重构一遍，命名为 &lt;code&gt;Crypto\Rsa&lt;/code&gt; 类。</description>
+    </item>
     
     <item>
       <title>微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起</title>
