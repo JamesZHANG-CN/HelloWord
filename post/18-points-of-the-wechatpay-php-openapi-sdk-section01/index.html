@@ -45,15 +45,15 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/18-points-of-the-wechatpay-php-openapi-sdk-section01/" />
 <meta property="article:published_time" content="2021-06-27T17:00:11&#43;08:00"/>
-<meta property="article:modified_time" content="2021-06-29T11:59:20&#43;08:00"/>
+<meta property="article:modified_time" content="2021-06-29T22:14:10&#43;08:00"/>
 
 <meta itemprop="name" content="微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起">
 <meta itemprop="description" content="SDK目标是优先`APIv3`版，当然也需要考虑当下，`APIv2`还在并行运行。两者之间有共性也有特性，把共性部分抽象出来，当属`格式化`参数部分。`随机字符串`首当其冲，那就从这个函数实现开始吧。">
 
 
 <meta itemprop="datePublished" content="2021-06-27T17:00:11&#43;08:00" />
-<meta itemprop="dateModified" content="2021-06-29T11:59:20&#43;08:00" />
-<meta itemprop="wordCount" content="5347">
+<meta itemprop="dateModified" content="2021-06-29T22:14:10&#43;08:00" />
+<meta itemprop="wordCount" content="5348">
 
 
 
@@ -270,7 +270,7 @@
     <span class="nv">$a</span> <span class="o">.=</span> <span class="nx">BASE62_CHARS</span><span class="p">[</span><span class="nx">mt_rand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">61</span><span class="p">)];</span>
 <span class="p">}</span>
 <span class="nx">printf</span><span class="p">(</span>
-    <span class="s1">&#39;[%30s] Time: %.7f s  %-32.32s %s&#39;</span><span class="p">,</span> <span class="s1">&#39;preg_replace_callback&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;[%30s] Time: %.7f s  %-32.32s %s&#39;</span><span class="p">,</span> <span class="s1">&#39;for loop&#39;</span><span class="p">,</span>
     <span class="nx">microtime</span><span class="p">(</span><span class="k">true</span><span class="p">)</span> <span class="o">-</span> <span class="nv">$start</span><span class="p">,</span> <span class="nv">$a</span><span class="p">,</span> <span class="nx">PHP_EOL</span>
 <span class="p">);</span>
 
@@ -288,7 +288,7 @@
     <span class="k">return</span> <span class="nv">$c</span> <span class="o">.=</span> <span class="s1">&#39;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span><span class="p">[</span><span class="nx">random_int</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">61</span><span class="p">)];</span>
 <span class="p">},</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
 <span class="nx">printf</span><span class="p">(</span>
-    <span class="s1">&#39;[%30s] Time: %.7f s  %-32.32s %s&#39;</span><span class="p">,</span> <span class="s1">&#39;preg_replace_callback&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;[%30s] Time: %.7f s  %-32.32s %s&#39;</span><span class="p">,</span> <span class="s1">&#39;array_reduce/random_int&#39;</span><span class="p">,</span>
     <span class="nx">microtime</span><span class="p">(</span><span class="k">true</span><span class="p">)</span> <span class="o">-</span> <span class="nv">$start</span><span class="p">,</span> <span class="nv">$a</span><span class="p">,</span> <span class="nx">PHP_EOL</span>
 <span class="p">);</span>
 
@@ -297,14 +297,14 @@
     <span class="k">return</span> <span class="nv">$c</span> <span class="o">.=</span> <span class="s1">&#39;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;</span><span class="p">[</span><span class="nx">mt_rand</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">61</span><span class="p">)];</span>
 <span class="p">},</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
 <span class="nx">printf</span><span class="p">(</span>
-    <span class="s1">&#39;[%30s] Time: %.7f s  %-32.32s %s&#39;</span><span class="p">,</span> <span class="s1">&#39;preg_replace_callback&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;[%30s] Time: %.7f s  %-32.32s %s&#39;</span><span class="p">,</span> <span class="s1">&#39;array_reduce/mt_rand&#39;</span><span class="p">,</span>
     <span class="nx">microtime</span><span class="p">(</span><span class="k">true</span><span class="p">)</span> <span class="o">-</span> <span class="nv">$start</span><span class="p">,</span> <span class="nv">$a</span><span class="p">,</span> <span class="nx">PHP_EOL</span>
 <span class="p">);</span>
 
 <span class="nv">$start</span> <span class="o">=</span> <span class="nx">microtime</span><span class="p">(</span><span class="k">true</span><span class="p">);</span>
 <span class="nv">$a</span> <span class="o">=</span> <span class="nx">substr</span><span class="p">(</span><span class="nx">bin2hex</span><span class="p">(</span><span class="nx">random_bytes</span><span class="p">(</span><span class="mi">50</span><span class="p">)),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">);</span>
 <span class="nx">printf</span><span class="p">(</span>
-    <span class="s1">&#39;[%30s] Time: %.7f s  %-32.32s %s&#39;</span><span class="p">,</span> <span class="s1">&#39;preg_replace_callback&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;[%30s] Time: %.7f s  %-32.32s %s&#39;</span><span class="p">,</span> <span class="s1">&#39;random_bytes&#39;</span><span class="p">,</span>
     <span class="nx">microtime</span><span class="p">(</span><span class="k">true</span><span class="p">)</span> <span class="o">-</span> <span class="nv">$start</span><span class="p">,</span> <span class="nv">$a</span><span class="p">,</span> <span class="nx">PHP_EOL</span>
 <span class="p">);</span>
 </code></pre></td></tr></table>
