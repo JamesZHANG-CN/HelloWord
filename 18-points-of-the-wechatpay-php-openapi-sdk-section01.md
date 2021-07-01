@@ -1,7 +1,7 @@
 ---
 title: "微信支付PHP开发对接18讲——01: Formatter 从格式化参数说起"
 date: 2021-06-27T17:00:11+08:00
-lastmod: 2021-06-28T12:11:48+08:00
+lastmod: 2021-06-29T22:14:10+08:00
 keywords: ["微信支付", "WeChatPay PHP SDK", "GuzzleHttp", "PHPStan Level8"]
 description: "SDK目标是优先`APIv3`版，当然也需要考虑当下，`APIv2`还在并行运行。两者之间有共性也有特性，把共性部分抽象出来，当属`格式化`参数部分。`随机字符串`首当其冲，那就从这个函数实现开始吧。"
 tags: []
@@ -68,7 +68,7 @@ for ($i = 0; $i < 50; $i++) {
     $a .= BASE62_CHARS[mt_rand(0, 61)];
 }
 printf(
-    '[%30s] Time: %.7f s  %-32.32s %s', 'preg_replace_callback',
+    '[%30s] Time: %.7f s  %-32.32s %s', 'for loop',
     microtime(true) - $start, $a, PHP_EOL
 );
 
@@ -86,7 +86,7 @@ $a = array_reduce(range(1, 50), static function(string $c) {
     return $c .= '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'[random_int(0, 61)];
 }, '');
 printf(
-    '[%30s] Time: %.7f s  %-32.32s %s', 'preg_replace_callback',
+    '[%30s] Time: %.7f s  %-32.32s %s', 'array_reduce/random_int',
     microtime(true) - $start, $a, PHP_EOL
 );
 
@@ -95,14 +95,14 @@ $a = array_reduce(range(1, 50), static function(string $c) {
     return $c .= '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'[mt_rand(0, 61)];
 }, '');
 printf(
-    '[%30s] Time: %.7f s  %-32.32s %s', 'preg_replace_callback',
+    '[%30s] Time: %.7f s  %-32.32s %s', 'array_reduce/mt_rand',
     microtime(true) - $start, $a, PHP_EOL
 );
 
 $start = microtime(true);
 $a = substr(bin2hex(random_bytes(50)), 0, 50);
 printf(
-    '[%30s] Time: %.7f s  %-32.32s %s', 'preg_replace_callback',
+    '[%30s] Time: %.7f s  %-32.32s %s', 'random_bytes',
     microtime(true) - $start, $a, PHP_EOL
 );
 ```
@@ -228,7 +228,7 @@ public function testTimestamp(): void
 
 1开头的10位纯数字，记住了，这就是 `Unix timestamp` 。
 
-### Formatter::authorization 认证值
+## Formatter::authorization 认证值
 
 这个函数，官方文档说的很详细了，但是内涵相当多的知识点，没有明说(哲学：我认为你应该知道所以我不讲了)，这个函数就是其中之一。翻[MDN](https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Authorization)，引申有说明，[RFC 7235, section 4.2: Authorization](https://tools.ietf.org/html/rfc7235#section-4.2)：只要符合规范，厂商可自主实现`<type> <credentials>`。
 
@@ -261,11 +261,11 @@ public static function authorization(string $mchid, string $nonce, string $signa
 那些官方没有明说的知识点就来了：
 
 1. 商户号 `mchid` 是1至32字符的`base62`字符串，当前绝大部分商户号是纯数字；
-2. 请求随机串 `nonce_str` 是至少16字符的`base62`字符串，上限不清楚，没测试过（不敢，怕封号)；
+2. 请求随机串 `nonce_str` 只要能通过HTTP上送的字符均可，建议是至少16字符的`base62`字符串；
 3. 签名值 `signature` 是`base64`字符串，base64末尾有可能有0个、1个或者2个`=`号，这都是正常的`base64`字符串；
 4. 时间戳 `timestamp` 是 `unix timestamp`，如 `Formatter::timestamp()` 封装所述;
 5. 商户API证书 `serial_no` 是8至40字符的`【0-9A-Z]`全大写字符串；
-6. 认证值有严格的顺序要求，即 `mchid,nonce,signature,timestamp,serial` 非字典序，值的组合用半角逗号(,)分隔，严格没有空格；
+6. 认证值有字典要求，即 `mchid,nonce,signature,timestamp,serial` 即这5个必须出现，排列组合顺序任意，值的组合用半角逗号(,)分隔，严格没有空格；
 
 我们用测试用例覆盖来校验如下：
 
@@ -455,8 +455,224 @@ public function testResponse(string $body): void
 4. `301/302/307/403/404/502/503`等状态码时，返回的内容有可能不是预期的`json`字符串，而是`html`串；
 5. `$timestamp`/`$nonce` 是从HTTP HEADES上取，对应的key是`Wechatpay-Timestamp`及`Wechatpay-Nonce`，其实还有3个key非常有用，后边再讲;
 
-## Formatter::joinedByLineFeed
+## Formatter::joinedByLineFeed 字符合并
 
-## Formatter::ksort
+上边两个函数，都提到这个字符串合并函数了，之所以单独拎出来，是因为这个函数不仅仅用在这两个函数之上，微信字符与微信的数据交换`二次签名`以及`官方小程序发券`插件数据签名，数据格式均以`0x0A`做合并签名，并且末行的`0x0A`是不能少的。
 
-## Formatter::queryStringLike
+这里不得不对`APIv3`的规范性做个感性评价，一致性还是相当可以的（虽然有难以言表的接口出现，拔特总体还是很可以的）。
+
+代码块如下：
+
+```php
+<?php
+/**
+ * Joined this inputs by for `Line Feed`(LF) char.
+ *
+ * @param string[] ...$pieces - The string(s) joined by line feed.
+ *
+ * @return string - The joined string.
+ */
+public static function joinedByLineFeed(...$pieces): string
+{
+    return implode("\n", array_merge($pieces, ['']));
+}
+```
+
+这里用到了`PHP7`的弹性入参功能`Variable-length argument lists`，入参是平展展的字符串，赋值给`$piecies`型参，内部用了内置的`implode`及`array_merge`函数，来构建末尾是`0xoA`的字符串。
+
+测试用例如下(其实request/response都已经覆盖)：
+
+```php
+<?php
+
+public function joinedByLineFeedPhrasesProvider(): array
+{
+    return [
+        'one argument' => [1],
+        'two arguments' => [1, '2'],
+        'mixed arguments' => [1, 2.0, '3', LINE_FEED, true, false, null， '4'],
+    ];
+}
+
+/**
+ * @dataProvider joinedByLineFeedPhrasesProvider
+ */
+public function testJoinedByLineFeed(...$data): void
+{
+    $value = Formatter::joinedByLineFeed(...$data);
+
+    self::assertIsString($value);
+
+    self::assertStringEndsWith(LINE_FEED, $value);
+
+    self::assertLessThanOrEqual(substr_count($value, LINE_FEED), count($data));
+}
+
+public function testNoneArgumentPassedToJoinedByLineFeed(): void
+{
+    $value = Formatter::joinedByLineFeed();
+
+    self::assertIsString($value);
+
+    self::assertStringNotContainsString(LINE_FEED, $value);
+
+    self::assertTrue(strlen($value) == 0);
+}
+```
+
+**小技巧：** 在测试用例上，使用了`PHP7`的变长函数参数特性，透传给了被测试函数（不一定是个好方案），姑且先这样测试，后续再说。
+
+## Formatter::ksort 字典序排列数组
+
+这个函数是`APIv2`用的，字典序排序入参，代码块如下：
+
+```php
+<?php
+/**
+ * Sort an array by key with `SORT_FLAG_CASE | SORT_NATURAL` flag.
+ *
+ * @param array<string, string|int> $thing - The input array.
+ *
+ * @return array<string, string|int> - The sorted array.
+ */
+public static function ksort(array $thing = []): array
+{
+    ksort($thing, SORT_FLAG_CASE | SORT_NATURAL);
+
+    return $thing;
+}
+```
+
+**知识点:** `PHP` 的 `SORT_NATURAL` 是按自然序排序，让我们用测试用例来感受一下：
+
+```php
+<?php
+public function ksortByFlagNaturePhrasesProvider(): array
+{
+    return [
+        [
+            ['a' => '1', 'b' => '3', 'aa' => '2'],
+            ['a' => '1', 'aa' => '2', 'b' => '3'],
+        ],
+        [
+            ['rfc1' => '1', 'b' => '4', 'rfc822' => '2', 'rfc2086' => '3'],
+            ['b' => '4', 'rfc1' => '1', 'rfc822' => '2', 'rfc2086' => '3'],
+        ],
+    ];
+}
+
+/**
+ * @dataProvider ksortByFlagNaturePhrasesProvider
+ */
+public function testKsort(array $thing, array $excepted): void
+{
+    self::assertEquals(Formatter::ksort($thing), $excepted);
+}
+
+public function nativeKsortPhrasesProvider(): array
+{
+    return [
+        [
+            ['a' => '1', 'b' => '3', 'aa' => '2'],
+            ['a' => '1', 'aa' => '2', 'b' => '3'],
+        ],
+        [
+            ['rfc1' => '1', 'b' => '4', 'rfc822' => '2', 'rfc2086' => '3'],
+            ['b' => '4', 'rfc1' => '1', 'rfc2086' => '3', 'rfc822' => '2'],
+        ],
+    ];
+}
+
+/**
+ * @dataProvider nativeKsortPhrasesProvider
+ */
+public function testNativeKsort(array $thing, array $excepted): void
+{
+    ksort($thing);
+    self::assertEquals($thing, $excepted);
+}
+```
+
+差异点就在于，对于字符串+数字序列的键值，自然排序是`rfc1, rfc822, rfc2086`，默认排序是`rfc1, rfc2086, rfc822`，理论上，这个和官方的`字典序`排序是不完全一样的，待后续观察。
+
+## Formatter::queryStringLike 数组转字符串
+
+方法名儿已经语义化了，是跟`querystring`做法类似，但是是有排除，排除规则是：键值是`sign`的，值是空串或者`null`的。代码块如下：
+
+```php
+<?php
+/**
+ * Like `queryString` does but without the `sign` and `empty value` entities.
+ *
+ * @param array<string, string|int|null> $thing - The input array.
+ *
+ * @return string - The `key=value` pair string whose joined by `&` char.
+ */
+public static function queryStringLike(array $thing = []): string
+{
+    $data = [];
+
+    foreach ($thing as $key => $value) {
+        if ($key === 'sign' || is_null($value) || $value === '') {
+            continue;
+        }
+        $data[] = implode('=', [$key, $value]);
+    }
+
+    return implode('&', $data);
+}
+```
+
+为什么要排除掉`null`呢？？这其实是本SDK一个强制要求，`APIv2`上，有一个接口是不太标准的，要求入参是`NULL`字符串，`null`数据类型和`NULL`字符串不是一回事儿，不是一回事儿，不是一回事儿，重要的事情说三遍。。。。
+
+测试用例覆盖如下：
+
+```php
+<?php
+/**
+ * @dataProvider nativeKsortPhrasesProvider
+ */
+public function testNativeKsort(array $thing, array $excepted): void
+{
+    self::assertTrue(ksort($thing));
+    self::assertEquals($thing, $excepted);
+}
+
+public function queryStringLikePhrasesProvider(): array
+{
+    return [
+        'none specific chars' => [
+            ['a' => '1', 'b' => '3', 'aa' => '2'],
+            'a=1&b=3&aa=2',
+        ],
+        'has `sign` key' => [
+            ['a' => '1', 'b' => '3', 'sign' => '2'],
+            'a=1&b=3',
+        ],
+        'has `empty` value' => [
+            ['a' => '1', 'b' => '3', 'c' => ''],
+            'a=1&b=3',
+        ],
+        'has `null` value' => [
+            ['a' => '1', 'b' => null, 'c' => '2'],
+            'a=1&c=2',
+        ],
+        'mixed `sign` key, `empty` and `null` values' => [
+            ['bob' => '1', 'alice' => null, 'tom' => '', 'sign' => 'mock'],
+            'bob=1',
+        ],
+    ];
+}
+
+/**
+ * @dataProvider queryStringLikePhrasesProvider
+ */
+public function testQueryStringLike(array $thing, string $excepted): void
+{
+    $value = Formatter::queryStringLike($thing);
+    self::assertIsString($value);
+    self::assertEquals($value, $excepted);
+}
+```
+
+至此，SDK上封装的基础格式化参数函数讲解完了，知识点即“踩坑”点，规集整理出来，分享给大家。
