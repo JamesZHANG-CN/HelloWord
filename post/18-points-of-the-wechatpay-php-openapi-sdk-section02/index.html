@@ -45,15 +45,15 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/18-points-of-the-wechatpay-php-openapi-sdk-section02/" />
 <meta property="article:published_time" content="2021-06-29T14:50:11&#43;08:00"/>
-<meta property="article:modified_time" content="2021-06-29T14:50:11&#43;08:00"/>
+<meta property="article:modified_time" content="2021-07-01T13:06:50&#43;08:00"/>
 
 <meta itemprop="name" content="微信支付PHP开发对接18讲——02: RSA-OAEP非对称加解密重构">
 <meta itemprop="description" content="有开发者反馈，先前的加解密`Util\SensitiveInfoCrypto`实现，用法看似简单，其实用起来&#39;坑&#39;蛮多的。&#39;坑&#39;点在于：初始化所需的`私钥`和`公钥(证书)`，在业务场景下是`非配对`的！`公钥(证书)`加密时，所用的`公钥(证书)`是`平台证书(公钥)`，而解密时所需的`私钥`，是`商户私钥`。并且，加解密稍不注意就会干扰到业务处理(初始化参数以及切换`stage`稍微繁琐)。遂重构一遍，命名为 `Crypto\Rsa` 类。">
 
 
 <meta itemprop="datePublished" content="2021-06-29T14:50:11&#43;08:00" />
-<meta itemprop="dateModified" content="2021-06-29T14:50:11&#43;08:00" />
-<meta itemprop="wordCount" content="1325">
+<meta itemprop="dateModified" content="2021-07-01T13:06:50&#43;08:00" />
+<meta itemprop="wordCount" content="3178">
 
 
 
@@ -281,6 +281,128 @@
 
 <p><strong>小技巧</strong>: 这里同样用到了<code>PHP7</code>命名空间下声明使用常量功能，即 <code>use const OPENSSL_PKCS1_OAEP_PADDING;</code>。所以在中间代码块上，可以不用再特别注意 <code>FQN</code>,可以安全使用。</p>
 
+<p>我们用测试用例来覆盖一下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">const</span> <span class="no">BASE64_EXPRESSION</span> <span class="o">=</span> <span class="s1">&#39;#^[a-zA-Z0-9][a-zA-Z0-9\+/]*={0,2}$#&#39;</span><span class="p">;</span>
+<span class="sd">/**
+</span><span class="sd"> * @return array&lt;string,array{string,string|resource|mixed,resource|mixed}&gt;
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">keysProvider</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span>
+<span class="p">{</span>
+    <span class="nv">$privateKey</span> <span class="o">=</span> <span class="nx">openssl_pkey_new</span><span class="p">([</span>
+        <span class="s1">&#39;digest_alg&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;sha256&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;default_bits&#39;</span> <span class="o">=&gt;</span> <span class="mi">2048</span><span class="p">,</span>
+        <span class="s1">&#39;private_key_bits&#39;</span> <span class="o">=&gt;</span> <span class="mi">2048</span><span class="p">,</span>
+        <span class="s1">&#39;private_key_type&#39;</span> <span class="o">=&gt;</span> <span class="nx">OPENSSL_KEYTYPE_RSA</span><span class="p">,</span>
+        <span class="s1">&#39;config&#39;</span> <span class="o">=&gt;</span> <span class="nx">dirname</span><span class="p">(</span><span class="no">__DIR__</span><span class="p">)</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">&#39;fixtures&#39;</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">&#39;openssl.conf&#39;</span><span class="p">,</span>
+    <span class="p">]);</span>
+
+    <span class="k">while</span> <span class="p">(</span><span class="nv">$msg</span> <span class="o">=</span> <span class="nx">openssl_error_string</span><span class="p">())</span> <span class="p">{</span>
+        <span class="s1">&#39;cli&#39;</span> <span class="o">===</span> <span class="nx">PHP_SAPI</span> <span class="o">&amp;&amp;</span> <span class="nx">fwrite</span><span class="p">(</span><span class="nx">STDERR</span><span class="p">,</span> <span class="s1">&#39;OpenSSL &#39;</span> <span class="o">.</span> <span class="nv">$msg</span> <span class="o">.</span> <span class="nx">PHP_EOL</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="p">[</span><span class="s1">&#39;key&#39;</span> <span class="o">=&gt;</span> <span class="nv">$publicKey</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$privateKey</span> <span class="o">?</span> <span class="nx">openssl_pkey_get_details</span><span class="p">(</span><span class="nv">$privateKey</span><span class="p">)</span> <span class="o">:</span> <span class="p">[];</span>
+
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s1">&#39;plaintext, publicKey and privateKey&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">&#39;hello wechatpay 你好 微信支付&#39;</span><span class="p">,</span> <span class="nv">$publicKey</span><span class="p">,</span> <span class="nv">$privateKey</span><span class="p">]</span>
+    <span class="p">];</span>
+<span class="p">}</span>
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider keysProvider
+</span><span class="sd"> * @param string $plaintext
+</span><span class="sd"> * @param object|resource|mixed $publicKey
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testEncrypt</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$publicKey</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$ciphertext</span> <span class="o">=</span> <span class="nx">Rsa</span><span class="o">::</span><span class="na">encrypt</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$publicKey</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertNotEquals</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">method_exists</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;assertMatchesRegularExpression&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertMatchesRegularExpression</span><span class="p">(</span><span class="nx">BASE64_EXPRESSION</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertRegExp</span><span class="p">(</span><span class="nx">BASE64_EXPRESSION</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p><code>BASE64_EXPRESSION</code> 是个命名空间常量，是 <code>base64</code> 字符串的一个正则匹配规则，相较于<code>Formatter</code>类内置的 <code>bas64</code> 检测规则，这里做了调整，加入来<strong>必须是字母或数字开头</strong>规则。</p>
+
+<p>有人可能会问，这里为什么不用<code>\w\d</code>代替呢？答案是：按照<code>base64</code>规范，只能出现<strong>字母或数字或加号或斜线</strong>，<code>\w</code> 是 <code>\word</code> 的简写， <code>\word</code> 存在语言适配表现不一致情况，即在法语系内，部分字符也是匹配到了 <code>\w</code> 内，这是其一；其二就是 <code>\d</code> 按照PHP官方文档介绍，是<code>decial digit</code>的简写，<code>decial</code>可能会带入点号(<code>.</code>)及逗号(<code>,</code>)，不严谨，遂还是按照<code>base64</code>规范来。</p>
+
+<p>另外，这里的数据供给器<code>keysProvider</code>函数，调试调整了一段时间，思考如下：</p>
+
+<ol>
+<li>相较于传统使用文件<code>fixtures</code>来提供<code>RSA</code>私钥/公钥，使是用函数生成来提供，是为了更安全得提供测试；</li>
+<li>这里尝试更范的测试场景覆盖，每轮测试生成的<code>私钥</code>、<code>公钥</code>理论上不一样，覆盖会更广；</li>
+</ol>
+
+<p>在<code>数据供给器</code>生成环节，检测出一个问题就是，在windows上，<code>PHP7.2/7.3</code>与<code>7.4+</code>表现不一致，内置的 <code>openssl_pkey_new</code> 函数不工作。这真是“意外”中的意外。</p>
+
+<p>在翻了PHP源码以及百谷歌度之后，最后从PHP手册上找到了线索如下：</p>
+
+<blockquote>
+<p><strong>Note: Note to Win32 Users</strong>
+&gt; Additionally, if you are planning to use the key generation and certificate signing functions, you will need to install a valid <code>openssl.cnf</code> file on your system.</p>
+</blockquote>
+
+<p>随后又翻了下PHP的变更历史，<code>PHP7.4.0</code>对windows环境做了优化，C++代码做了自动搜索<code>openssl.cnf</code>文件并取默认值。前向兼容方案遂如上述代码，在<code>私钥</code>生成时，指定配置文件即可。</p>
+
+<p><strong>小技巧:</strong></p>
+
+<ol>
+<li><code>ext-openssl</code>在工作时，会在各个阶段把异常信息打入堆栈中，可以通过 <code>openssl_error_string</code> 获取到堆栈信息；</li>
+<li>在测试环境下，本测试供给器函数，把这些“错误”信息，使用了 <code>fwrite</code> 直接写入至 <code>STDERR</code> 管道，仅在<code>CLI</code>模式下有效；</li>
+<li>数组<code>Array</code>解构，除了用<code>list</code>顺序解构(<code>PHP7+</code>)之外，还可以通过键值<code>key</code>来解构，即 <code>['key' =&gt; $publicKey] = []</code> 形式来解构;</li>
+</ol>
+
 <h2 id="crypto-rsa-decrypt-私钥解密">Crypto\Rsa::decrypt 私钥解密</h2>
 
 <p>对应地，私钥解密也变得用起来简单得多了，型参类型签名，返回值类型签名，代码块如下：</p>
@@ -327,9 +449,217 @@
 </code></pre></td></tr></table>
 </div>
 </div>
+<p>如前所属，每轮测试的数据供给是不一样的，所以得从加密开始，测试用例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider keysProvider
+</span><span class="sd"> * @param string $plaintext
+</span><span class="sd"> * @param object|resource|mixed $publicKey
+</span><span class="sd"> * @param object|resource|mixed $privateKey
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testDecrypt</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$publicKey</span><span class="p">,</span> <span class="nv">$privateKey</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$ciphertext</span> <span class="o">=</span> <span class="nx">Rsa</span><span class="o">::</span><span class="na">encrypt</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$publicKey</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertNotEquals</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">method_exists</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;assertMatchesRegularExpression&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertMatchesRegularExpression</span><span class="p">(</span><span class="nx">BASE64_EXPRESSION</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertRegExp</span><span class="p">(</span><span class="nx">BASE64_EXPRESSION</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nv">$mytext</span> <span class="o">=</span> <span class="nx">Rsa</span><span class="o">::</span><span class="na">decrypt</span><span class="p">(</span><span class="nv">$ciphertext</span><span class="p">,</span> <span class="nv">$privateKey</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$mytext</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$mytext</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>这里有个知识点需要补充一下，即，<code>publicKey</code> 公钥和 <code>privateKey</code> 私钥是配对的，公钥可以从私钥提取、也可以从私钥签发的证书提取。当前测试用例是从私钥提取的，后边再讲从<code>证书</code>提取。</p>
+
 <h2 id="crypto-rsa-sign-私钥签名">Crypto\Rsa::sign 私钥签名</h2>
 
+<p>顾名思义，<code>私钥</code>理应是私密的，用来做签名，具有不可篡改特性。签名封装代码如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Creates and returns a `base64_encode` string that uses `sha256WithRSAEncryption`.
+</span><span class="sd"> *
+</span><span class="sd"> * @param string $message - Content will be `openssl_sign`.
+</span><span class="sd"> * @param \OpenSSLAsymmetricKey|\OpenSSLCertificate|object|resource|string|mixed $privateKey - A PEM encoded private key.
+</span><span class="sd"> *
+</span><span class="sd"> * @return string - The base64-encoded signature.
+</span><span class="sd"> * @throws UnexpectedValueException
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">sign</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$message</span><span class="p">,</span> <span class="nv">$privateKey</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="k">static</span><span class="o">::</span><span class="na">preCondition</span><span class="p">();</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">openssl_sign</span><span class="p">(</span><span class="nv">$message</span><span class="p">,</span> <span class="nv">$signature</span><span class="p">,</span> <span class="nv">$privateKey</span><span class="p">,</span> <span class="nx">sha256WithRSAEncryption</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">UnexpectedValueException</span><span class="p">(</span><span class="s1">&#39;Signing the input $message failed, please checking your $privateKey whether or nor correct.&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">base64_encode</span><span class="p">(</span><span class="nv">$signature</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>测试代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider keysProvider
+</span><span class="sd"> * @param string $plaintext
+</span><span class="sd"> * @param object|resource|mixed $publicKey
+</span><span class="sd"> * @param object|resource|mixed $privateKey
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testSign</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$publicKey</span><span class="p">,</span> <span class="nv">$privateKey</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$signature</span> <span class="o">=</span> <span class="nx">Rsa</span><span class="o">::</span><span class="na">sign</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$privateKey</span><span class="p">);</span>
+
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$signature</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertNotEquals</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$signature</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">method_exists</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;assertMatchesRegularExpression&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertMatchesRegularExpression</span><span class="p">(</span><span class="nx">BASE64_EXPRESSION</span><span class="p">,</span> <span class="nv">$signature</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertRegExp</span><span class="p">(</span><span class="nx">BASE64_EXPRESSION</span><span class="p">,</span> <span class="nv">$signature</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>因为使用了同一套<code>数据供给器</code>代码，所以这个测试用例上，第二参数<code>$publicKey</code>还得加上（虽然没用）。</p>
+
 <h2 id="crypto-rsa-verify-公钥验签">Crypto\Rsa::verify 公钥验签</h2>
+
+<p>这个验签逻辑，可以用来理解<code>非对称加密技术</code>。如上一小结，<code>私钥数据签名</code>的数据，一般私钥是需要严密保存的，基本不会对外分发。那问题来了，收到加密数据的接收方，应该如何验证数据签名来自<code>预期的数据签名方</code>呢？<code>公钥验签</code>就是来解决这个<code>数据</code>及<code>数据签名</code>真伪的一种方式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Verifying the `message` with given `signature` string that uses `sha256WithRSAEncryption`.
+</span><span class="sd"> *
+</span><span class="sd"> * @param string $message - Content will be `openssl_verify`.
+</span><span class="sd"> * @param string $signature - The base64-encoded ciphertext.
+</span><span class="sd"> * @param \OpenSSLAsymmetricKey|\OpenSSLCertificate|object|resource|string|mixed $publicKey - A PEM encoded public key.
+</span><span class="sd"> *
+</span><span class="sd"> * @return boolean - True is passed, false is failed.
+</span><span class="sd"> * @throws UnexpectedValueException
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">verify</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$message</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$signature</span><span class="p">,</span> <span class="nv">$publicKey</span><span class="p">)</span><span class="o">:</span> <span class="nx">bool</span>
+<span class="p">{</span>
+    <span class="k">static</span><span class="o">::</span><span class="na">preCondition</span><span class="p">();</span>
+
+    <span class="k">if</span> <span class="p">((</span><span class="nv">$result</span> <span class="o">=</span> <span class="nx">openssl_verify</span><span class="p">(</span><span class="nv">$message</span><span class="p">,</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$signature</span><span class="p">),</span> <span class="nv">$publicKey</span><span class="p">,</span> <span class="nx">sha256WithRSAEncryption</span><span class="p">))</span> <span class="o">===</span> <span class="k">false</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">UnexpectedValueException</span><span class="p">(</span><span class="s1">&#39;Verified the input $message failed, please checking your $publicKey whether or nor correct.&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nv">$result</span> <span class="o">===</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>小知识：上一小结提到，<code>私钥</code>和<code>公钥</code>是配对出现的，<code>公钥</code>含在<code>私钥</code>及<code>证书</code>里，所以验签逻辑的<code>公钥</code>输入，可以是源<code>私钥</code>，也可以是源<code>私钥</code>签发的<code>证书</code>，即代码注释里的<code>\OpenSSLAsymmetricKey</code>及<code>\OpenSSLCertificate</code>。</p>
+
+<p>至此，01章节<code>格式化请求参数</code>及<code>格式化响应参数</code>提到的两个关键函数 <code>Rsa::sign</code> 及 <code>Rsa::verify</code> 也讲解完了，微信支付APIv3的核心部件，通过这两个静态类，共计10余个函数就抽象完成了。</p>
 
     </div>
 
@@ -341,7 +671,7 @@
   <p class="copyright-item">
     <span class="item-title">上次更新</span>
     <span class="item-content">
-        2021-06-29
+        2021-07-01
         
     </span>
   </p>
