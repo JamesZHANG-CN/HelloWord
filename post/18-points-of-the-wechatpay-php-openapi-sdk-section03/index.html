@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>分类 - TheNorthMemory</title>
+  <title>微信支付PHP开发对接18讲——03: Crypto\AesInterface AES抽象接口 - TheNorthMemory</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="James" />
+<meta name="author" content="James" /><meta name="description" content="1. `PHP7` 可以在接口文件中定义公共类常量; 2. 阐述高等级加密`AES`的两个基础知识点; 3. 抽象公共加/解密函数接口，引述程序设计中的`协变`设计规则;" /><meta name="keywords" content="微信支付, WeChatPay PHP SDK, GuzzleHttp, PHPStan Level8" />
 
 
 
@@ -26,9 +26,7 @@
 <meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
 
 
-<link rel="canonical" href="/categories/" />
-  <link href="/categories/index.xml" rel="alternate" type="application/rss+xml" title="TheNorthMemory" />
-  <link href="/categories/index.xml" rel="feed" type="application/rss+xml" title="TheNorthMemory" />
+<link rel="canonical" href="/post/18-points-of-the-wechatpay-php-openapi-sdk-section03/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -42,19 +40,27 @@
 
 <style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
 
-<meta property="og:title" content="Categories" />
-<meta property="og:description" content="" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="/categories/" />
+<meta property="og:title" content="微信支付PHP开发对接18讲——03: Crypto\AesInterface AES抽象接口" />
+<meta property="og:description" content="1. `PHP7` 可以在接口文件中定义公共类常量; 2. 阐述高等级加密`AES`的两个基础知识点; 3. 抽象公共加/解密函数接口，引述程序设计中的`协变`设计规则;" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/18-points-of-the-wechatpay-php-openapi-sdk-section03/" />
+<meta property="article:published_time" content="2021-07-01T19:19:11&#43;08:00"/>
+<meta property="article:modified_time" content="2021-07-01T19:19:11&#43;08:00"/>
 
-<meta property="og:updated_time" content="2021-07-01T19:19:11&#43;08:00"/>
+<meta itemprop="name" content="微信支付PHP开发对接18讲——03: Crypto\AesInterface AES抽象接口">
+<meta itemprop="description" content="1. `PHP7` 可以在接口文件中定义公共类常量; 2. 阐述高等级加密`AES`的两个基础知识点; 3. 抽象公共加/解密函数接口，引述程序设计中的`协变`设计规则;">
 
-<meta itemprop="name" content="Categories">
-<meta itemprop="description" content="">
 
+<meta itemprop="datePublished" content="2021-07-01T19:19:11&#43;08:00" />
+<meta itemprop="dateModified" content="2021-07-01T19:19:11&#43;08:00" />
+<meta itemprop="wordCount" content="484">
+
+
+
+<meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Categories"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:title" content="微信支付PHP开发对接18讲——03: Crypto\AesInterface AES抽象接口"/>
+<meta name="twitter:description" content="1. `PHP7` 可以在接口文件中定义公共类常量; 2. 阐述高等级加密`AES`的两个基础知识点; 3. 抽象公共加/解密函数接口，引述程序设计中的`协变`设计规则;"/>
 
 <!--[if lte IE 9]>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
@@ -110,35 +116,74 @@
     <main id="main" class="main">
       <div class="content-wrapper">
         <div id="content" class="content">
-          <div class="terms">
-      <div class="terms-title">
-        共计 5 个分类
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">微信支付PHP开发对接18讲——03: Crypto\AesInterface AES抽象接口</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-07-01 </span>
+        <div class="post-category">
+            <a href="/categories/php/"> php </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
       </div>
-      <div class="terms-tags">
-        <a class="terms-link" href="/categories/wechat/">
-            wechat
-            <span class="terms-count">25</span>
-          </a>
-        <a class="terms-link" href="/categories/javascript/">
-            javascript
-            <span class="terms-count">20</span>
-          </a>
-        <a class="terms-link" href="/categories/php/">
-            php
-            <span class="terms-count">6</span>
-          </a>
-        <a class="terms-link" href="/categories/alipay/">
-            alipay
-            <span class="terms-count">4</span>
-          </a>
-        <a class="terms-link" href="/categories/postgres/">
-            postgres
-            <span class="terms-count">2</span>
-          </a>
-        </div>
+    </header>
+
+    
+    <div class="post-content">
+      <p>之所以把这个<code>接口文件</code>单独拿出来讲，主要是为了阐明三件事情：</p>
+
+<ol>
+<li><code>PHP7</code> 可以在接口文件中定义公共类常量;</li>
+<li>阐述高等级加密<code>AES</code>的两个基础知识点;</li>
+<li>抽象公共加/解密函数接口，引述程序设计中的<code>协变</code>设计规则;</li>
+</ol>
+
+<p><code>AES</code> 加解密的块大小，固定是16字节的，遂定义了 <code>Crypto\AesInterface::BLOCK_SIZE</code> 这个常量；<code>GCM</code>模式的认证标签<code>auth_tag</code>，在<code>OpenSSL</code>中的可能值是<code>16, 15, 14, 13, 12, 8 or 4</code>的其中一个，官方文档在阐述敏感信息加解密的时候，定义了<code>AUTH_TAG_LENGTH_BYTE</code>常量，严格意义上来说，这个值应该是个数组，只是在实现过程中，取了最大值，即等于<code>AES</code>的块大小，这个在程序代码中标记成<code>即将废弃</code>功能（因为不准确），预计在下一个大版本上会移除。</p>
+
+<p>接口上同时定义了两个加密算法常量 <code>ALGO_AES_256_GCM</code> 及 <code>ALGO_AES_256_ECB</code>，从字面量上给<code>类实现</code>提供了可以直接使用的公共加/解密算法。</p>
+
+<p>接口同时定义了抽象公共方法 加密：<code>encrypt(string $plaintext, string $key, string $iv = ''): string;</code> 及解密： <code>decrypt(string $ciphertext, string $key, string $iv = ''): string;</code> 的参数名称/顺序及类型，返回值类型，给<code>类实现</code>圈定基础参数。</p>
+
+<p>这个接口类就没啥说的类，下一讲，我们来说说APIv3的敏感信息加解密<code>AES-GCM</code>实现。</p>
+
     </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-07-01
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/18-points-of-the-wechatpay-php-openapi-sdk-section02/">
+            <span class="next-text nav-default">微信支付PHP开发对接18讲——02: RSA-OAEP非对称加解密重构</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
         </div>
         
+  
+  
+
+  
 
       </div>
     </main>

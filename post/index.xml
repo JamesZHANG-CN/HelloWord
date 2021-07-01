@@ -6,10 +6,19 @@
     <description>Recent content in Posts on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Tue, 29 Jun 2021 14:50:11 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 01 Jul 2021 19:19:11 +0800</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>微信支付PHP开发对接18讲——03: Crypto\AesInterface AES抽象接口</title>
+      <link>/post/18-points-of-the-wechatpay-php-openapi-sdk-section03/</link>
+      <pubDate>Thu, 01 Jul 2021 19:19:11 +0800</pubDate>
+      
+      <guid>/post/18-points-of-the-wechatpay-php-openapi-sdk-section03/</guid>
+      <description>&lt;code&gt;AES&lt;/code&gt; 加解密的块大小，固定是16字节的，提供加密算法常量 &lt;code&gt;ALGO_AES_256_GCM&lt;/code&gt; 及 &lt;code&gt;ALGO_AES_256_ECB&lt;/code&gt;，从字面量上给&lt;code&gt;类实现&lt;/code&gt;提供了可以直接使用的公共加/解密算法。另外3点：1. &lt;code&gt;PHP7&lt;/code&gt; 可以在接口文件中定义公共类常量; 2. 阐述高等级加密&lt;code&gt;AES&lt;/code&gt;的两个基础知识点; 3. 抽象公共加/解密函数接口，引述程序设计中的&lt;code&gt;协变&lt;/code&gt;设计规则;</description>
+    </item>
     
     <item>
       <title>微信支付PHP开发对接18讲——02: RSA-OAEP非对称加解密重构</title>
