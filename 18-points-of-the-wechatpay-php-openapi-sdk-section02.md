@@ -1,7 +1,7 @@
 ---
 title: "微信支付PHP开发对接18讲——02: RSA-OAEP非对称加解密重构"
 date: 2021-06-29T14:50:11+08:00
-lastmod: 2021-07-01T13:06:50+08:00
+lastmod: 2021-07-01T13:18:59+08:00
 keywords: ["微信支付", "WeChatPay PHP SDK", "GuzzleHttp", "PHPStan Level8"]
 description: "有开发者反馈，先前的加解密`Util\\SensitiveInfoCrypto`实现，用法看似简单，其实用起来'坑'蛮多的。'坑'点在于：初始化所需的`私钥`和`公钥(证书)`，在业务场景下是`非配对`的！`公钥(证书)`加密时，所用的`公钥(证书)`是`平台证书(公钥)`，而解密时所需的`私钥`，是`商户私钥`。并且，加解密稍不注意就会干扰到业务处理(初始化参数以及切换`stage`稍微繁琐)。遂重构一遍，命名为 `Crypto\\Rsa` 类。"
 tags: []
@@ -149,14 +149,15 @@ public function testEncrypt(string $plaintext, $publicKey): void
 
 另外，这里的数据供给器`keysProvider`函数，调试调整了一段时间，思考如下：
 
-1. 相较于传统使用文件`fixtures`来提供`RSA`私钥/公钥，使是用函数生成来提供，是为了更安全得提供测试；
-2. 这里尝试更范的测试场景覆盖，每轮测试生成的`私钥`、`公钥`理论上不一样，覆盖会更广；
+1. 相较于传统使用文件`fixtures`来提供`RSA`私钥/公钥，使是函数生成，是为了更安全的被使用在测试场景中；
+2. 这里尝试更范的场景覆盖，每轮生成的`私钥`、`公钥`理论上不一样，覆盖会更广；
 
-在`数据供给器`生成环节，检测出一个问题就是，在windows上，`PHP7.2/7.3`与`7.4+`表现不一致，内置的 `openssl_pkey_new` 函数不工作。这真是“意外”中的意外。
+在`数据供给器`生成环节，检测出一个问题就是，在windows上，`PHP7.2/7.3`与`7.4+`表现不一致，内置的 `openssl_pkey_new` 函数在`7.2/7.3`上不工作。这真是“意外”中的意外。
 
 在翻了PHP源码以及百谷歌度之后，最后从PHP手册上找到了线索如下：
 
 > **Note: Note to Win32 Users**
+>
 >> Additionally, if you are planning to use the key generation and certificate signing functions, you will need to install a valid `openssl.cnf` file on your system. 
 
 随后又翻了下PHP的变更历史，`PHP7.4.0`对windows环境做了优化，C++代码做了自动搜索`openssl.cnf`文件并取默认值。前向兼容方案遂如上述代码，在`私钥`生成时，指定配置文件即可。

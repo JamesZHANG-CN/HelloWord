@@ -1,7 +1,7 @@
 ---
 title: "微信支付PHP开发对接18讲——从起步到跑顺路"
 date: 2021-06-27T16:00:11+08:00
-lastmod: 2021-06-29T14:58:50+08:00
+lastmod: 2021-07-01T19:23:09+08:00
 keywords: ["微信支付", "WeChatPay PHP SDK", "GuzzleHttp", "PHPStan Level8"]
 description: "用时18天，18个文件，2021年6月18日正式发布，带你了解一下「可链式调用的微信支付PHPSDK」研发细节。"
 tags: []
@@ -32,6 +32,8 @@ author: "James"
 [Crypto\Rsa RSA-OAEP非对称加解密重构](/post/18-points-of-the-wechatpay-php-openapi-sdk-section02/)
 
 ## 03: Crypto\AesInterface AES抽象接口
+
+[Crypto\AesInterface AES抽象接口](/post/18-points-of-the-wechatpay-php-openapi-sdk-section03/)
 
 ## 04: Crypto\AesGcm AES-GCM加解密函数重构
 
