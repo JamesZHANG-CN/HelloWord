@@ -1,6 +1,7 @@
 ---
-title: "微信支付PHP开发对接18讲——03: Crypto\AesInterface AES抽象接口"
+title: "微信支付PHP开发对接18讲——03: AesInterface AES抽象接口"
 date: 2021-07-01T19:19:11+08:00
+lastmod: 2021-07-01T19:38:26+08:00
 keywords: ["微信支付", "WeChatPay PHP SDK", "GuzzleHttp", "PHPStan Level8"]
 description: "1. `PHP7` 可以在接口文件中定义公共类常量; 2. 阐述高等级加密`AES`的两个基础知识点; 3. 抽象公共加/解密函数接口，引述程序设计中的`协变`设计规则;"
 tags: []
