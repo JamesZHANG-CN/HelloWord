@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密函数重构 - TheNorthMemory</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="James" /><meta name="description" content="官方`APIv3`做了安全加强，对于敏感信息及回调通知信息，才有了`AES-GCM`加密，依赖商户平台配置`APIv3密钥`。PHP自7.1开始支持`GCM`模式。上一讲提到了`协变`（covariant）设计规则，这个类的实现就是对`AesInterface`做了方法入参扩展，分别如下。" /><meta name="keywords" content="微信支付, WeChatPay PHP SDK, GuzzleHttp, PHPStan Level8" />
+
+
+
+<meta name="google-site-verification" content="ilxnhUCMJcotuhg8OoMLLLBfiX8UKrXg4ScYRrSErRs" />
+
+
+<meta name="generator" content="Hugo 0.55.6 with even 4.0.0" />
+
+
+<link rel="canonical" href="/post/18-points-of-the-wechatpay-php-openapi-sdk-section04/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
+
+<meta property="og:title" content="微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密函数重构" />
+<meta property="og:description" content="官方`APIv3`做了安全加强，对于敏感信息及回调通知信息，才有了`AES-GCM`加密，依赖商户平台配置`APIv3密钥`。PHP自7.1开始支持`GCM`模式。上一讲提到了`协变`（covariant）设计规则，这个类的实现就是对`AesInterface`做了方法入参扩展，分别如下。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/18-points-of-the-wechatpay-php-openapi-sdk-section04/" />
+<meta property="article:published_time" content="2021-07-02T11:39:11&#43;08:00"/>
+<meta property="article:modified_time" content="2021-07-02T11:39:11&#43;08:00"/>
+
+<meta itemprop="name" content="微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密函数重构">
+<meta itemprop="description" content="官方`APIv3`做了安全加强，对于敏感信息及回调通知信息，才有了`AES-GCM`加密，依赖商户平台配置`APIv3密钥`。PHP自7.1开始支持`GCM`模式。上一讲提到了`协变`（covariant）设计规则，这个类的实现就是对`AesInterface`做了方法入参扩展，分别如下。">
+
+
+<meta itemprop="datePublished" content="2021-07-02T11:39:11&#43;08:00" />
+<meta itemprop="dateModified" content="2021-07-02T11:39:11&#43;08:00" />
+<meta itemprop="wordCount" content="1908">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密函数重构"/>
+<meta name="twitter:description" content="官方`APIv3`做了安全加强，对于敏感信息及回调通知信息，才有了`AES-GCM`加密，依赖商户平台配置`APIv3密钥`。PHP自7.1开始支持`GCM`模式。上一讲提到了`协变`（covariant）设计规则，这个类的实现就是对`AesInterface`做了方法入参扩展，分别如下。"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">TheNorthMemory</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/post/">
+        <li class="mobile-menu-item">Posts</li>
+      </a><a href="https://thenorthmemory.github.io/wechat-swagger/">
+        <li class="mobile-menu-item">WeDocs</li>
+      </a><a href="https://thenorthmemory.github.io/wechatpay-openapi/">
+        <li class="mobile-menu-item">Wechatpay</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">TheNorthMemory</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/post/">Posts</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechat-swagger/">WeDocs</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="https://thenorthmemory.github.io/wechatpay-openapi/">Wechatpay</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密函数重构</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-07-02 </span>
+        <div class="post-category">
+            <a href="/categories/php/"> php </a>
+            <a href="/categories/wechat/"> wechat </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<p>官方<code>APIv3</code>做了安全加强，对于敏感信息及回调通知信息，才有了<code>AES-GCM</code>加密，依赖商户平台配置<code>APIv3密钥</code>。PHP自7.1开始支持<code>GCM</code>模式。上一讲提到了<code>协变</code>（covariant）设计规则，这个类的实现就是对<code>AesInterface</code>做了方法入参扩展，分别如下。</p>
+
+<h2 id="crypto-aesgcm-precondition-前置条件检测">Crypto\AesGcm::preCondition 前置条件检测</h2>
+
+<p>这个方法如同<code>Rsa::preCondition</code>类似，检测当前<code>ext-openssl</code>扩展，是否支持<code>aes-256-gcm</code>加解密算法，均可在未来的版本中安全删除。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Detect the ext-openssl whether or nor including the `aes-256-gcm` algorithm
+</span><span class="sd"> *
+</span><span class="sd"> * @throws RuntimeException
+</span><span class="sd"> */</span>
+<span class="k">private</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">preCondition</span><span class="p">()</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">in_array</span><span class="p">(</span><span class="k">static</span><span class="o">::</span><span class="na">ALGO_AES_256_GCM</span><span class="p">,</span> <span class="nx">openssl_get_cipher_methods</span><span class="p">()))</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">RuntimeException</span><span class="p">(</span><span class="s1">&#39;It looks like the ext-openssl extension missing the `aes-256-gcm` cipher method.&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>扩展知识：<code>static::ALGO_AES_256_GCM</code> 是<code>PHP7</code>中的<code>延迟静态绑定(late static bindings)</code>，其作用域是要看运行时的上下文类，更多知识参阅PHP官方文档。</p>
+
+<h2 id="crypto-aesgcm-encrypt-加密">Crypto\AesGcm::encrypt 加密</h2>
+
+<p>这个方法，在官方的<code>wechatpay-guzzle-middleware</code>没有实现，这是新包新增的。从这个我们能窥出一丢丢官方接口设计上的一些<code>分歧点</code>。</p>
+
+<p>官方文档上的<code>敏感信息加解密</code>，上下行均才有RSA证书加密模式，RSA是<code>非对称加解密</code>，公钥加密/私钥解密，可以提供极佳的安全体验。而在<code>证书及回调通知</code>时，却采用的是<code>对称加解密</code>方案，加密均由平台方来完成，商户侧仅需在收到报文进行解密即可。</p>
+
+<p>为什么在<code>敏感信息加解密</code>使用<code>非对称加解密</code>，而在<code>证书及回调通知</code>使用<code>对称加解密</code>，唯一合理的解释就是为了<code>安全</code>，“良苦用心”没有明说，然这个没明说却给对接<code>APIv3</code>带出了许多“难以理解”；而不提供对称加密函数，这又让人不得不把问题上升到哲学层面（我认为你不需要，所以我不提供了）唉。。。</p>
+
+<p>实现这个函数，也就几行代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Encrypts given data with given key, iv and aad, returns a base64 encoded string.
+</span><span class="sd"> *
+</span><span class="sd"> * @param string $plaintext - Text to encode.
+</span><span class="sd"> * @param string $key - The secret key, 32 bytes string.
+</span><span class="sd"> * @param string $iv - The initialization vector, 16 bytes string.
+</span><span class="sd"> * @param string $aad - The additional authenticated data, maybe empty string.
+</span><span class="sd"> *
+</span><span class="sd"> * @return string - The base64-encoded ciphertext.
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">encrypt</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$plaintext</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$key</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$iv</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$aad</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="k">static</span><span class="o">::</span><span class="na">preCondition</span><span class="p">();</span>
+
+    <span class="nv">$ciphertext</span> <span class="o">=</span> <span class="nx">openssl_encrypt</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="k">static</span><span class="o">::</span><span class="na">ALGO_AES_256_GCM</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="nx">OPENSSL_RAW_DATA</span><span class="p">,</span> <span class="nv">$iv</span><span class="p">,</span> <span class="nv">$tag</span><span class="p">,</span> <span class="nv">$aad</span><span class="p">,</span> <span class="k">static</span><span class="o">::</span><span class="na">BLOCK_SIZE</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">false</span> <span class="o">===</span> <span class="nv">$ciphertext</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">UnexpectedValueException</span><span class="p">(</span><span class="s1">&#39;Encrypting the input $plaintext failed, please checking your $key and $iv whether or nor correct.&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">base64_encode</span><span class="p">(</span><span class="nv">$ciphertext</span> <span class="o">.</span> <span class="nv">$tag</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>测试代码如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="k">const</span> <span class="no">BASE64_EXPRESSION</span> <span class="o">=</span> <span class="s1">&#39;#^[a-zA-Z0-9\+/]+={0,2}$#&#39;</span><span class="p">;</span>
+
+<span class="sd">/**
+</span><span class="sd"> * @return array&lt;string,array{string,string,string,string}&gt;
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">dataProvider</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s1">&#39;random key and iv&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="s1">&#39;hello wechatpay 你好 微信支付&#39;</span><span class="p">,</span>
+            <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(</span><span class="nx">AesGcm</span><span class="o">::</span><span class="na">KEY_LENGTH_BYTE</span><span class="p">),</span>
+            <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(</span><span class="nx">AesGcm</span><span class="o">::</span><span class="na">BLOCK_SIZE</span><span class="p">),</span>
+            <span class="s1">&#39;&#39;</span>
+        <span class="p">],</span>
+        <span class="s1">&#39;random key, iv and aad&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="s1">&#39;hello wechatpay 你好 微信支付&#39;</span><span class="p">,</span>
+            <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(</span><span class="nx">AesGcm</span><span class="o">::</span><span class="na">KEY_LENGTH_BYTE</span><span class="p">),</span>
+            <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(</span><span class="nx">AesGcm</span><span class="o">::</span><span class="na">BLOCK_SIZE</span><span class="p">),</span>
+            <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(</span><span class="nx">AesGcm</span><span class="o">::</span><span class="na">BLOCK_SIZE</span><span class="p">)</span>
+        <span class="p">],</span>
+    <span class="p">];</span>
+<span class="p">}</span>
+
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider dataProvider
+</span><span class="sd"> * @param string $plaintext
+</span><span class="sd"> * @param string $key
+</span><span class="sd"> * @param string $iv
+</span><span class="sd"> * @param string $aad
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testEncrypt</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="nv">$iv</span><span class="p">,</span> <span class="nv">$aad</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$ciphertext</span> <span class="o">=</span> <span class="nx">AesGcm</span><span class="o">::</span><span class="na">encrypt</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="nv">$iv</span><span class="p">,</span> <span class="nv">$aad</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertNotEquals</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">method_exists</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;assertMatchesRegularExpression&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertMatchesRegularExpression</span><span class="p">(</span><span class="nx">self</span><span class="o">::</span><span class="na">BASE64_EXPRESSION</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertRegExp</span><span class="p">(</span><span class="nx">self</span><span class="o">::</span><span class="na">BASE64_EXPRESSION</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>目前看的这个测试用例，是修正后的，期间翻了一次车。。。因由是由<code>BASE64_EXPRESSION</code>类常量的定义引起的。</p>
+
+<p>测试用例覆盖，采用了与<code>RsaTest</code>类似的动态生成<code>数据供给</code>方案，为验证加密后的字符串是<code>base64</code>而不是其他，所以需要个<code>规则</code>来判断字符串是不是<code>base64</code>，这里采用了正则表达式。正是这个表达式，翻了车了。</p>
+
+<p>上一版的正则表达式为<code>#^[a-zA-Z0-9][a-zA-Z0-9\+/]*={0,2}$#</code>，我们来回溯一些测试样本数据：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">(&#39;hello wechatpay 你好 微信支付&#39;, &#39;RSXrQ0bANKaUGdbvWwPENFNjhftB6EYs&#39;, &#39;XxG5mkSo7DBiGxSN&#39;, &#39;&#39;) -&gt; &#39;/bXfSUzxl3dcrGBbduG6Jh9vd269iRzO91qSRnzzLl+RPxH6fVPS6hKPlC3hADltDKuU&#39;
+(&#39;hello wechatpay 你好 微信支付&#39;, &#39;0hVcffnbHcx9zpyi9bgmbGtDZHOXuq6V&#39;, &#39;In4deshcFFOhdyTs&#39;, &#39;lUY1Dm04bXRhj4Z1&#39;) -&gt; &#39;+RwaCGnFNMJPezHifxSBjEuJR3LBYndNLZHO1gV9cj5/hlL55hwlcNzpAOr/1Vm42hp8&#39;
+(&#39;hello wechatpay 你好 微信支付&#39;, &#39;0ZehDc6SnHPcEzqXv18Qiikz0syFvUoO&#39;, &#39;urJE0OMNEuVYwY9Y&#39;, &#39;&#39;) -&gt; &#39;/LtXN1bbvlxubbgypv23QKsdIw14RAhsL1GNUHAfwfEBBNp2elvcy7mw8D8KUOJ4VIUC&#39;</pre></td></tr></table>
+</div>
+</div>
+<p><code>base64字符串+/</code>也可以出现在起始位，翻新了我对<code>base64</code>的认知。。。</p>
+
+<h2 id="crypto-aesgcm-decrypt-解密">Crypto\AesGcm::decrypt 解密</h2>
+
+<p>解密函数对官方源版做了部分调整，调整点是对<code>auth_tag</code>长度判断上进行判断。按照php官方手册上说<code>openssl_decrypt</code>在出来<code>GCM</code>模式密文时，调用方要自行判断<code>auth_tag</code>的长度。实现代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * Takes a base64 encoded string and decrypts it using a given key, iv and aad.
+</span><span class="sd"> *
+</span><span class="sd"> * @param string $ciphertext - The base64-encoded ciphertext.
+</span><span class="sd"> * @param string $key - The secret key, 32 bytes string.
+</span><span class="sd"> * @param string $iv - The initialization vector, 16 bytes string.
+</span><span class="sd"> * @param string $aad - The additional authenticated data, maybe empty string.
+</span><span class="sd"> *
+</span><span class="sd"> * @return string - The utf-8 plaintext.
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">static</span> <span class="k">function</span> <span class="nf">decrypt</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$ciphertext</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$key</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$iv</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">string</span> <span class="nv">$aad</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">:</span> <span class="nx">string</span>
+<span class="p">{</span>
+    <span class="k">static</span><span class="o">::</span><span class="na">preCondition</span><span class="p">();</span>
+
+    <span class="nv">$ciphertext</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="nv">$authTag</span> <span class="o">=</span> <span class="nx">substr</span><span class="p">(</span><span class="nv">$ciphertext</span><span class="p">,</span> <span class="nx">intval</span><span class="p">(</span><span class="o">-</span><span class="k">static</span><span class="o">::</span><span class="na">BLOCK_SIZE</span><span class="p">));</span>
+    <span class="nv">$tagLength</span> <span class="o">=</span> <span class="nx">strlen</span><span class="p">(</span><span class="nv">$authTag</span><span class="p">);</span>
+
+    <span class="cm">/* Manually checking the length of the tag, because the `openssl_decrypt` was mentioned there, it&#39;s the caller&#39;s responsibility. */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$tagLength</span> <span class="o">&gt;</span> <span class="k">static</span><span class="o">::</span><span class="na">BLOCK_SIZE</span> <span class="o">||</span> <span class="p">(</span><span class="nv">$tagLength</span> <span class="o">&lt;</span> <span class="mi">12</span> <span class="o">&amp;&amp;</span> <span class="nv">$tagLength</span> <span class="o">!==</span> <span class="mi">8</span> <span class="o">&amp;&amp;</span> <span class="nv">$tagLength</span> <span class="o">!==</span> <span class="mi">4</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">RuntimeException</span><span class="p">(</span><span class="s1">&#39;The inputs `$ciphertext` incomplete, the bytes length must be one of 16, 15, 14, 13, 12, 8 or 4.&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nv">$plaintext</span> <span class="o">=</span> <span class="nx">openssl_decrypt</span><span class="p">(</span><span class="nx">substr</span><span class="p">(</span><span class="nv">$ciphertext</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">intval</span><span class="p">(</span><span class="o">-</span><span class="k">static</span><span class="o">::</span><span class="na">BLOCK_SIZE</span><span class="p">)),</span> <span class="k">static</span><span class="o">::</span><span class="na">ALGO_AES_256_GCM</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="nx">OPENSSL_RAW_DATA</span><span class="p">,</span> <span class="nv">$iv</span><span class="p">,</span> <span class="nv">$authTag</span><span class="p">,</span> <span class="nv">$aad</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="k">false</span> <span class="o">===</span> <span class="nv">$plaintext</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nx">UnexpectedValueException</span><span class="p">(</span><span class="s1">&#39;Decrypting the input $ciphertext failed, please checking your $key and $iv whether or nor correct.&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nv">$plaintext</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>测试代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-php" data-lang="php"><span class="cp">&lt;?php</span>
+<span class="sd">/**
+</span><span class="sd"> * @return array&lt;string,array{string,string,string,string}&gt;
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">dataProvider</span><span class="p">()</span><span class="o">:</span> <span class="k">array</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="s1">&#39;random key and iv&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="s1">&#39;hello wechatpay 你好 微信支付&#39;</span><span class="p">,</span>
+            <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(</span><span class="nx">AesGcm</span><span class="o">::</span><span class="na">KEY_LENGTH_BYTE</span><span class="p">),</span>
+            <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(</span><span class="nx">AesGcm</span><span class="o">::</span><span class="na">BLOCK_SIZE</span><span class="p">),</span>
+            <span class="s1">&#39;&#39;</span>
+        <span class="p">],</span>
+        <span class="s1">&#39;random key, iv and aad&#39;</span> <span class="o">=&gt;</span> <span class="p">[</span>
+            <span class="s1">&#39;hello wechatpay 你好 微信支付&#39;</span><span class="p">,</span>
+            <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(</span><span class="nx">AesGcm</span><span class="o">::</span><span class="na">KEY_LENGTH_BYTE</span><span class="p">),</span>
+            <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(</span><span class="nx">AesGcm</span><span class="o">::</span><span class="na">BLOCK_SIZE</span><span class="p">),</span>
+            <span class="nx">Formatter</span><span class="o">::</span><span class="na">nonce</span><span class="p">(</span><span class="nx">AesGcm</span><span class="o">::</span><span class="na">BLOCK_SIZE</span><span class="p">)</span>
+        <span class="p">],</span>
+    <span class="p">];</span>
+<span class="p">}</span>
+
+<span class="sd">/**
+</span><span class="sd"> * @dataProvider dataProvider
+</span><span class="sd"> * @param string $plaintext
+</span><span class="sd"> * @param string $key
+</span><span class="sd"> * @param string $iv
+</span><span class="sd"> * @param string $aad
+</span><span class="sd"> */</span>
+<span class="k">public</span> <span class="k">function</span> <span class="nf">testDecrypt</span><span class="p">(</span><span class="nx">string</span> <span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="nv">$iv</span><span class="p">,</span> <span class="nv">$aad</span><span class="p">)</span><span class="o">:</span> <span class="nx">void</span>
+<span class="p">{</span>
+    <span class="nv">$ciphertext</span> <span class="o">=</span> <span class="nx">AesGcm</span><span class="o">::</span><span class="na">encrypt</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="nv">$iv</span><span class="p">,</span> <span class="nv">$aad</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertNotEquals</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">method_exists</span><span class="p">(</span><span class="nv">$this</span><span class="p">,</span> <span class="s1">&#39;assertMatchesRegularExpression&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">assertMatchesRegularExpression</span><span class="p">(</span><span class="nx">self</span><span class="o">::</span><span class="na">BASE64_EXPRESSION</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">self</span><span class="o">::</span><span class="na">assertRegExp</span><span class="p">(</span><span class="nx">self</span><span class="o">::</span><span class="na">BASE64_EXPRESSION</span><span class="p">,</span> <span class="nv">$ciphertext</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="nv">$mytext</span> <span class="o">=</span> <span class="nx">AesGcm</span><span class="o">::</span><span class="na">decrypt</span><span class="p">(</span><span class="nv">$ciphertext</span><span class="p">,</span> <span class="nv">$key</span><span class="p">,</span> <span class="nv">$iv</span><span class="p">,</span> <span class="nv">$aad</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertIsString</span><span class="p">(</span><span class="nv">$mytext</span><span class="p">);</span>
+    <span class="nx">self</span><span class="o">::</span><span class="na">assertEquals</span><span class="p">(</span><span class="nv">$plaintext</span><span class="p">,</span> <span class="nv">$mytext</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+<p>至此，<code>APIv3</code>上的包括证书及回调所需的函数，均封装完毕，下一讲就对接<code>HttpClient</code>，来驱动请求响应。</p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">James</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-07-02
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/18-points-of-the-wechatpay-php-openapi-sdk-section03/">
+            <span class="next-text nav-default">微信支付PHP开发对接18讲——03: AesInterface AES抽象接口</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+  
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="https://github.com/TheNorthMemory/" class="iconfont icon-github" title="github"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2019 - 
+    2021
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">James</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-125471285-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

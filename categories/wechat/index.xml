@@ -6,10 +6,19 @@
     <description>Recent content in wechat on TheNorthMemory</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh_CN</language>
-    <lastBuildDate>Thu, 01 Jul 2021 19:19:11 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 02 Jul 2021 11:39:11 +0800</lastBuildDate>
     
 	<atom:link href="/categories/wechat/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密函数重构</title>
+      <link>/post/18-points-of-the-wechatpay-php-openapi-sdk-section04/</link>
+      <pubDate>Fri, 02 Jul 2021 11:39:11 +0800</pubDate>
+      
+      <guid>/post/18-points-of-the-wechatpay-php-openapi-sdk-section04/</guid>
+      <description>官方&lt;code&gt;APIv3&lt;/code&gt;做了安全加强，对于敏感信息及回调通知信息，才有了&lt;code&gt;AES-GCM&lt;/code&gt;加密，依赖商户平台配置&lt;code&gt;APIv3密钥&lt;/code&gt;。PHP自7.1开始支持&lt;code&gt;GCM&lt;/code&gt;模式。上一讲提到了&lt;code&gt;协变&lt;/code&gt;（covariant）设计规则，这个类的实现就是对&lt;code&gt;AesInterface&lt;/code&gt;做了方法入参扩展，分别如下。</description>
+    </item>
     
     <item>
       <title>微信支付PHP开发对接18讲——03: AesInterface AES抽象接口</title>
