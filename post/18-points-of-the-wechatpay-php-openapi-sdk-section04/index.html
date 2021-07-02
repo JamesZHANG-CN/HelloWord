@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密函数重构 - TheNorthMemory</title>
+  <title>微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密 - TheNorthMemory</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -40,26 +40,26 @@
 
 <style>.container{min-height: 98vh}.header .logo-wrapper .logo{font-size:36px;}</style>
 
-<meta property="og:title" content="微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密函数重构" />
+<meta property="og:title" content="微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密" />
 <meta property="og:description" content="官方`APIv3`做了安全加强，对于敏感信息及回调通知信息，才有了`AES-GCM`加密，依赖商户平台配置`APIv3密钥`。PHP自7.1开始支持`GCM`模式。上一讲提到了`协变`（covariant）设计规则，这个类的实现就是对`AesInterface`做了方法入参扩展，分别如下。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/18-points-of-the-wechatpay-php-openapi-sdk-section04/" />
 <meta property="article:published_time" content="2021-07-02T11:39:11&#43;08:00"/>
-<meta property="article:modified_time" content="2021-07-02T11:39:11&#43;08:00"/>
+<meta property="article:modified_time" content="2021-07-02T11:45:33&#43;08:00"/>
 
-<meta itemprop="name" content="微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密函数重构">
+<meta itemprop="name" content="微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密">
 <meta itemprop="description" content="官方`APIv3`做了安全加强，对于敏感信息及回调通知信息，才有了`AES-GCM`加密，依赖商户平台配置`APIv3密钥`。PHP自7.1开始支持`GCM`模式。上一讲提到了`协变`（covariant）设计规则，这个类的实现就是对`AesInterface`做了方法入参扩展，分别如下。">
 
 
 <meta itemprop="datePublished" content="2021-07-02T11:39:11&#43;08:00" />
-<meta itemprop="dateModified" content="2021-07-02T11:39:11&#43;08:00" />
+<meta itemprop="dateModified" content="2021-07-02T11:45:33&#43;08:00" />
 <meta itemprop="wordCount" content="1908">
 
 
 
 <meta itemprop="keywords" content="" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密函数重构"/>
+<meta name="twitter:title" content="微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密"/>
 <meta name="twitter:description" content="官方`APIv3`做了安全加强，对于敏感信息及回调通知信息，才有了`AES-GCM`加密，依赖商户平台配置`APIv3密钥`。PHP自7.1开始支持`GCM`模式。上一讲提到了`协变`（covariant）设计规则，这个类的实现就是对`AesInterface`做了方法入参扩展，分别如下。"/>
 
 <!--[if lte IE 9]>
@@ -119,7 +119,7 @@
           <article class="post">
     
     <header class="post-header">
-      <h1 class="post-title">微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密函数重构</h1>
+      <h1 class="post-title">微信支付PHP开发对接18讲——04: AesGcm AES-GCM加解密</h1>
 
       <div class="post-meta">
         <span class="post-time"> 2021-07-02 </span>
